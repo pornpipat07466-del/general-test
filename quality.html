@@ -1,0 +1,91 @@
+<!doctype html>
+<html lang="th">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>วัสดุดีหรือไม่ดีดูอย่างไร</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Sarabun:wght@400;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+<header class="top">
+  <div class="org">สตว. สทช.14 (กระบี่) · General Test</div>
+  <h1>3. วัสดุดีหรือไม่ดีดูอย่างไร</h1>
+  <div class="sub">ตัดสินด้วยผลทดสอบเทียบเกณฑ์ มทช. · ข้อสังเกตด้วยตาใช้คัดกรองเบื้องต้นเท่านั้น</div>
+  <span class="badge">ฉบับร่าง 20 ต.ค. 2569 · รอตรวจทานและภาพจริง</span>
+</header>
+<nav class="chips"><a href="#rule">หลักตัดสิน</a><a href="#soil">ดิน</a><a href="#lat">ลูกรัง</a><a href="#base">หินคลุก</a><a href="#sand">ทราย</a><a href="#agg">หิน คอนกรีต/AC</a><a href="#rebar">เหล็ก</a><a href="#prod">ผลิตภัณฑ์</a></nav>
+<main>
+  <a class="back" href="index.html">← กลับหน้าหลัก</a>
+
+  <section id="rule">
+    <h2><span class="n">✓</span>หลักการตัดสิน</h2>
+    <ol class="steps">
+      <li><b>วัสดุดี</b> = ผลทดสอบผ่านเกณฑ์ใน <a href="properties.html">หน้าเกณฑ์คุณสมบัติ</a> ครบทุกรายการ จึงอนุญาตให้ใช้</li>
+      <li><b>ไม่ผ่าน</b> = ปรับปรุงวัสดุหรือเปลี่ยนแหล่ง แล้วเก็บตัวอย่างใหม่ส่งทดสอบ <span class="ref">(ขั้นตอนกลางระบบ QR)</span></li>
+      <li>ห้ามนำวัสดุที่ยังไม่ผ่านการทดสอบมาใช้ <span class="ref">(เช่น มทช.251-2569 ทรายรองถนนคอนกรีต)</span></li>
+    </ol>
+    <p class="ref">ข้อสังเกตด้วยตาด้านล่างเป็น <span class="todo">ข้อสังเกตเบื้องต้น รอ สตว. ตรวจทานและใส่ภาพจริง</span> ไม่ใช้แทนผลทดสอบ</p>
+  </section>
+
+  <section id="soil">
+    <h2><span class="n">1</span>ดินเดิม / ดินถม</h2>
+    <div class="grid2">
+      <div class="card ok"><div class="photo">[ภาพดินถมที่ดี]</div><h3>✓ ผ่านเกณฑ์เมื่อ</h3><ul><li>C.B.R. ≥ 4% และ Swell ≤ 4% (ดินทั่วไป) <span class="ref">มทช.201-2545</span></li></ul></div>
+      <div class="card bad"><div class="photo">[ภาพดินขาดคุณสมบัติ]</div><h3>✗ สัญญาณเตือน <span class="todo">[รอตรวจทาน]</span></h3><ul><li>มีรากไม้ เศษพืช หรือดินอินทรีย์สีดำปน</li><li>ดินเหนียวจัด เปียกแล้วเหนียวติดมือ แห้งแล้วแตกระแหง</li><li>แหล่งเปลี่ยน สีหรือเนื้อดินต่างจากที่ส่งทดสอบ</li></ul></div>
+    </div>
+  </section>
+
+  <section id="lat">
+    <h2><span class="n">2</span>ลูกรัง / วัสดุรองพื้นทาง</h2>
+    <div class="grid2">
+      <div class="card ok"><div class="photo">[ภาพลูกรังที่ดี]</div><h3>✓ ผ่านเกณฑ์เมื่อ</h3><ul><li>ผ่านทุกรายการในตาราง 2-10 ลำดับ 4 (Compaction, Gradation, C.B.R., Swelling, Atterberg, % Abrasion) <span class="todo">[ค่าเกณฑ์ตาม มทช. รองพื้นทาง]</span></li></ul></div>
+      <div class="card bad"><div class="photo">[ภาพลูกรังขาดคุณสมบัติ]</div><h3>✗ สัญญาณเตือน <span class="todo">[รอตรวจทาน]</span></h3><ul><li>เม็ดลูกรังน้อย มีดินเหนียวมาก</li><li>เม็ดผุ บี้แตกด้วยนิ้ว</li><li>เปียกแล้วเละ ลื่น</li></ul></div>
+    </div>
+  </section>
+
+  <section id="base">
+    <h2><span class="n">3</span>หินคลุก (พื้นทาง)</h2>
+    <div class="grid2">
+      <div class="card ok"><div class="photo">[ภาพกองหินคลุกที่ดี]</div><h3>✓ ผ่านเกณฑ์เมื่อ</h3><ul><li>LL ≤ 25 · PI ≤ 6 · LA ≤ 40 · Soundness ≤ 9 · C.B.R. ≥ 80/90 · ขนาดคละอยู่ในช่วง <span class="ref">มทช.203-2557</span></li><li>ไม่มีหินดินดาน (Shale) · ส่วนละเอียดเป็นวัสดุชนิดเดียวกับส่วนหยาบ <span class="ref">มทช.203-2557</span></li></ul></div>
+      <div class="card bad"><div class="photo">[ภาพวัสดุขาดคุณสมบัติ]</div><h3>✗ สัญญาณเตือน <span class="todo">[รอตรวจทาน]</span></h3><ul><li>มีก้อนดินเหนียวหรือหินดินดานปน</li><li>เม็ดผุ บี้แตกด้วยมือได้</li><li>แยกตัว (Segregation): หินใหญ่กับส่วนละเอียดอยู่คนละส่วนของกอง</li><li>เปียกแล้วเหนียวติดมือ แสดงว่ามีส่วนละเอียดที่เป็นดินมาก</li></ul></div>
+    </div>
+  </section>
+
+  <section id="sand">
+    <h2><span class="n">4</span>ทราย (ถม / รองถนนคอนกรีต / คอนกรีต)</h2>
+    <div class="grid2">
+      <div class="card ok"><div class="photo">[ภาพทรายที่ดี]</div><h3>✓ ผ่านเกณฑ์เมื่อ</h3><ul><li>ทรายรองถนนคอนกรีต: เม็ดโตสุด ≤ 9.5 มม. · ผ่านเบอร์ 200 ≤ 10% · Non-Plastic <span class="ref">มทช.251-2569</span></li><li>ทรายคอนกรีต: FM 2.3–3.1 <span class="ref">มทช.101-2563</span></li></ul></div>
+      <div class="card bad"><div class="photo">[ภาพทรายขาดคุณสมบัติ]</div><h3>✗ สัญญาณเตือน <span class="todo">[รอตรวจทาน]</span></h3><ul><li>มีดินหรือโคลนปน กำแล้วเป็นก้อน</li><li>มีเศษไม้ ใบไม้ เปลือกหอยปน</li><li>เม็ดละเอียดมากคล้ายฝุ่น</li></ul></div>
+    </div>
+  </section>
+
+  <section id="agg">
+    <h2><span class="n">5</span>หินสำหรับคอนกรีตและแอสฟัลต์คอนกรีต</h2>
+    <div class="grid2">
+      <div class="card ok"><div class="photo">[ภาพหินที่ดี]</div><h3>✓ ผ่านเกณฑ์เมื่อ</h3><ul><li>ผ่าน % Abrasion, Flakiness, Elongation, Gradation, Specific Gravity <span class="ref">ตาราง 2-10 ลำดับ 8, 10</span> <span class="todo">[ค่าเกณฑ์ มทช.209/มทช.101]</span></li><li>หินคอนกรีตขนาดโตสุด ≤ 40 มม. <span class="ref">มทช.101-2563</span></li></ul></div>
+      <div class="card bad"><div class="photo">[ภาพหินขาดคุณสมบัติ]</div><h3>✗ สัญญาณเตือน <span class="todo">[รอตรวจทาน]</span></h3><ul><li>หินแบนหรือยาวมาก (Flaky / Elongated)</li><li>มีฝุ่นหรือดินเคลือบผิว</li><li>หินผุ สีไม่สม่ำเสมอ</li></ul></div>
+    </div>
+  </section>
+
+  <section id="rebar">
+    <h2><span class="n">6</span>เหล็กเสริม</h2>
+    <div class="grid2">
+      <div class="card ok"><div class="photo">[ภาพเหล็กที่ดี]</div><h3>✓ ผ่านเกณฑ์เมื่อ</h3><ul><li>ผลแรงดึงจุดคลาก แรงดึงสูงสุด % การยืด ผ่านตาม มอก.20 / มอก.24 · TS/YS ≥ 1.25 <span class="ref">มทช.103-2569</span></li></ul></div>
+      <div class="card bad"><div class="photo">[ภาพเหล็กขาดคุณสมบัติ]</div><h3>✗ เมื่อไม่ผ่าน</h3><ul><li><b>ทั้งชุดใช้ไม่ได้</b> <span class="ref">มทช.103-2569</span></li><li>สัญญาณเตือน: สนิมขุมลึก เหล็กคด ขนาดไม่ตรงที่ระบุ <span class="todo">[รอตรวจทาน]</span></li></ul></div>
+    </div>
+  </section>
+
+  <section id="prod">
+    <h2><span class="n">7</span>ผลิตภัณฑ์สำเร็จรูป (ท่อ สี ป้าย ยาง)</h2>
+    <ul>
+      <li>ท่อ คสล.: ตรวจสอบใบรับรอง มอก. และตรวจคุณภาพ ขนาดในสนาม <span class="ref">ตาราง 2-10 ลำดับ 11</span></li>
+      <li>ป้ายจราจร / ตีเส้น: วัดขนาด ค่าสะท้อนแสงในสนาม <span class="ref">ตาราง 2-10 ลำดับ 12</span></li>
+      <li>ยาง: ใช้ของใหม่หรืออยู่ในอายุการเก็บ เพราะการเก็บนานอาจเปลี่ยนคุณสมบัติ <span class="ref">คู่มือ QC แอสฟัลต์คอนกรีต ทช. 2558 ข้อ 1.4</span></li>
+    </ul>
+  </section>
+</main>
+<footer>แหล่งอ้างอิง: มทช. ตามที่ระบุ · คู่มือการควบคุมงานก่อสร้างทาง ตาราง 2-10 · คู่มือการปฏิบัติงานควบคุมคุณภาพการก่อสร้างผิวทางแอสฟัลต์คอนกรีต (ทช. 2558) · ข้อสังเกตด้วยตาทุกข้อรอ สตว. ตรวจทาน</footer>
+</body>
+</html>
