@@ -27,7 +27,12 @@
   function filter() {
     const v = (q.value || '').trim().toLowerCase().replace(/\s+/g, ' ');
     $$('.std').forEach(a => { a.hidden = !!v && !a.textContent.toLowerCase().replace(/\s+/g, ' ').includes(v); });
-    $$('.sgrp').forEach(g => { g.hidden = !!v && !$$('.std', g).some(a => !a.hidden); });
+    $$('.sgrp').forEach(g => {
+      if (v && g.dataset.o == null) g.dataset.o = g.open ? '1' : '';      // จำสถานะพับ/กาง ก่อนค้นหา
+      g.hidden = !!v && !$$('.std', g).some(a => !a.hidden);
+      if (v) g.open = !g.hidden;                                         // ค้นหา → กางหมวดที่พบ
+      else if (g.dataset.o != null) { g.open = !!g.dataset.o; delete g.dataset.o; }  // ล้างคำค้น → คืนสถานะเดิม
+    });
     let none = $('#nores'); const any = $$('.std').some(a => !a.hidden);
     if (!none) { none = document.createElement('p'); none.id = 'nores'; none.className = 'ref'; none.style.margin = '0 4px 12px'; q.after(none); }
     none.textContent = v && !any ? 'ไม่พบ "' + q.value + '" ในรายการ มทช.' : '';
