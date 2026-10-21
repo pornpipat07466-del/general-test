@@ -12,7 +12,7 @@
 <body>
 <header class="appbar"><a class="home" href="index.html"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 11l9-8 9 8"/><path d="M5 10v10h14V10"/></svg>หน้าแรก</a><div class="ttl">วัสดุดีหรือไม่ดีดูอย่างไร</div></header>
 <div class="pagehead"><div class="kick">สตว. สทช.14 กระบี่ · General Test</div><h1>3. วัสดุดีหรือไม่ดีดูอย่างไร</h1><p>ตัดสินด้วยผลทดสอบเทียบเกณฑ์ มทช. · ข้อสังเกตด้วยตาใช้คัดกรองเบื้องต้นเท่านั้น</p></div>
-<nav class="chips"><a href="#rule">หลักตัดสิน</a><a href="#soil">ดิน</a><a href="#lat">ลูกรัง</a><a href="#base">หินคลุก</a><a href="#sand">ทราย</a><a href="#agg">หิน คอนกรีต/AC</a><a href="#rebar">เหล็ก</a><a href="#prod">ผลิตภัณฑ์</a></nav>
+<nav class="chips"><a href="#rule">หลักตัดสิน</a><a href="#issues">ปัญหาที่พบบ่อย</a><a href="#soil">ดิน</a><a href="#lat">ลูกรัง</a><a href="#base">หินคลุก</a><a href="#sand">ทราย</a><a href="#agg">หิน คอนกรีต/AC</a><a href="#rebar">เหล็ก</a><a href="#prod">ผลิตภัณฑ์</a></nav>
 <main>
 
   <section id="rule">
@@ -23,6 +23,12 @@
       <li>ห้ามนำวัสดุที่ยังไม่ผ่านการทดสอบมาใช้ <span class="ref">(เช่น <a class="mlink" href="https://drive.google.com/file/d/1m-WuQW3snmwo3ZBf5oLK8Tg8MQfotbzC/view" target="_blank" rel="noopener">มทช.251-2569</a> ทรายรองถนนคอนกรีต)</span></li>
     </ol>
     <p class="ref">ข้อสังเกตด้วยตาด้านล่างเป็น <span class="todo">ข้อสังเกตเบื้องต้น รอ สตว. ตรวจทานและใส่ภาพจริง</span> ไม่ใช้แทนผลทดสอบ</p>
+  </section>
+
+  <section id="issues">
+    <h2><span class="n">!</span>ปัญหาอุปสรรคที่พบบ่อย</h2>
+    <p class="ref" style="margin-top:-6px">รวบรวมจากการรับตัวอย่างและผลทดสอบของ สตว. · เพิ่มรายการได้ที่ปุ่ม "จัดการรูปและปัญหา" ท้ายหน้า</p>
+    <div id="issues-list"></div>
   </section>
 
   <section id="soil">
@@ -81,7 +87,7 @@
       <li>ยาง: ใช้ของใหม่หรืออยู่ในอายุการเก็บ เพราะการเก็บนานอาจเปลี่ยนคุณสมบัติ <span class="ref">คู่มือ QC แอสฟัลต์คอนกรีต ทช. 2558 ข้อ 1.4</span></li>
     </ul>
   </section>
-  <div class="phbar" id="phbar"><button class="phedit" id="phedit" type="button">จัดการรูป (สำหรับ สตว.)</button><span class="phmsg" id="phmsg"></span></div>
+  <div class="phbar" id="phbar"><button class="phedit" id="phedit" type="button">จัดการรูปและปัญหา (สำหรับ สตว.)</button><span class="phmsg" id="phmsg"></span></div>
 </main>
 <a class="tohome" href="index.html"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 11l9-8 9 8"/><path d="M5 10v10h14V10"/></svg>กลับหน้าแรก</a>
 <footer>แหล่งอ้างอิง: มทช. ตามที่ระบุ (แตะชื่อเพื่อเปิด PDF) · คู่มือการปฏิบัติงานควบคุมคุณภาพการก่อสร้างผิวทางแอสฟัลต์คอนกรีต กรมทางหลวงชนบท (2558) · ข้อสังเกตด้วยตารอ สตว. ตรวจทาน</footer>

@@ -167,9 +167,9 @@ table.sheet .x:has(.v){font-weight:600!important}
   <!-- ขั้น 3 -->
   <section id="st3" hidden>
     <div class="card">
-      <h2>เลือกเอกสารที่ต้องการ</h2>
-      <label class="pick"><input type="checkbox" id="w1" checked><span><b>PDF 1</b> บันทึกนำส่งตัวอย่างวัสดุ<br><small class="ref">ตามแบบฟอร์ม สตว. — ผู้ควบคุมงานลงนาม แนบไปกับตัวอย่าง</small></span></label>
-      <label class="pick"><input type="checkbox" id="w2" checked><span><b>PDF 2</b> ใบสรุปการเตรียมตัวอย่างวัสดุ (General Test)<br><small class="ref">ให้ผู้รับจ้างใช้เตรียมและนำส่งวัสดุ</small></span></label>
+      <h2>ตัวเลือกเอกสาร</h2>
+      <label class="pick" hidden><input type="checkbox" id="w1" checked><span><b>PDF 1</b> บันทึกนำส่งตัวอย่างวัสดุ<br><small class="ref">ตามแบบฟอร์ม สตว. — ผู้ควบคุมงานลงนาม แนบไปกับตัวอย่าง</small></span></label>
+      <label class="pick" hidden><input type="checkbox" id="w2" checked><span><b>PDF 2</b> ใบสรุปการเตรียมตัวอย่างวัสดุ (General Test)<br><small class="ref">ให้ผู้รับจ้างใช้เตรียมและนำส่งวัสดุ</small></span></label>
       <label class="pick" id="wLabWrap"><input type="checkbox" id="wLab"><span>แนบป้ายติดถุงตัวอย่างท้าย PDF 2</span></label>
       <div id="sheetNote" class="ref"></div>
     </div>
@@ -203,6 +203,15 @@ table.sheet .x:has(.v){font-weight:600!important}
       <div class="ready" id="ready" hidden><b id="readyT">PDF พร้อมแล้ว</b><div class="row"><button class="btn" id="bSave">บันทึก / แชร์</button><button class="btn ghost" id="bOpen">เปิดดู</button></div><p class="ref" id="readyN"></p></div>
       <p class="ref">ได้ไฟล์ PDF ขนาด A4 ทันที ใช้ได้ทั้งมือถือและคอมพิวเตอร์ · iPhone: กด "บันทึก / แชร์" แล้วเลือก "บันทึกไปยังแอปไฟล์" หรือส่งต่อทาง LINE</p>
       <div class="prev" id="prevBox" hidden><div class="scaler" id="prevScaler"></div></div>
+      </div>
+    <div class="card">
+      <h2>แบบฟอร์มว่าง (Google Sheets)</h2>
+      <p class="ref" style="margin:0 0 10px">สำหรับกรอกเองในคอมพิวเตอร์ แต่ละคนได้สำเนาของตัวเอง ใช้พร้อมกันได้หลายคน ไม่กระทบต้นฉบับ</p>
+      <div style="display:grid;gap:10px">
+        <a class="btn" style="text-align:center;text-decoration:none;background:#1E7B4F" href="https://docs.google.com/spreadsheets/d/1RRIjfouXgvC6SsrJzSvJ0nFgZIEi9sRER2RCLpcUZkM/copy" target="_blank" rel="noopener">ทำสำเนาไปกรอกใน Google Sheets</a>
+        <a class="btn ghost" style="text-align:center;text-decoration:none" href="https://docs.google.com/spreadsheets/d/1RRIjfouXgvC6SsrJzSvJ0nFgZIEi9sRER2RCLpcUZkM/export?format=xlsx" target="_blank" rel="noopener">ดาวน์โหลดเป็น Excel (.xlsx)</a>
+      </div>
+      <p class="ref">กรอกที่แผ่น "แบบกรอก" คอลัมน์ C แล้วพิมพ์แผ่น PDF1 / PDF2</p>
       <p style="margin-top:14px"><button class="btn ghost sm" id="bClear">ล้างข้อมูลที่กรอกทั้งหมด</button></p>
     </div>
   </section>
@@ -545,7 +554,7 @@ $('#bNext').onclick=()=>go(step+1); $('#bBack').onclick=()=>go(step-1);
 $$('.steps button').forEach(b=>b.onclick=()=>go(+b.dataset.go));
 function save(){ try{ localStorage.setItem(KEY,JSON.stringify({picked,st,info,w:[$('#w1').checked,$('#w2').checked,$('#wLab').checked]})); }catch(e){} }
 function load(){ let s=null; try{ s=JSON.parse(localStorage.getItem(KEY)||'null'); }catch(e){}
-  if(s){ picked=s.picked||[]; st=s.st||{}; info=s.info||{}; if(s.w){ $('#w1').checked=s.w[0]; $('#w2').checked=s.w[1]; $('#wLab').checked=s.w[2]; } }
+  if(s){ picked=s.picked||[]; st=s.st||{}; info=s.info||{}; if(s.w){ $('#wLab').checked=s.w[2]; } $('#w1').checked=$('#w2').checked=true; }
   const q=new URLSearchParams(location.search).get('m'); if(q) q.split(',').forEach(id=>{ if(byId(id)&&!picked.includes(id)) picked.push(id); });
   picked=picked.filter(byId); picked.sort((a,b)=>byId(a).no-byId(b).no); picked.forEach(id=>{ if(!st[id]) st[id]=defaults(byId(id)); });
   const sel=(n,arr)=>{ $(`[name=${n}]`).innerHTML='<option value="">— เลือก —</option>'+arr.map(o=>`<option>${esc(o)}</option>`).join(''); };
