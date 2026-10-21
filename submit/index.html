@@ -277,7 +277,7 @@ const M=[
   rule:{t:'ส่งผลออกแบบ ≥ 30 วันก่อนเริ่มงาน',ref:'มทช.230-2563'},
   items:[{n:'หิน Hot Bin 3/4″',q:50,u:'กก.',ref:S},{n:'หิน Hot Bin 1/2″',q:50,u:'กก.',ref:S},{n:'หิน Hot Bin 3/8″',q:50,u:'กก.',ref:S},{n:'หินฝุ่น Hot Bin',q:50,u:'กก.',ref:S},{n:'ยางแอสฟัลต์ซีเมนต์',q:5,u:'ลิตร',ref:'คู่มือ QC แอสฟัลต์คอนกรีต ทช. 2558 ข้อ 1.4'}],
   tests:['เม็ดหยาบ: % Abrasion, Flakiness Index, Elongation Index, Gradation, Specific Gravity','เม็ดละเอียด: Sand Equivalent, % Abrasion, Gradation, Specific Gravity','ออกแบบส่วนผสม'],
-  src:[{k:'s34',l:'Hot Bin 3/4″',ph:''},{k:'s12',l:'Hot Bin 1/2″',ph:''},{k:'s38',l:'Hot Bin 3/8″',ph:''},{k:'sd',l:'Hot Bin หินฝุ่น',ph:''},{k:'mk',l:'ผู้ผลิตยาง AC',ph:''}],opt:{k:'type',l:'ชั้นทาง',v:['Wearing','Binder']},opt2:{k:'atype',l:'ชนิดยาง AC (มทช.230-2563 ข้อ 2.1)',s:'ชนิดยาง',v:['AC 60-70','AC 40-50','อื่น ๆ ตามแบบ (ต้องได้รับอนุญาต ทช.)']}},
+  src:[{k:'s34',l:'แหล่งวัสดุ Hot Bin 3/4″',s:'Hot Bin 3/4″',ph:''},{k:'s12',l:'แหล่งวัสดุ Hot Bin 1/2″',s:'Hot Bin 1/2″',ph:''},{k:'s38',l:'แหล่งวัสดุ Hot Bin 3/8″',s:'Hot Bin 3/8″',ph:''},{k:'sd',l:'แหล่งวัสดุ Hot Bin หินฝุ่น',s:'Hot Bin หินฝุ่น',ph:''},{k:'mk',l:'ผู้ผลิตยาง AC',ph:''}],opt:{k:'type',l:'ชั้นทาง',v:['Wearing','Binder']},opt2:{k:'atype',l:'ชนิดยาง AC (มทช.230-2563 ข้อ 2.1)',s:'ชนิดยาง',v:['AC 60-70','AC 40-50','อื่น ๆ ตามแบบ (ต้องได้รับอนุญาต ทช.)']}},
  {id:'concrete',no:10,g:2,name:'งาน คสล.',en:'ถนน สะพาน ท่อลอดเหลี่ยม',sheet:2,unit:'ชุด',k:10,
   rule:{t:'ทั้งสัญญา ≤ 50 ม.³ ไม่ต้องออกแบบ ใช้ปูนขั้นต่ำ ค.18 ≥ 290, ค.21 ≥ 300, ค.24 ≥ 320 กก./ม.³',ref:'มทช.101-2563 ข้อ 3.4.2'},
   items:[{n:'ทราย',q:50,u:'กก.',ref:S},{n:'หิน',q:50,u:'กก.',ref:S},{n:'ปูนซีเมนต์ประเภท 1',q:1,u:'กระสอบ',ref:S}],
@@ -460,7 +460,7 @@ function renderDoc2(){
   const d=info, today=new Date(), ts=`${today.getDate()} ${MONTH[today.getMonth()]} ${today.getFullYear()+543}`;
   const notes=[];
   const rows=picked.map((id,i)=>{ const m=byId(id), s=st[id], L=lines(m), N=setsOf(m);
-    const srcs=(m.src||[]).filter(x=>s[x.k]).map(x=>`${esc(x.l)}: ${esc(s[x.k])}`);
+    const srcs=(m.src||[]).filter(x=>s[x.k]).map(x=>`${esc(x.s||x.l)}: ${esc(s[x.k])}`);
     if(m.opt) srcs.push(`${esc(m.opt.l)}: ${esc(s.type)}`); if(m.opt2) srcs.push(`${esc(m.opt2.s)}: ${esc(s[m.opt2.k]||m.opt2.v[0])}`);
     const many=!m.calc&&N>1, none=L.length&&L.every(l=>l.tot===0);
     const samp= none ? `<b>ไม่ต้องส่ง</b> <span class="r">${esc(L[0].note||'')}</span>`
