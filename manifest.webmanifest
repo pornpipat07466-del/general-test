@@ -1,0 +1,16 @@
+{
+  "name": "General Test · สตว. สทช.14 กระบี่",
+  "short_name": "General Test",
+  "description": "เกณฑ์การนำส่งวัสดุเพื่อทดสอบ และสร้างบันทึกนำส่งตัวอย่างวัสดุ",
+  "lang": "th",
+  "start_url": "./index.html",
+  "scope": "./",
+  "display": "standalone",
+  "background_color": "#F3F5F9",
+  "theme_color": "#1F3A5F",
+  "icons": [
+    {"src": "icons/icon-192.png", "sizes": "192x192", "type": "image/png"},
+    {"src": "icons/icon-512.png", "sizes": "512x512", "type": "image/png"},
+    {"src": "icons/maskable-512.png", "sizes": "512x512", "type": "image/png", "purpose": "maskable"}
+  ]
+}

@@ -7,6 +7,13 @@
 <title>วัสดุดีหรือไม่ดีดูอย่างไร</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Sarabun:wght@400;600;700&display=swap" rel="stylesheet">
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="icon" type="image/png" href="icons/favicon-64.png">
+<link rel="apple-touch-icon" href="icons/apple-touch-icon.png">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="General Test">
+<meta name="description" content="เกณฑ์การนำส่งวัสดุเพื่อทดสอบ (General Test) และสร้างบันทึกนำส่งตัวอย่างวัสดุ สตว. สทช.14 กระบี่">
 <link rel="stylesheet" href="css/style.css">
 </head>
 <body>
@@ -90,8 +97,9 @@
   <div class="phbar" id="phbar"><button class="phedit" id="phedit" type="button">จัดการรูปและปัญหา (สำหรับ สตว.)</button><span class="phmsg" id="phmsg"></span></div>
 </main>
 <a class="tohome" href="index.html"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 11l9-8 9 8"/><path d="M5 10v10h14V10"/></svg>กลับหน้าแรก</a>
-<footer>แหล่งอ้างอิง: มทช. ตามที่ระบุ (แตะชื่อเพื่อเปิด PDF) · คู่มือการปฏิบัติงานควบคุมคุณภาพการก่อสร้างผิวทางแอสฟัลต์คอนกรีต กรมทางหลวงชนบท (2558) · ข้อสังเกตด้วยตารอ สตว. ตรวจทาน</footer>
+<footer>แหล่งอ้างอิง: มทช. ตามที่ระบุ (แตะชื่อเพื่อเปิด PDF) · คู่มือการปฏิบัติงานควบคุมคุณภาพการก่อสร้างผิวทางแอสฟัลต์คอนกรีต กรมทางหลวงชนบท (2558) · ข้อสังเกตด้วยตารอ สตว. ตรวจทาน<br><span class="ver">General Test · สตว. สทช.14 กระบี่ · ฉบับใช้งาน 1.0 · 21 ต.ค. 2569</span></footer>
 <script>window.PHOTO_API="https://script.google.com/macros/s/AKfycbyoLhtSeG7GeF4dh0Q25uvg7tqESwGeewG7b8IbsuMqLlJ_Tl1cI9_lxL0s1isLsFo_/exec";</script>
 <script src="js/photos.js"></script>
+<script>if("serviceWorker" in navigator)addEventListener("load",()=>navigator.serviceWorker.register("sw.js").catch(()=>{}));</script>
 </body>
 </html>
