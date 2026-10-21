@@ -272,12 +272,12 @@ const M=[
   rule:{t:'จากแหล่งผลิตหรือที่นำมาใช้งาน',ref:K},
   items:[{n:'ยาง Prime Coat',q:5,u:'ลิตร',ref:S},{n:'หินคลุกพื้นทางที่จะพ่น',q:50,u:'กก.',ref:S}],
   tests:['คุณสมบัติยาง Prime Coat','ออกแบบอัตราการพ่นยาง'],
-  src:[{k:'s1',l:'แหล่งหินคลุก',ph:''},{k:'mk',l:'ผู้ผลิตยาง',ph:''}],opt:{k:'type',l:'ชนิดยาง',v:['CSS-1','MC-70','อื่น ๆ']}},
+  src:[{k:'s1',l:'แหล่งหินคลุก',ph:''},{k:'mk',l:'ผู้ผลิตยาง',ph:''}],opt:{k:'type',l:'ชนิดยาง',v:['CSS-1','CSS-1h','MC-30','MC-70','SC-70','SS-K','EAP','อื่น ๆ']}},
  {id:'ac',no:9,g:1,name:'Asphalt Concrete',en:'แอสฟัลต์คอนกรีต',sheet:2,unit:'ตัวอย่าง',k:8,
   rule:{t:'ส่งผลออกแบบ ≥ 30 วันก่อนเริ่มงาน',ref:'มทช.230-2563'},
-  items:[{n:'หิน Hot Bin 3/4″',q:50,u:'กก.',ref:S},{n:'หิน Hot Bin 1/2″',q:50,u:'กก.',ref:S},{n:'หิน Hot Bin 3/8″',q:50,u:'กก.',ref:S},{n:'หินฝุ่น Hot Bin',q:50,u:'กก.',ref:S},{n:'ยาง AC 60-70',q:5,u:'ลิตร',ref:'คู่มือ QC แอสฟัลต์คอนกรีต ทช. 2558 ข้อ 1.4'}],
+  items:[{n:'หิน Hot Bin 3/4″',q:50,u:'กก.',ref:S},{n:'หิน Hot Bin 1/2″',q:50,u:'กก.',ref:S},{n:'หิน Hot Bin 3/8″',q:50,u:'กก.',ref:S},{n:'หินฝุ่น Hot Bin',q:50,u:'กก.',ref:S},{n:'ยางแอสฟัลต์ซีเมนต์',q:5,u:'ลิตร',ref:'คู่มือ QC แอสฟัลต์คอนกรีต ทช. 2558 ข้อ 1.4'}],
   tests:['เม็ดหยาบ: % Abrasion, Flakiness Index, Elongation Index, Gradation, Specific Gravity','เม็ดละเอียด: Sand Equivalent, % Abrasion, Gradation, Specific Gravity','ออกแบบส่วนผสม'],
-  src:[{k:'s34',l:'Hot Bin 3/4″',ph:''},{k:'s12',l:'Hot Bin 1/2″',ph:''},{k:'s38',l:'Hot Bin 3/8″',ph:''},{k:'sd',l:'Hot Bin หินฝุ่น',ph:''},{k:'mk',l:'ผู้ผลิตยาง AC',ph:''}],opt:{k:'type',l:'ชั้นทาง',v:['Wearing','Binder']}},
+  src:[{k:'s34',l:'Hot Bin 3/4″',ph:''},{k:'s12',l:'Hot Bin 1/2″',ph:''},{k:'s38',l:'Hot Bin 3/8″',ph:''},{k:'sd',l:'Hot Bin หินฝุ่น',ph:''},{k:'mk',l:'ผู้ผลิตยาง AC',ph:''}],opt:{k:'type',l:'ชั้นทาง',v:['Wearing','Binder']},opt2:{k:'atype',l:'ชนิดยาง AC (มทช.230-2563 ข้อ 2.1)',s:'ชนิดยาง',v:['AC 60-70','AC 40-50','อื่น ๆ ตามแบบ (ต้องได้รับอนุญาต ทช.)']}},
  {id:'concrete',no:10,g:2,name:'งาน คสล.',en:'ถนน สะพาน ท่อลอดเหลี่ยม',sheet:2,unit:'ชุด',k:10,
   rule:{t:'ทั้งสัญญา ≤ 50 ม.³ ไม่ต้องออกแบบ ใช้ปูนขั้นต่ำ ค.18 ≥ 290, ค.21 ≥ 300, ค.24 ≥ 320 กก./ม.³',ref:'มทช.101-2563 ข้อ 3.4.2'},
   items:[{n:'ทราย',q:50,u:'กก.',ref:S},{n:'หิน',q:50,u:'กก.',ref:S},{n:'ปูนซีเมนต์ประเภท 1',q:1,u:'กระสอบ',ref:S}],
@@ -314,7 +314,7 @@ const esc=s=>String(s??'').replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&g
 const fmt=n=>Number(n).toLocaleString('th-TH');
 let step=1, picked=[], st={}, info={};
 const byId=id=>M.find(m=>m.id===id);
-function defaults(m){ const o={sets:1}; (m.src||[]).forEach(s=>o[s.k]=''); if(m.opt) o.type=m.opt.v[0];
+function defaults(m){ const o={sets:1}; (m.src||[]).forEach(s=>o[s.k]=''); if(m.opt) o.type=m.opt.v[0]; if(m.opt2) o[m.opt2.k]=m.opt2.v[0];
   if(m.calc==='bars') o.rows=[{gr:'SD40',sz:'DB16',n:'',mk:''}]; if(m.calc==='pipes') o.rows=[{sz:'1000',n:'',mk:''}]; if(m.calc==='area') o.area=''; return o; }
 
 /* ===== กติกาคำนวณ ===== */
@@ -358,6 +358,7 @@ function cardHTML(m,i){
   } else {
     inp=`<div class="row2 s">${(m.src||[]).map(x=>I(m.id,x.k,x.l,s[x.k],x.ph)).join('')}
       ${m.opt?`<div><label class="f">${m.opt.l}</label><select data-m="${m.id}" data-k="type">${m.opt.v.map(o=>`<option ${o===s.type?'selected':''}>${esc(o)}</option>`).join('')}</select></div>`:''}
+      ${m.opt2?`<div><label class="f">${m.opt2.l}</label><select data-m="${m.id}" data-k="${m.opt2.k}">${m.opt2.v.map(o=>`<option ${o===s[m.opt2.k]?'selected':''}>${esc(o)}</option>`).join('')}</select></div>`:''}
       ${m.calc==='area'?I(m.id,'area','พื้นที่ตีเส้น (ตร.ม.)',s.area,'เช่น 2500','n'):''}
       ${I(m.id,'sets',`จำนวน (${m.unit})${m.max?' สูงสุด '+m.max:''}`,s.sets,'1','n')}</div>`;
   }
@@ -407,9 +408,9 @@ function sheetValues(){
       case 'cement-modified': o.Y_sc_sets=String(N); o.Y_sc_cmp=String(N); o.Y_sc_ucs=String(N*4);
         for(let k=1;k<=Math.min(N,4);k++){ o[`Y_sc${k}_src`]=s.s1; o[`Y_sc${k}_type`]='หินคลุก'; } break;
       case 'prime': o.X_pr=true; o.X_pr_n=String(N); o.X_pr_rock=true; o.X_pr_rock_s1=s.s1;
-        if(s.type==='CSS-1'){o.X_pr_css=true;o.X_pr_css_m=s.mk;} else if(s.type==='MC-70'){o.X_pr_mc=true;o.X_pr_mc_m=s.mk;} else {o.X_pr_ash=true;o.X_pr_ash_t=s.mk;} break;
+        if(s.type==='CSS-1'){o.X_pr_css=true;o.X_pr_css_m=s.mk;} else if(s.type==='MC-70'){o.X_pr_mc=true;o.X_pr_mc_m=s.mk;} else {o.X_pr_ash=true;o.X_pr_ash_t=[s.type==='อื่น ๆ'?'':s.type,s.mk].filter(Boolean).join(' · ');} break;
       case 'ac': o[s.type==='Binder'?'X_ac_b':'X_ac_w']=true; o.X_ac_n=String(N);
-        for(const [k,sk] of [['34','s34'],['12','s12'],['38','s38'],['dust','sd']]){ o['X_ac_'+k]=true; o[`X_ac_${k}_s`]=s[sk]; } o.X_ac_ac=true; o.X_ac_ac_m=s.mk; break;
+        for(const [k,sk] of [['34','s34'],['12','s12'],['38','s38'],['dust','sd']]){ o['X_ac_'+k]=true; o[`X_ac_${k}_s`]=s[sk]; } { const at=s.atype||'AC 60-70'; if(at==='AC 60-70'){o.X_ac_ac=true; o.X_ac_ac_m=s.mk;} else {o.X_ac_oth=true; o.X_ac_oth_t=[at.startsWith('อื่น')?'':at,s.mk].filter(Boolean).join(' · ');} } break;
       case 'concrete': o.X_cm_n=String(N); o.X_cm_type=s.type; o.X_cm_cem=true; o.X_cm_cem_b=s.mk; o.X_cm_sand=true; o.X_cm_sand_s=s.s1; o.X_cm_stone=true; o.X_cm_stone_s=s.s2; break;
       case 'rebar': { let sets=0,bars=0; s.rows.forEach(r=>{ if(!r.sz) return; const k=`B_${r.gr}_${r.sz}`; o[k]=true; o[k+'_m']=r.mk; sets++; bars+=barSamples(r.n); });
         o.B_sets=String(sets); o.B_bars=String(bars); break; }
@@ -460,7 +461,7 @@ function renderDoc2(){
   const notes=[];
   const rows=picked.map((id,i)=>{ const m=byId(id), s=st[id], L=lines(m), N=setsOf(m);
     const srcs=(m.src||[]).filter(x=>s[x.k]).map(x=>`${esc(x.l)}: ${esc(s[x.k])}`);
-    if(m.opt) srcs.push(`${esc(m.opt.l)}: ${esc(s.type)}`);
+    if(m.opt) srcs.push(`${esc(m.opt.l)}: ${esc(s.type)}`); if(m.opt2) srcs.push(`${esc(m.opt2.s)}: ${esc(s[m.opt2.k]||m.opt2.v[0])}`);
     const many=!m.calc&&N>1, none=L.length&&L.every(l=>l.tot===0);
     const samp= none ? `<b>ไม่ต้องส่ง</b> <span class="r">${esc(L[0].note||'')}</span>`
       : L.filter(l=>l.tot!==0).map(l=>`${esc(l.n)} <b>${l.per!=null||l.todo?qtxt(l.per,l.u):qtxt(l.tot,l.u)}</b>${many&&l.tot!=null?` <span class="r">(รวม ${fmt(l.tot)} ${esc(l.u)})</span>`:''}`).join('<br>')||'<span class="miss">[ยังไม่กรอกขนาด]</span>';
