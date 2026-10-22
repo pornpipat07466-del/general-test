@@ -197,3 +197,4 @@ a.mlink{color:inherit;text-decoration:underline;text-decoration-color:var(--acc)
 table.mx{table-layout:fixed}
 table.mx td,table.mx th{padding:9px 6px}
 table.mx td:first-child{font-weight:600}
+table.gr td,table.gr th{padding:8px 1px;font-size:13.5px;letter-spacing:-.2px}
