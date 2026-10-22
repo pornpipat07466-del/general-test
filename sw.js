@@ -1,5 +1,5 @@
 /* General Test — ใช้งานแบบออฟไลน์ได้หลังเปิดครั้งแรก (หน้าเว็บ: ดึงใหม่ก่อน ถ้าไม่มีเน็ตใช้ฉบับที่เก็บไว้) */
-const V = 'gt-v1.0.9';
+const V = 'gt-v1.0.10';
 const CORE = ['./', 'index.html', 'criteria.html', 'properties.html', 'quality.html', 'standards.html', 'submit/index.html',
   'css/style.css', 'js/photos.js', 'js/standards.js', 'img/sampling-stockpile.jpg', 'img/quartering-field.jpg', 'icons/icon-192.png', 'manifest.webmanifest'];
 self.addEventListener('install', e => { e.waitUntil(caches.open(V).then(c => c.addAll(CORE)).then(() => self.skipWaiting())); });
