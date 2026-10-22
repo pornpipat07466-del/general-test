@@ -194,3 +194,6 @@ a.mlink{color:inherit;text-decoration:underline;text-decoration-color:var(--acc)
 
 .look{margin:0 0 6px;padding:4px 10px;border-left:3px solid var(--ok);background:var(--ok-bg);border-radius:0 8px 8px 0;font-size:14.5px;line-height:1.45}
 .look::before{content:"✓ ";font-weight:700;color:var(--ok)}
+table.mx{table-layout:fixed}
+table.mx td,table.mx th{padding:9px 6px}
+table.mx td:first-child{font-weight:600}
