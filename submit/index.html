@@ -55,6 +55,7 @@ input:focus,select:focus{outline:2px solid var(--acc);outline-offset:1px}
 .row3{display:grid;grid-template-columns:1.2fr 1fr 1fr;gap:0 8px}
 @media (max-width:420px){.row2.s{grid-template-columns:1fr}}
 .ref{font-size:12.5px;color:var(--muted);margin:4px 0 0}
+.ref a.mlink{color:var(--acc-ink,#B45309);text-decoration:underline;text-underline-offset:2px}
 .q{background:var(--warn);color:var(--ink);border-left:3px solid var(--acc);padding:8px 10px;border-radius:6px;font-size:14px;margin:8px 0}
 table.list{width:100%;border-collapse:collapse;font-size:14.5px}
 table.list th,table.list td{border-bottom:1px solid var(--line);padding:6px 4px;text-align:left;vertical-align:top}
@@ -238,6 +239,9 @@ table.sheet .x:has(.v){font-weight:600!important}
    ทุกค่ามีแหล่ง (ref) · todo = ยังไม่มีแหล่ง รอ สตว. ยืนยัน
    ===================================================================== */
 const S='แนวทางปฏิบัติ สตว.', K='คู่มือการควบคุมงานก่อสร้างทาง ตาราง 2-10', F='แบบฟอร์มใบนำส่ง สตว.';
+const STDID={"มทช.201": "1nUaGAGJTQWjj6yS9O2Ueq5jhx4vaF79y", "มทช.202": "1FsS5MekMZO_RbdORe1ym10FL3boBQaFY", "มทช.203": "1PodUJU0YjOFbJ1M1a4ti51pMwxSL7t8v", "มทช.204": "1tfAyPo-U67xPcJ9HdJRb6GegclJnq95Z", "มทช.206": "19i2mQdTHtdIiFW6Yw9WoBIVySdfJ-i4F", "มทช.209": "1Btl_iVd9WKbqHyOk-K6cIqzzpwtTqv8r", "มทช.213": "1EPAcoc0xJSpFaOnyrVjSPlYfixgO2P09", "มทช.214": "1pukyOpka6zrLUOAuF3RzedxeEDty0k7e", "มทช.216": "1X_1Y1hUjRWfe7kWOdPTFWAIcdj2LRW3Y", "มทช.223": "16ptV0R48GQ5gIKhe6LkLlmY8wHqTY94L", "มทช.225": "1CIWenOuyhRehejUDHDNHw-MqZqEmX5Yn", "มทช.227": "130kKvHlCaOJXLKzRhca0DTbvot-5Lkyv", "มทช.230": "1p9szyy15H7D3hgxVLcoGyr8xtaJ66X-T", "มทช.231": "11HL306mP3efUtUbLSX9SrQAIUkiYXmG0", "มทช.232": "1kWEKem-khwOemlRP9gsbQGkmco5LCEaS", "มทช.237": "1a17sinWHQhgyS6_jR5PWLa7khoeyY_wN", "มทช.239": "1N678xXv8nrJAqvL0CLsg5k2N0DbS4BLj", "มทช.241": "1484txjVEay-jMjCoLgrp4hccmV0DJMPN", "มทช.242": "1LVbqJSOx91-iR22tFSORj21rYiFzWl2y", "มทช.244": "1SgUEMI0Ny7yy1ku8H8x8TuigvvrI_6GM", "มทช.248": "1nvgoim-3sQOA_xWMH4goeExvIYq-sl8-", "มทช.249": "1QfBfLteTjbKQ_ivwSr-urJJuR8S5pSfI", "มทช.251": "1m-WuQW3snmwo3ZBf5oLK8Tg8MQfotbzC", "มทช.101": "155KlNHqjQHaqr3aRbJHxlrweAqtTWxFm", "มทช.103": "1iJ8l6q4TtHaO7cqfccDn83ZEarAzFElm", "มทช.106": "1Lj2fJShuDna-P95b_jJjlvCruBzUAcbM", "มทช.(ท)501.1": "1gRNVGbQlsOdugO855oPa9TnHm9dIOsLk", "มทช.(ท)501.2": "1nu317R6YBHBM4TFAKoWsj3ro6JDOf-hD", "มทช.(ท)501.3": "1hm5v4EzTpt2t5Aisui2r6vFJuLp5hLLx", "มทช.(ท)501.5": "1qlUxCcad9wn2gLJ91mvZv3Yk8EfGpLK3", "มทช.(ท)501.6": "1hTP3vr-kW0UizsVwpNJTXaJ9EOMkKcyQ", "มทช.(ท)501.8": "1J-A-b5etJXpUQaPeXAm-QFD1HcECaFvz", "มทช.(ท)501.9": "1HiKUy_4WuENCQkD5Lv9W9mIvtUn0EFf2", "มทช.(ท)501.12": "1ZJMohYzH3R_KHMaDlBrdnfOVBTgOB0mE", "มทช.(ท)501.13": "1JQJSfZMPIE8ASg21bjnk6wfaNaOLCp6M", "มทช.(ท)501.14": "1HMV40srZff4RQXFlXmuSlJOm2rRJfpWF", "มทช.(ท)501.15": "1mB8ep4kr81dusiphBsn8sg6wcn37q9OD", "มทช.(ท)501.16": "1lYWxtkadpyEuwo1hgMna-fWkheRPPLqG", "มทช.(ท)601": "1c43Y2vqfreCNsb76yV8OAaDCKY5Ea08L", "มทช.(ท)602": "1RjW-lGFNlpdcS1Ff7CDz6sbjmZuIwwtH", "มทช.(ท)603": "18M6sE6HdtN0PCu1v717QKL49KRpEPgqD", "มทช.(ท)604": "1C6FllbEhn-SOQwROEeSIHDImo35ukpVW", "มทช.(ท)605": "1pj7ccTvf4I0ssCtiHanmnb5ljvKMEeuu", "มทช.(ท)607": "139SZYY4bnfmFTUIrtOEX7ujAsyO1M8Jh", "มทช.(ท)101.1": "1sUwNZpaVwuvrSBQMqeeZhhWZK-97HeHI", "มทช.(ท)101.2": "16pA3hFmrPioVn1tLAc8L0Jq7u7MHVeqS", "มทช.(ท)101.3": "1Pk2d3tRzcG-vFA8Pb_dwYybPQeLBBm0m", "มทช.(ท)101.4": "1Lc6iNk98Ooo8-HcJEmnShZhjphCxTjXg", "มทช.(ท)101.5": "1kECzIq_5tBKB96bUzk80P7E9JUbcXwFE", "มทช.(ท)303": "1FyQYdulzaMKeKhrc3HwSvKBdeGUV4jEF", "มทช.(ท)517": "1RQvxfW3qB2XZIHxcMCMXX3zWYPANk6mL", "QCS": "1sBNXhhFZ2esYGXNHxN9ne9uD0guibrka"};
+function lk(s){ return esc(s).replace(/มาตรการ QCS(?: ปีงบ)? 2569|มทช\.\s?(?:\(ท\)\s?)?\d{3}(?:\.\d+)?(?:\s?[-–]\s?\d{4})?/g, m=>{ const k=/QCS/.test(m)?'QCS':m.replace(/\s/g,'').replace(/[-–]\d{4}$/,''); const id=STDID[k]; return id?`<a class="mlink" href="https://drive.google.com/file/d/${id}/view" target="_blank" rel="noopener">${m}</a>`:m; }); }
+
 const GROUPS=['หมวด 1 งานชั้นทาง','หมวด 2 งานยางและผิวทาง','หมวด 3 งานคอนกรีตและเหล็ก','หมวด 4 งานอุปกรณ์ทาง'];
 const VOL={t:'5,000 ม.³/ตัวอย่าง',ref:K};
 const M=[
@@ -357,18 +361,18 @@ function cardHTML(m,i){
       + `<p><button class="btn ghost sm" data-add="${m.id}">+ เพิ่มขนาด</button></p>`;
   } else {
     inp=`<div class="row2 s">${(m.src||[]).map(x=>I(m.id,x.k,x.l,s[x.k],x.ph)).join('')}
-      ${m.opt?`<div><label class="f">${m.opt.l}</label><select data-m="${m.id}" data-k="type">${m.opt.v.map(o=>`<option ${o===s.type?'selected':''}>${esc(o)}</option>`).join('')}</select></div>`:''}
-      ${m.opt2?`<div><label class="f">${m.opt2.l}</label><select data-m="${m.id}" data-k="${m.opt2.k}">${m.opt2.v.map(o=>`<option ${o===s[m.opt2.k]?'selected':''}>${esc(o)}</option>`).join('')}</select></div>`:''}
+      ${m.opt?`<div><label class="f">${lk(m.opt.l)}</label><select data-m="${m.id}" data-k="type">${m.opt.v.map(o=>`<option ${o===s.type?'selected':''}>${esc(o)}</option>`).join('')}</select></div>`:''}
+      ${m.opt2?`<div><label class="f">${lk(m.opt2.l)}</label><select data-m="${m.id}" data-k="${m.opt2.k}">${m.opt2.v.map(o=>`<option ${o===s[m.opt2.k]?'selected':''}>${esc(o)}</option>`).join('')}</select></div>`:''}
       ${m.calc==='area'?I(m.id,'area','พื้นที่ตีเส้น (ตร.ม.)',s.area,'เช่น 2500','n'):''}
       ${I(m.id,'sets',`จำนวน (${m.unit})${m.max?' สูงสุด '+m.max:''}`,s.sets,'1','n')}</div>`;
   }
   return `<div class="card" id="c-${m.id}"><h2><span class="no">${i+1}.</span>${esc(m.name)}</h2>
     <table class="list"><tr><th>วัสดุที่ต้องส่ง</th><th>ต่อชุด</th><th>รวม</th></tr>${
-      L.map(l=>`<tr><td>${esc(l.n)}${l.note?`<div class="ref">${esc(l.note)}</div>`:''}<div class="ref">ที่มา: ${esc(l.ref)}</div></td><td class="n">${l.per===null&&!l.todo?'—':qtxt(l.per,l.u)}</td><td class="n">${qtxt(l.tot,l.u)}</td></tr>`).join('')||'<tr><td colspan="3" class="ref">กรอกขนาดด้านล่าง</td></tr>'}</table>
+      L.map(l=>`<tr><td>${esc(l.n)}${l.note?`<div class="ref">${lk(l.note)}</div>`:''}<div class="ref">ที่มา: ${lk(l.ref)}</div></td><td class="n">${l.per===null&&!l.todo?'—':qtxt(l.per,l.u)}</td><td class="n">${qtxt(l.tot,l.u)}</td></tr>`).join('')||'<tr><td colspan="3" class="ref">กรอกขนาดด้านล่าง</td></tr>'}</table>
     ${inp}
-    <div class="ref">เกณฑ์: ${esc(m.rule.t)} (${esc(m.rule.ref)})</div>
+    <div class="ref">เกณฑ์: ${lk(m.rule.t)} (${lk(m.rule.ref)})</div>
     <div class="f" style="margin-top:8px;font-size:14px;color:var(--muted)">ดำเนินการทดสอบ</div>
-    <ol class="tests">${m.tests.map(t=>`<li>${esc(t)}</li>`).join('')}</ol><div class="ref">ที่มา: ${esc(m.testRef)}</div>
+    <ol class="tests">${m.tests.map(t=>`<li>${esc(t)}</li>`).join('')}</ol><div class="ref">ที่มา: ${lk(m.testRef)}</div>
     ${m.sheet===0?`<div class="q">ไม่มีช่องในแบบฟอร์มบันทึกนำส่ง (PDF 1) — ใช้บันทึกข้อความแยก [รอ สตว. กำหนด]</div>`:''}
     ${m.max&&+s.sets>m.max?`<div class="q">แบบฟอร์มรับได้ ${m.max} ชุดต่อใบ — ส่วนที่เกินออกใบนำส่งเพิ่ม</div>`:''}</div>`;
 }
