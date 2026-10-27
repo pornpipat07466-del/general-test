@@ -45,6 +45,8 @@ main{max-width:760px;margin:0 auto;padding:6px 16px 120px}
 .chip{display:flex;gap:8px;align-items:flex-start;padding:11px 10px;border:1.5px solid var(--line);border-radius:14px;color:var(--ink);background:var(--card);cursor:pointer;font-size:15px;line-height:1.35}
 .chip input{width:20px;height:20px;margin:1px 0 0;flex:none;accent-color:var(--acc)}
 .chip small{display:block;color:var(--muted);font-size:12px}
+.chip b.cnt{color:var(--acc);font-size:13px}
+.dupbar{display:flex;gap:8px;flex-wrap:wrap;margin-top:12px;padding-top:10px;border-top:1px dashed var(--line)}
 .chip:has(input:checked){border-color:var(--acc);background:var(--acc-bg);box-shadow:inset 0 0 0 1px var(--acc)}
 label.f{display:block;font-size:14px;color:var(--muted);margin:10px 0 3px}
 input,select{width:100%;font:inherit;font-size:16px;padding:9px 10px;border:1px solid var(--line);border-radius:12px;background:var(--card);color:var(--ink);-webkit-text-fill-color:var(--ink);opacity:1}
@@ -242,7 +244,13 @@ const S='แนวทางปฏิบัติ สตว.', K='คู่มื
 const STDID={"มทช.201": "1nUaGAGJTQWjj6yS9O2Ueq5jhx4vaF79y", "มทช.202": "1FsS5MekMZO_RbdORe1ym10FL3boBQaFY", "มทช.203": "1PodUJU0YjOFbJ1M1a4ti51pMwxSL7t8v", "มทช.204": "1tfAyPo-U67xPcJ9HdJRb6GegclJnq95Z", "มทช.206": "19i2mQdTHtdIiFW6Yw9WoBIVySdfJ-i4F", "มทช.209": "1Btl_iVd9WKbqHyOk-K6cIqzzpwtTqv8r", "มทช.213": "1EPAcoc0xJSpFaOnyrVjSPlYfixgO2P09", "มทช.214": "1pukyOpka6zrLUOAuF3RzedxeEDty0k7e", "มทช.216": "1X_1Y1hUjRWfe7kWOdPTFWAIcdj2LRW3Y", "มทช.223": "16ptV0R48GQ5gIKhe6LkLlmY8wHqTY94L", "มทช.225": "1CIWenOuyhRehejUDHDNHw-MqZqEmX5Yn", "มทช.227": "130kKvHlCaOJXLKzRhca0DTbvot-5Lkyv", "มทช.230": "1p9szyy15H7D3hgxVLcoGyr8xtaJ66X-T", "มทช.231": "11HL306mP3efUtUbLSX9SrQAIUkiYXmG0", "มทช.232": "1kWEKem-khwOemlRP9gsbQGkmco5LCEaS", "มทช.237": "1a17sinWHQhgyS6_jR5PWLa7khoeyY_wN", "มทช.239": "1N678xXv8nrJAqvL0CLsg5k2N0DbS4BLj", "มทช.241": "1484txjVEay-jMjCoLgrp4hccmV0DJMPN", "มทช.242": "1LVbqJSOx91-iR22tFSORj21rYiFzWl2y", "มทช.244": "1SgUEMI0Ny7yy1ku8H8x8TuigvvrI_6GM", "มทช.248": "1nvgoim-3sQOA_xWMH4goeExvIYq-sl8-", "มทช.249": "1QfBfLteTjbKQ_ivwSr-urJJuR8S5pSfI", "มทช.251": "1m-WuQW3snmwo3ZBf5oLK8Tg8MQfotbzC", "มทช.101": "155KlNHqjQHaqr3aRbJHxlrweAqtTWxFm", "มทช.103": "1iJ8l6q4TtHaO7cqfccDn83ZEarAzFElm", "มทช.106": "1Lj2fJShuDna-P95b_jJjlvCruBzUAcbM", "มทช.(ท)501.1": "1gRNVGbQlsOdugO855oPa9TnHm9dIOsLk", "มทช.(ท)501.2": "1nu317R6YBHBM4TFAKoWsj3ro6JDOf-hD", "มทช.(ท)501.3": "1hm5v4EzTpt2t5Aisui2r6vFJuLp5hLLx", "มทช.(ท)501.5": "1qlUxCcad9wn2gLJ91mvZv3Yk8EfGpLK3", "มทช.(ท)501.6": "1hTP3vr-kW0UizsVwpNJTXaJ9EOMkKcyQ", "มทช.(ท)501.8": "1J-A-b5etJXpUQaPeXAm-QFD1HcECaFvz", "มทช.(ท)501.9": "1HiKUy_4WuENCQkD5Lv9W9mIvtUn0EFf2", "มทช.(ท)501.12": "1ZJMohYzH3R_KHMaDlBrdnfOVBTgOB0mE", "มทช.(ท)501.13": "1JQJSfZMPIE8ASg21bjnk6wfaNaOLCp6M", "มทช.(ท)501.14": "1HMV40srZff4RQXFlXmuSlJOm2rRJfpWF", "มทช.(ท)501.15": "1mB8ep4kr81dusiphBsn8sg6wcn37q9OD", "มทช.(ท)501.16": "1lYWxtkadpyEuwo1hgMna-fWkheRPPLqG", "มทช.(ท)601": "1c43Y2vqfreCNsb76yV8OAaDCKY5Ea08L", "มทช.(ท)602": "1RjW-lGFNlpdcS1Ff7CDz6sbjmZuIwwtH", "มทช.(ท)603": "18M6sE6HdtN0PCu1v717QKL49KRpEPgqD", "มทช.(ท)604": "1C6FllbEhn-SOQwROEeSIHDImo35ukpVW", "มทช.(ท)605": "1pj7ccTvf4I0ssCtiHanmnb5ljvKMEeuu", "มทช.(ท)607": "139SZYY4bnfmFTUIrtOEX7ujAsyO1M8Jh", "มทช.(ท)101.1": "1sUwNZpaVwuvrSBQMqeeZhhWZK-97HeHI", "มทช.(ท)101.2": "16pA3hFmrPioVn1tLAc8L0Jq7u7MHVeqS", "มทช.(ท)101.3": "1Pk2d3tRzcG-vFA8Pb_dwYybPQeLBBm0m", "มทช.(ท)101.4": "1Lc6iNk98Ooo8-HcJEmnShZhjphCxTjXg", "มทช.(ท)101.5": "1kECzIq_5tBKB96bUzk80P7E9JUbcXwFE", "มทช.(ท)303": "1FyQYdulzaMKeKhrc3HwSvKBdeGUV4jEF", "มทช.(ท)517": "1RQvxfW3qB2XZIHxcMCMXX3zWYPANk6mL", "QCS": "1sBNXhhFZ2esYGXNHxN9ne9uD0guibrka"};
 function lk(s){ return esc(s).replace(/มาตรการ QCS(?: ปีงบ)? 2569|มทช\.\s?(?:\(ท\)\s?)?\d{3}(?:\.\d+)?(?:\s?[-–]\s?\d{4})?/g, m=>{ const k=/QCS/.test(m)?'QCS':m.replace(/\s/g,'').replace(/[-–]\d{4}$/,''); const id=STDID[k]; return id?`<a class="mlink" href="https://drive.google.com/file/d/${id}/view" target="_blank" rel="noopener">${m}</a>`:m; }); }
 
-const GROUPS=['หมวด 1 งานชั้นทาง','หมวด 2 งานยางและผิวทาง','หมวด 3 งานคอนกรีตและเหล็ก','หมวด 4 งานอุปกรณ์ทาง'];
+const GROUPS=['หมวด 1 งานชั้นทาง','หมวด 2 งานยางและผิวทาง','หมวด 3 งานคอนกรีตและเหล็ก','หมวด 4 งานอุปกรณ์ทาง','หมวด 5 สอบทาน (Spot Check) คุณภาพ'];
+/* ชนิดคอนกรีต [ชื่อ, Cube, Cylinder] กก./ตร.ซม. — มทช.101-2563 · แบบมาตรฐานงานสะพาน 2568 (สพ 0102/68) · ค25 จากแบบมาตรฐานสะพาน */
+const CONC=[['ค18',180,145],['ค21',210,175],['ค24',240,200],['ค25',250,210],['ค28',280,235],['ค30',300,250],['ค35',350,290],['ค42',420,350],['ค45',450,400],['ค50',500,450]];
+const concLabel=c=>{ const x=CONC.find(r=>r[0]===c)||CONC[0]; return `${x[0]} (Cube ${x[1]} / Cylinder ${x[2]})`; };
+const concCode=t=>(String(t||'').match(/^ค\d+/)||[''])[0];
+const CONC_OLD={'ค1':'ค18','ค1-2':'ค21','ค2':'ค24','ค3':'ค30','ค4':'ค42'};   // ย้ายข้อมูลเก่า (ค่า Cube/Cylinder เท่ากัน)
+const SPOT_REF='มาตรการ QCS ปีงบ 2569 ข้อ 3 และ 10.1 · เกณฑ์ สตว.';
 const VOL={t:'5,000 ม.³/ตัวอย่าง',ref:K};
 const M=[
  {id:'subgrade',no:1,g:0,name:'ดินเดิม',en:'Subgrade',sheet:1,unit:'ตัวอย่าง',rule:VOL,k:1,
@@ -283,11 +291,11 @@ const M=[
   tests:['เม็ดหยาบ: % Abrasion, Flakiness Index, Elongation Index, Gradation, Specific Gravity','เม็ดละเอียด: Sand Equivalent, % Abrasion, Gradation, Specific Gravity','ออกแบบส่วนผสม'],
   src:[{k:'s34',l:'แหล่งวัสดุ Hot Bin 3/4″',s:'Hot Bin 3/4″',ph:''},{k:'s12',l:'แหล่งวัสดุ Hot Bin 1/2″',s:'Hot Bin 1/2″',ph:''},{k:'s38',l:'แหล่งวัสดุ Hot Bin 3/8″',s:'Hot Bin 3/8″',ph:''},{k:'sd',l:'แหล่งวัสดุ Hot Bin หินฝุ่น',s:'Hot Bin หินฝุ่น',ph:''},{k:'mk',l:'ผู้ผลิตยาง AC',ph:''}],opt:{k:'type',l:'ชั้นทาง',v:['Wearing','Binder']},opt2:{k:'atype',l:'ชนิดยาง AC (มทช.230-2563 ข้อ 2.1)',s:'ชนิดยาง',v:['AC 60-70','AC 40-50','อื่น ๆ ตามแบบ (ต้องได้รับอนุญาต ทช.)']}},
  {id:'concrete',no:10,g:2,name:'งาน คสล.',en:'ถนน สะพาน ท่อลอดเหลี่ยม',sheet:2,unit:'ชุด',k:10,
-  rule:{t:'ทั้งสัญญา ≤ 50 ม.³ ไม่ต้องออกแบบ ใช้ปูนขั้นต่ำ ค.18 ≥ 290, ค.21 ≥ 300, ค.24 ≥ 320 กก./ม.³',ref:'มทช.101-2563 ข้อ 3.4.2'},
+  rule:{t:'ออกแบบส่วนผสม 1 ชุด ต่อ 1 ชนิดคอนกรีต · ชนิดอื่นกด "+ เพิ่มรายการซ้ำ"',ref:'มทช.101-2563 · แบบมาตรฐานงานสะพาน 2568 (สพ 0102/68)'},one:true,
   items:[{n:'ทราย',q:50,u:'กก.',ref:S},{n:'หิน',q:50,u:'กก.',ref:S},{n:'ปูนซีเมนต์ประเภท 1',q:1,u:'กระสอบ',ref:S}],
   tests:['เม็ดหยาบ: % Abrasion, Flakiness Index, Elongation Index, Gradation, Specific Gravity','เม็ดละเอียด: Organic Impurity, Fineness Modulus, Gradation','ออกแบบส่วนผสม'],
   src:[{k:'s1',l:'แหล่งทราย',ph:''},{k:'s2',l:'แหล่งหิน',ph:''},{k:'mk',l:'ปูนซีเมนต์ ตรา',ph:''}],
-  opt:{k:'type',l:'ชนิดคอนกรีต',v:['ค1 (Cube 180 / Cylinder 145)','ค1-2 (Cube 210 / Cylinder 175)','ค2 (Cube 240 / Cylinder 200)','ค3 (Cube 300 / Cylinder 250)','ค4 (Cube 420 / Cylinder 350)']}},
+  opt:{k:'type',l:'ชนิดคอนกรีต (กก./ตร.ซม.)',v:CONC.map(x=>concLabel(x[0]))}},
  {id:'rebar',no:11,g:2,name:'เหล็กเสริม',en:'Reinforcing Steel',sheet:1,unit:'ตัวอย่าง',calc:'bars',k:10,
   rule:{t:'ทุกขนาด/ผู้ผลิต จากกองวัสดุ 5 ตัวอย่าง (คู่มือฯ) · 1 ตัวอย่าง/100 เส้น ไม่น้อยกว่า 5 ยาว ≥ 1.00 ม. (มทช.103-2569 ข้อ 3.5)',ref:K+' · มทช.103-2569'},
   items:[],tests:['แรงดึงจุดคลาก','แรงดึงสูงสุด','% การยืด']},
@@ -296,14 +304,23 @@ const M=[
   items:[],tests:['ตรวจสอบใบรับรอง มอก.','แรงอัดแตก / แรงกดสูงสุด (กรณีส่งทดสอบ)']},
  {id:'thermo',no:13,g:3,name:'สีเทอร์โมพลาสติก ลูกแก้ว',en:'Thermoplastic',sheet:0,unit:'ชุด',calc:'area',k:12,
   rule:{t:'มาตรการ QCS 2569 ข้อ 7.4: พื้นที่รวมมากกว่า 2,000 ตร.ม. ต้องส่งสีขาว สีเหลือง ลูกแก้ว ทดสอบรับรองก่อนใช้ · ไม่เกิน 2,000 ตร.ม. ไม่ต้องส่ง เว้นแต่สงสัยคุณภาพ',ref:K+' · '+S},
-  items:[{n:'สีเหลือง',q:1,u:'บรรจุภัณฑ์',ref:S},{n:'สีขาว',q:1,u:'บรรจุภัณฑ์',ref:S},{n:'ลูกแก้ว',q:1,u:'บรรจุภัณฑ์',ref:S}],
+  items:[{n:'สีขาว (มอก.542)',q:1,u:'บรรจุภัณฑ์',ref:S},{n:'สีเหลือง (มอก.542)',q:1,u:'บรรจุภัณฑ์',ref:S},{n:'ลูกแก้ว (มอก.543)',q:1,u:'บรรจุภัณฑ์',ref:S}],a2:true,
   tests:['ค่าสะท้อนแสง และคุณสมบัติตาม มอก.'],src:[{k:'mk',l:'ผู้ผลิต / ยี่ห้อ',ph:''}]},
  {id:'sign',no:14,g:3,name:'ป้ายจราจร',en:'Traffic Sign',sheet:0,unit:'ป้าย',k:12,
   rule:{t:'มาตรการ QCS 2569 ข้อ 8: ส่งป้ายทุกแผ่น พร้อมตัวอย่างแผ่นสะท้อนแสงทุกชนิด และ Shop Drawing ที่ ผอ.ขทช. รับรอง · ตรวจขนาด รูปแบบ ค่าสะท้อนแสง',ref:K+' · '+S},
-  items:[{n:'ป้ายจราจร (ทุกแผ่นในสัญญา)',q:1,u:'ป้าย',ref:S}],tests:['มิติ','ค่าสะท้อนแสง'],src:[{k:'mk',l:'ผู้ผลิต',ph:''}]}
+  items:[],calc:'sign',a2:true,tests:['มิติ','ค่าสะท้อนแสง'],src:[{k:'mk',l:'ผู้ผลิต',ph:''},{k:'sheetT',l:'ชนิดแผ่นสะท้อนแสง',ph:'เช่น Type …'}]},
+ {id:'spot1',no:15,g:4,name:'Spot Check ชั้นโครงสร้างทาง',en:'สอบทานชั้นโครงสร้างทาง',sheet:0,a2:true,calc:'spot',unit:'',k:0,
+  rule:{t:'ตอกวัดความหนา + Nuclear Density Gauge ทุก 250 ม./จุด ไม่น้อยกว่า 3 จุด/สายทาง · สุ่มอย่างน้อย 1 ชั้นวัสดุ/สายทาง',ref:SPOT_REF},
+  items:[],tests:[],layers:['ดินถม','วัสดุคัดเลือก','รองพื้นทาง','พื้นทาง']},
+ {id:'spot2',no:16,g:4,name:'Spot Check ผิวทางลาดยาง, คอนกรีต',en:'สอบทานผิวทาง',sheet:0,a2:true,calc:'spot',unit:'',k:0,
+  rule:{t:'เจาะเก็บตัวอย่างในที่ วัดความหนาด้วยเทป บริเวณเดียวกับ 5.1 ทุก 250 ม./จุด ไม่น้อยกว่า 3 จุด',ref:SPOT_REF},
+  items:[],tests:[],layers:['ผิว AC','ถนนคอนกรีต']},
+ {id:'spot3',no:17,g:4,name:'Spot Check เส้นจราจร',en:'สอบทานเส้นจราจร',sheet:0,a2:true,calc:'spot',unit:'',k:0,
+  rule:{t:'ความกว้าง ความยาว ระยะเว้นช่วง ด้วยเทป / Micrometer / Retroreflectometer ไม่น้อยกว่า 3 ตำแหน่ง ตำแหน่งละ 10 ค่า',ref:SPOT_REF},
+  items:[],tests:[],layerText:'เส้นจราจร'}
 ];
 M.forEach(m=>m.testRef=m.tref||K+' ลำดับ '+m.k);
-const RS={"recycling": "1 ชุด ต่อ 1,000 ม.", "rebar": "5 ตัวอย่าง/ขนาด/ผู้ผลิต", "pipe": "1 ท่อน ต่อ 200 ท่อน (QCS 2569)", "thermo": "> 2,000 ตร.ม. ต้องส่ง (QCS 2569)", "sign": "ทุกแผ่น + แผ่นสะท้อนแสง (QCS 2569)", "concrete": "≤ 50 ม.³ ไม่ต้องออกแบบ", "ac": "ส่งผลออกแบบ ≥ 30 วันก่อนเริ่มงาน", "prime": "จากแหล่งผลิต/ที่นำมาใช้งาน", "cement-modified": "ออกแบบก่อนเริ่มงาน"};
+const RS={"recycling": "1 ชุด ต่อ 1,000 ม.", "rebar": "5 ตัวอย่าง/ขนาด/ผู้ผลิต", "pipe": "1 ท่อน ต่อ 200 ท่อน (QCS 2569)", "thermo": "> 2,000 ตร.ม. ต้องส่ง (QCS 2569)", "sign": "ทุกแผ่น + แผ่นสะท้อนแสง (QCS 2569)", "concrete": "1 ชุด ต่อ 1 ชนิดคอนกรีต", "ac": "ส่งผลออกแบบ ≥ 30 วันก่อนเริ่มงาน", "prime": "จากแหล่งผลิต/ที่นำมาใช้งาน", "cement-modified": "ออกแบบก่อนเริ่มงาน"};
 const BARS={SR24:['RB6','RB9','RB12','RB15','RB19','RB25'],SD30:['DB10','DB12','DB16','DB20','DB25','DB28'],SD40:['DB10','DB12','DB16','DB20','DB25','DB28']};
 const PIPES=['600','800','1000','1200','1500'];
 const CHECK=[['ตัวอย่างเป็นตัวแทนของวัสดุ/กอง',S],['ปริมาณมากพอสำหรับการทดสอบ (ตามตาราง)',S],['ติดป้ายทุกภาชนะ ระบุ วัน เดือน ปี สถานที่ จุดเก็บ ผู้เก็บ',S],['ภาชนะที่ใช้ใส่วัสดุควรมีความเหมาะสม แข็งแรง ปิดสนิท',S],['เก็บรักษาให้คงสภาพจนถึงวันทดสอบ',S]];
@@ -317,82 +334,130 @@ const $=s=>document.querySelector(s), $$=s=>[...document.querySelectorAll(s)];
 const esc=s=>String(s??'').replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
 const fmt=n=>Number(n).toLocaleString('th-TH');
 let step=1, picked=[], st={}, info={};
-const byId=id=>M.find(m=>m.id===id);
+/* รายการที่เลือก = คีย์ เช่น 'concrete' และรายการซ้ำ 'concrete__2' (ปุ่ม "+ เพิ่มรายการซ้ำ") */
+const base=k=>String(k).split('__')[0];
+const byId=k=>M.find(m=>m.id===base(k));
+const keysOf=id=>picked.filter(k=>base(k)===id);
 function defaults(m){ const o={sets:1}; (m.src||[]).forEach(s=>o[s.k]=''); if(m.opt) o.type=m.opt.v[0]; if(m.opt2) o[m.opt2.k]=m.opt2.v[0];
-  if(m.calc==='bars') o.rows=[{gr:'SD40',sz:'DB16',n:'',mk:''}]; if(m.calc==='pipes') o.rows=[{sz:'1000',n:'',mk:''}]; if(m.calc==='area') o.area=''; return o; }
+  if(m.calc==='bars') o.rows=[{gr:'SD40',sz:'DB16',n:'',mk:''}]; if(m.calc==='pipes') o.rows=[{sz:'1000',n:'',mk:''}]; if(m.calc==='area') o.area='';
+  if(m.calc==='sign'){ o.nT=''; o.nN=''; o.nB=''; }
+  if(m.calc==='spot'){ o.layer=m.layers?m.layers[0]:(m.layerText||''); o.dist=''; }
+  return o; }
 
 /* ===== กติกาคำนวณ ===== */
 const barSamples=n=>Math.max(5,Math.ceil((+n||0)/100));            // มทช.103-2569 ข้อ 3.5
 function pipeSamples(n){ n=+n||0; if(n<50) return 0; const lots=n<=200?1:Math.floor(n/200)+((n%200)>50?1:0); return lots; } // มาตรการ QCS ปีงบ 2569 ข้อ 1.2: 1 ท่อน ต่อ 200 ท่อน
-/* รายการวัสดุที่ต้องส่งของแต่ละวัสดุ (รวมกรณีเหล็ก/ท่อ/สี) */
-function lines(m){
-  const s=st[m.id]||defaults(m), N=Math.max(1,+s.sets||1);
+const SIGNS=[['nT','ป้ายเตือน (ต)'],['nN','ป้ายแนะนำ (น)'],['nB','ป้ายบังคับ (บ)']];
+/* จำนวนชุดตัวอย่างของรายการ (ใช้แยกช่องแหล่ง 1 ช่อง/ตัวอย่าง เมื่อ ≥ 2) */
+function setsOf(k){ const m=byId(k), s=st[k];
+  if(m.calc==='bars'||m.calc==='pipes') return lines(k).reduce((a,l)=>a+(l.tot>0?1:0),0);
+  if(m.one||m.calc==='sign'||m.calc==='spot'||m.calc==='area') return 1;
+  return Math.max(1,+s.sets||1); }
+/* แหล่งของตัวอย่างที่ 1…n : ช่องแรกใช้คีย์เดิม (เช่น s1) ช่องถัดไป s1_2, s1_3 … */
+const srcVals=(s,k,n)=>Array.from({length:n},(_,j)=>s[j?`${k}_${j+1}`:k]||'');
+/* รายการวัสดุที่ต้องส่งของแต่ละรายการ (รวมกรณีเหล็ก/ท่อ/สี/ป้าย) */
+function lines(k){
+  const m=byId(k), s=st[k]||defaults(m), N=(m.one||m.calc)?1:Math.max(1,+s.sets||1);
+  if(m.calc==='spot') return [];
+  if(m.calc==='sign') return SIGNS.filter(([f])=>+s[f]>0).map(([f,n])=>({n,per:null,tot:+s[f],u:'ป้าย',ref:'มาตรการ QCS ปีงบ 2569 ข้อ 8'}));
   if(m.calc==='bars') return s.rows.filter(r=>r.sz).map(r=>({n:`เหล็ก ${r.gr} ${r.sz}${r.mk?' ('+r.mk+')':''}`,per:null,tot:barSamples(r.n),u:'ท่อน (ยาว 1.00 ม.)',ref:'มทช.103-2569 ข้อ 3.5',note:r.n?`ใช้ ${fmt(r.n)} เส้น`:'ยังไม่กรอกจำนวนเส้น → ขั้นต่ำ 5'}));
-  if(m.calc==='pipes') return s.rows.filter(r=>r.sz).map(r=>{const k=pipeSamples(r.n);return {n:`ท่อ Ø ${fmt(r.sz)} มม.${r.mk?' ('+r.mk+')':''}`,per:null,tot:k,u:'ท่อน',ref:S,note:r.n?`ใช้ ${fmt(r.n)} ท่อน${k===0?' — ไม่ต้องทดสอบ แนบ มอก.':''}`:'ยังไม่กรอกจำนวนท่อน'};});
+  if(m.calc==='pipes') return s.rows.filter(r=>r.sz).map(r=>{const q=pipeSamples(r.n);return {n:`ท่อ Ø ${fmt(r.sz)} มม.${r.mk?' ('+r.mk+')':''}`,per:null,tot:q,u:'ท่อน',ref:S,note:r.n?`ใช้ ${fmt(r.n)} ท่อน${q===0?' — ไม่ต้องทดสอบ แนบ มอก.':''}`:'ยังไม่กรอกจำนวนท่อน'};});
   if(m.calc==='area' && (+s.area||0)<=2000) return m.items.map(it=>({n:it.n,per:null,tot:0,u:it.u,ref:it.ref,note:'พื้นที่ไม่เกิน 2,000 ตร.ม. ไม่ต้องส่ง แนบ มอก. (ส่งได้ถ้าสงสัยคุณภาพ)'}));
   return m.items.map(it=>({n:it.n,per:it.q,tot:it.q==null?null:it.q*N,u:it.u,ref:it.ref,todo:it.todo}));
 }
-function setsOf(m){ const s=st[m.id]; if(m.calc==='bars'||m.calc==='pipes') return lines(m).reduce((a,l)=>a+(l.tot>0?1:0),0); return Math.max(1,+s.sets||1); }
 const qtxt=(v,u)=>v==null?`<span class="miss">[… ${esc(u)}]</span>`:`${fmt(v)} ${esc(u)}`;
+/* ชื่อรายการ (รวมชนิดเมื่อมีหลายรายการ เช่น งาน คสล. · ค24) */
+function titleOf(k){ const m=byId(k), s=st[k]; if(m.id==='concrete') return `${m.name} · ${concCode(s.type)}`; if(keysOf(m.id).length>1&&m.opt) return `${m.name} · ${s.type}`; return m.name; }
+/* ชนิดซ้ำกับรายการอื่นของวัสดุเดียวกัน */
+const dupType=k=>{ const m=byId(k); return m.opt&&keysOf(m.id).some(o=>o!==k&&st[o].type===st[k].type); };
 
 /* ===== ขั้น 1: เลือกวัสดุ ===== */
 function renderPicker(){
   $('#picker').innerHTML=GROUPS.map((g,gi)=>`<div class="g">${g}</div><div class="chips">${
-    M.filter(m=>m.g===gi).map(m=>`<label class="chip"><input type="checkbox" value="${m.id}" ${picked.includes(m.id)?'checked':''}><span>${m.no}. ${esc(m.name)}<small>${esc(m.en)}</small></span></label>`).join('')}</div>`).join('');
-  $$('#picker input').forEach(i=>i.onchange=()=>{ picked=M.filter(m=>$(`#picker input[value="${m.id}"]`).checked).map(m=>m.id);
-    picked.forEach(id=>{ if(!st[id]) st[id]=defaults(byId(id)); }); save(); nav(); });
+    M.filter(m=>m.g===gi).map(m=>{ const n=keysOf(m.id).length; return `<label class="chip"><input type="checkbox" value="${m.id}" ${n?'checked':''}><span>${m.no}. ${esc(m.name)}${n>1?` <b class="cnt">×${n}</b>`:''}<small>${esc(m.en)}</small></span></label>`; }).join('')}</div>`).join('')
+    + `<p class="ref" style="margin-top:10px">หมวด 5 ใช้กับผู้ใช้กลุ่ม A (สทช.14) และ B (ขทช.) เท่านั้น</p>`;
+  $$('#picker input').forEach(i=>i.onchange=()=>{
+    picked=M.flatMap(m=>{ if(!$(`#picker input[value="${m.id}"]`).checked) return []; const ks=keysOf(m.id); return ks.length?ks:[m.id]; });
+    picked.forEach(k=>{ if(!st[k]) st[k]=defaults(byId(k)); }); save(); nav(); });
 }
+/* เพิ่มรายการซ้ำ: คัดลอกแหล่งเดิม เลือกชนิดถัดไปที่ยังไม่ใช้ (เปลี่ยนได้) */
+function dupItem(k){ const m=byId(k), ks=keysOf(m.id);
+  const n=Math.max(1,...ks.map(x=>+(x.split('__')[1]||1)))+1, nk=`${m.id}__${n}`, o=JSON.parse(JSON.stringify(st[k]));
+  if(m.opt){ const used=ks.map(x=>st[x].type), nx=m.opt.v.find(v=>!used.includes(v)); if(nx) o.type=nx; }
+  st[nk]=o; picked.splice(picked.indexOf(ks[ks.length-1])+1,0,nk); return nk; }
 
 /* ===== ขั้น 2: หน้าสรุปรวม ===== */
-function I(id,k,l,v,ph,type){ return `<div><label class="f">${l}</label><input data-m="${id}" data-k="${k}" value="${esc(v)}" placeholder="${esc(ph||'')}" ${type==='n'?'inputmode="numeric"':''}></div>`; }
-function cardHTML(m,i){
-  const s=st[m.id], L=lines(m);
+function I(k,f,l,v,ph,type){ return `<div><label class="f">${l}</label><input data-m="${k}" data-k="${f}" value="${esc(v)}" placeholder="${esc(ph||'')}" ${type==='n'?'inputmode="numeric"':type==='d'?'inputmode="decimal"':''}></div>`; }
+function cardHTML(k,i){
+  const m=byId(k), s=st[k], L=lines(k), N=setsOf(k), many=keysOf(m.id).length>1;
   let inp='';
   if(m.calc==='bars'||m.calc==='pipes'){
     inp=s.rows.map((r,ri)=>`<div class="sub"><div class="row3">${
       m.calc==='bars'
-      ? `<div><label class="f">ชั้นคุณภาพ</label><select data-m="${m.id}" data-r="${ri}" data-k="gr">${Object.keys(BARS).map(g=>`<option ${g===r.gr?'selected':''}>${g}</option>`).join('')}</select></div>
-         <div><label class="f">ขนาด</label><select data-m="${m.id}" data-r="${ri}" data-k="sz">${BARS[r.gr].map(z=>`<option ${z===r.sz?'selected':''}>${z}</option>`).join('')}</select></div>
-         <div><label class="f">ใช้ (เส้น)</label><input data-m="${m.id}" data-r="${ri}" data-k="n" value="${esc(r.n)}" inputmode="numeric"></div>`
-      : `<div><label class="f">ขนาด (มม.)</label><select data-m="${m.id}" data-r="${ri}" data-k="sz">${PIPES.map(z=>`<option value="${z}" ${z===r.sz?'selected':''}>Ø ${fmt(z)}</option>`).join('')}</select></div>
-         <div><label class="f">ใช้ (ท่อน)</label><input data-m="${m.id}" data-r="${ri}" data-k="n" value="${esc(r.n)}" inputmode="numeric"></div><div></div>`
-    }</div><div class="row2"><div><label class="f">ผู้ผลิต</label><input data-m="${m.id}" data-r="${ri}" data-k="mk" value="${esc(r.mk)}"></div>
-      <div style="align-self:end;text-align:right"><button class="btn ghost sm" data-del="${m.id}:${ri}">ลบขนาดนี้</button></div></div></div>`).join('')
-      + `<p><button class="btn ghost sm" data-add="${m.id}">+ เพิ่มขนาด</button></p>`;
+      ? `<div><label class="f">ชั้นคุณภาพ</label><select data-m="${k}" data-r="${ri}" data-k="gr">${Object.keys(BARS).map(g=>`<option ${g===r.gr?'selected':''}>${g}</option>`).join('')}</select></div>
+         <div><label class="f">ขนาด</label><select data-m="${k}" data-r="${ri}" data-k="sz">${BARS[r.gr].map(z=>`<option ${z===r.sz?'selected':''}>${z}</option>`).join('')}</select></div>
+         <div><label class="f">ใช้ (เส้น)</label><input data-m="${k}" data-r="${ri}" data-k="n" value="${esc(r.n)}" inputmode="numeric"></div>`
+      : `<div><label class="f">ขนาด (มม.)</label><select data-m="${k}" data-r="${ri}" data-k="sz">${PIPES.map(z=>`<option value="${z}" ${z===r.sz?'selected':''}>Ø ${fmt(z)}</option>`).join('')}</select></div>
+         <div><label class="f">ใช้ (ท่อน)</label><input data-m="${k}" data-r="${ri}" data-k="n" value="${esc(r.n)}" inputmode="numeric"></div><div></div>`
+    }</div><div class="row2"><div><label class="f">ผู้ผลิต</label><input data-m="${k}" data-r="${ri}" data-k="mk" value="${esc(r.mk)}"></div>
+      <div style="align-self:end;text-align:right"><button class="btn ghost sm" data-del="${k}:${ri}">ลบขนาดนี้</button></div></div></div>`).join('')
+      + `<p><button class="btn ghost sm" data-add="${k}">+ เพิ่มขนาด</button></p>`;
+  } else if(m.calc==='sign'){
+    inp=`<div class="row3">${SIGNS.map(([f,n])=>I(k,f,n,s[f],'0','n')).join('')}</div>
+      <div class="row2 s">${(m.src||[]).map(x=>I(k,x.k,x.l,s[x.k],x.ph)).join('')}</div>`;
+  } else if(m.calc==='spot'){
+    inp=`<div class="row2 s">${m.layers
+      ? `<div><label class="f">ชั้น</label><select data-m="${k}" data-k="layer">${m.layers.map(o=>`<option ${o===s.layer?'selected':''}>${esc(o)}</option>`).join('')}</select></div>`
+      : I(k,'layer','ชั้น (ชนิดเส้น)',s.layer,'เช่น เส้นจราจร')}
+      ${I(k,'dist','ระยะทาง (กม.)',s.dist,'เช่น 2.500','d')}</div>`;
   } else {
-    inp=`<div class="row2 s">${(m.src||[]).map(x=>I(m.id,x.k,x.l,s[x.k],x.ph)).join('')}
-      ${m.opt?`<div><label class="f">${lk(m.opt.l)}</label><select data-m="${m.id}" data-k="type">${m.opt.v.map(o=>`<option ${o===s.type?'selected':''}>${esc(o)}</option>`).join('')}</select></div>`:''}
-      ${m.opt2?`<div><label class="f">${lk(m.opt2.l)}</label><select data-m="${m.id}" data-k="${m.opt2.k}">${m.opt2.v.map(o=>`<option ${o===s[m.opt2.k]?'selected':''}>${esc(o)}</option>`).join('')}</select></div>`:''}
-      ${m.calc==='area'?I(m.id,'area','พื้นที่ตีเส้น (ตร.ม.)',s.area,'เช่น 2500','n'):''}
-      ${I(m.id,'sets',`จำนวน (${m.unit})${m.max?' สูงสุด '+m.max:''}`,s.sets,'1','n')}</div>`;
+    const srcs=(m.src||[]).flatMap(x=> x.k!=='mk'&&N>=2
+      ? srcVals(s,x.k,N).map((v,j)=>I(k,j?`${x.k}_${j+1}`:x.k,`${x.l} · ตัวอย่างที่ ${j+1}`,v,x.ph))
+      : [I(k,x.k,x.l,s[x.k],x.ph)]).join('');
+    inp=`<div class="row2 s">${m.one||m.calc==='area'?'':I(k,'sets',`จำนวน (${m.unit})${m.max?' สูงสุด '+m.max:''}`,s.sets,'1','n')}${srcs}
+      ${m.opt?`<div><label class="f">${lk(m.opt.l)}</label><select data-m="${k}" data-k="type">${m.opt.v.map(o=>`<option ${o===s.type?'selected':''}>${esc(o)}</option>`).join('')}</select></div>`:''}
+      ${m.opt2?`<div><label class="f">${lk(m.opt2.l)}</label><select data-m="${k}" data-k="${m.opt2.k}">${m.opt2.v.map(o=>`<option ${o===s[m.opt2.k]?'selected':''}>${esc(o)}</option>`).join('')}</select></div>`:''}
+      ${m.calc==='area'?I(k,'area','พื้นที่ตีเส้น (ตร.ม.)',s.area,'เช่น 2500','n'):''}
+      </div>`;
   }
-  return `<div class="card" id="c-${m.id}"><h2><span class="no">${i+1}.</span>${esc(m.name)}</h2>
-    <table class="list"><tr><th>วัสดุที่ต้องส่ง</th><th>ต่อชุด</th><th>รวม</th></tr>${
-      L.map(l=>`<tr><td>${esc(l.n)}${l.note?`<div class="ref">${lk(l.note)}</div>`:''}<div class="ref">ที่มา: ${lk(l.ref)}</div></td><td class="n">${l.per===null&&!l.todo?'—':qtxt(l.per,l.u)}</td><td class="n">${qtxt(l.tot,l.u)}</td></tr>`).join('')||'<tr><td colspan="3" class="ref">กรอกขนาดด้านล่าง</td></tr>'}</table>
+  const tbl = m.calc==='spot'
+    ? `<table class="list"><tr><th>รายการในเอกสาร</th></tr><tr><td>ชั้น <b>${esc(s.layer)||'<span class="miss">[…]</span>'}</b> &nbsp; ระยะทาง <b>${esc(s.dist)||'<span class="miss">[…]</span>'}</b> กม.</td></tr></table>`
+    : `<table class="list"><tr><th>วัสดุที่ต้องส่ง</th><th>ต่อชุด</th><th>รวม</th></tr>${
+      L.map(l=>`<tr><td>${esc(l.n)}${l.note?`<div class="ref">${lk(l.note)}</div>`:''}<div class="ref">ที่มา: ${lk(l.ref)}</div></td><td class="n">${l.per===null&&!l.todo?'—':qtxt(l.per,l.u)}</td><td class="n">${qtxt(l.tot,l.u)}</td></tr>`).join('')
+      ||`<tr><td colspan="3" class="ref">${m.calc==='sign'?'กรอกจำนวนป้ายด้านล่าง':'กรอกขนาดด้านล่าง'}</td></tr>`}</table>`;
+  return `<div class="card" id="c-${k}"><h2><span class="no">${i+1}.</span>${esc(titleOf(k))}</h2>
+    ${tbl}
     ${inp}
+    ${dupType(k)?`<div class="q">${m.id==='concrete'?'ชนิดคอนกรีต':'ชนิด'}ซ้ำกับรายการอื่น — เปลี่ยนชนิด หรือลบรายการนี้</div>`:''}
     <div class="ref">เกณฑ์: ${lk(m.rule.t)} (${lk(m.rule.ref)})</div>
-    <div class="f" style="margin-top:8px;font-size:14px;color:var(--muted)">ดำเนินการทดสอบ</div>
-    <ol class="tests">${m.tests.map(t=>`<li>${esc(t)}</li>`).join('')}</ol><div class="ref">ที่มา: ${lk(m.testRef)}</div>
-    ${m.sheet===0?`<div class="q">ไม่มีช่องในแบบฟอร์มบันทึกนำส่ง (PDF 1) — ใช้บันทึกข้อความแยก [รอ สตว. กำหนด]</div>`:''}
-    ${m.max&&+s.sets>m.max?`<div class="q">แบบฟอร์มรับได้ ${m.max} ชุดต่อใบ — ส่วนที่เกินออกใบนำส่งเพิ่ม</div>`:''}</div>`;
+    ${m.tests.length?`<div class="f" style="margin-top:8px;font-size:14px;color:var(--muted)">ดำเนินการทดสอบ</div>
+    <ol class="tests">${m.tests.map(t=>`<li>${esc(t)}</li>`).join('')}</ol><div class="ref">ที่มา: ${lk(m.testRef)}</div>`:''}
+    ${m.calc==='spot'?`<div class="q">ใช้กับผู้ใช้กลุ่ม A (สทช.14) และ B (ขทช.) เท่านั้น · เอกสารแสดงเพียง ชั้น และระยะทาง</div>`:''}
+    ${m.max&&+s.sets>m.max?`<div class="q">แบบฟอร์มรับได้ ${m.max} ชุดต่อใบ — ส่วนที่เกินออกใบนำส่งเพิ่ม</div>`:''}
+    <div class="dupbar"><button class="btn ghost sm" data-dup="${k}">+ เพิ่มรายการซ้ำ</button>${many?`<button class="btn ghost sm" data-rm="${k}">ลบรายการนี้</button>`:''}</div></div>`;
 }
 function renderCards(){
-  $('#cards').innerHTML = picked.length? picked.map((id,i)=>cardHTML(byId(id),i)).join('') : '<div class="card">ยังไม่ได้เลือกวัสดุ</div>';
+  $('#cards').innerHTML = picked.length? picked.map((k,i)=>cardHTML(k,i)).join('') : '<div class="card">ยังไม่ได้เลือกวัสดุ</div>';
 }
-function refreshCard(id){ const m=byId(id), el=$('#c-'+id), i=picked.indexOf(id), a=document.activeElement, k=a&&a.dataset.k, r=a&&a.dataset.r;
-  const pos=a&&a.selectionStart; el.outerHTML=cardHTML(m,i);
-  if(k){ const n=$(`#c-${id} [data-k="${k}"]${r!=null?`[data-r="${r}"]`:''}`); if(n){ n.focus(); try{ n.setSelectionRange(pos,pos);}catch(e){} } } }
+function refreshCard(k){ const el=document.getElementById('c-'+k); if(!el) return; const i=picked.indexOf(k), a=document.activeElement, f=a&&a.dataset.k, r=a&&a.dataset.r;
+  const pos=a&&a.selectionStart; el.outerHTML=cardHTML(k,i);
+  if(f&&a.dataset.m===k){ const n=document.getElementById('c-'+k).querySelector(`[data-k="${f}"]${r!=null?`[data-r="${r}"]`:''}`); if(n){ n.focus(); try{ n.setSelectionRange(pos,pos);}catch(e){} } } }
 document.addEventListener('input',e=>{
   const t=e.target;
-  if(t.dataset.m){ const s=st[t.dataset.m]; if(t.dataset.r!=null){ s.rows[+t.dataset.r][t.dataset.k]=t.value; if(t.dataset.k==='gr') s.rows[+t.dataset.r].sz=BARS[t.value][0]; } else s[t.dataset.k]=t.value;
-    save(); if(t.tagName==='SELECT'||t.dataset.k==='sets'||t.dataset.k==='n'||t.dataset.k==='area') refreshCard(t.dataset.m); nav(); return; }
+  if(t.dataset.m){ const k=t.dataset.m, s=st[k]; if(t.dataset.r!=null){ s.rows[+t.dataset.r][t.dataset.k]=t.value; if(t.dataset.k==='gr') s.rows[+t.dataset.r].sz=BARS[t.value][0]; } else s[t.dataset.k]=t.value;
+    save();
+    if(t.tagName==='SELECT') keysOf(base(k)).forEach(refreshCard);
+    else if(['sets','n','area','nT','nN','nB','layer','dist'].includes(t.dataset.k)) refreshCard(k);
+    nav(); return; }
   if(t.name){ info[t.name]= t.type==='radio' ? (t.checked?t.value:info[t.name]) : t.value; save(); upd3(); }
 });
 document.addEventListener('change',e=>{ if(e.target.tagName==='SELECT'&&e.target.dataset.m) e.target.dispatchEvent(new Event('input',{bubbles:true})); if(e.target.type==='radio'){ info.ret=e.target.value; save(); upd3(); } });
 document.addEventListener('click',e=>{
-  const a=e.target.closest('[data-add]'), d=e.target.closest('[data-del]');
-  if(a){ const m=byId(a.dataset.add); st[m.id].rows.push(m.calc==='bars'?{gr:'SD40',sz:'DB16',n:'',mk:''}:{sz:'1000',n:'',mk:''}); save(); refreshCard(m.id); }
-  if(d){ const [id,ri]=d.dataset.del.split(':'); st[id].rows.splice(+ri,1); save(); refreshCard(id); }
+  const a=e.target.closest('[data-add]'), d=e.target.closest('[data-del]'), u=e.target.closest('[data-dup]'), rm=e.target.closest('[data-rm]');
+  if(a){ const k=a.dataset.add, m=byId(k); st[k].rows.push(m.calc==='bars'?{gr:'SD40',sz:'DB16',n:'',mk:''}:{sz:'1000',n:'',mk:''}); save(); refreshCard(k); }
+  if(d){ const [k,ri]=d.dataset.del.split(':'); st[k].rows.splice(+ri,1); save(); refreshCard(k); }
+  if(u){ const nk=dupItem(u.dataset.dup); save(); renderCards(); nav(); const el=document.getElementById('c-'+nk); if(el) el.scrollIntoView({behavior:'smooth',block:'start'}); }
+  if(rm){ const k=rm.dataset.rm; picked.splice(picked.indexOf(k),1); delete st[k]; save(); renderCards(); nav(); }
 });
 
 /* ===== PDF 1: แปลงสถานะ -> ค่าในแบบฟอร์ม ===== */
@@ -401,31 +466,33 @@ function sheetValues(){
   if(o.H_work!=='อื่นๆ') o.H_work_other='';
   o.F_ret_self=(info.ret||'self')==='self'; o.F_ret_send=info.ret==='send'; if(!o.F_ret_send) o.F_ret_addr='';
   const src={D:[],K:[],L:[],R:[]}, add=(k,v)=>o[k]=String((+o[k]||0)+v);
-  for(const id of picked){ const m=byId(id), s=st[id], N=Math.max(1,+s.sets||1);
+  const conc=[], cSrc={sand:[],stone:[],cem:[]}, uniq=a=>[...new Set(a.filter(Boolean))].join(' / ');
+  for(const key of picked){ const id=base(key), m=byId(key), s=st[key], N=Math.max(1,+s.sets||1), SV=k=>srcVals(s,k,N).filter(Boolean);
     switch(id){
-      case 'subgrade': o.D_gen=true; o.D_t2=true; add('D_n',N); if(s.s1) src.D.push('ดินเดิม: '+s.s1); break;
-      case 'embankment': o.D_gen=true; o.D_t3=true; add('D_n',N); if(s.s1) src.D.push('ดินถม: '+s.s1); break;
-      case 'selected': o.K_gen=true; o[s.type==='ประเภท ก'?'K_a':'K_b']=true; o.K_n=String(N); if(s.s1) src.K.push(s.s1); break;
-      case 'subbase': o.L_gen=true; o.L_sub=true; o.L_n=String(N); if(s.s1) src.L.push(s.s1); break;
-      case 'base': o.R_gen=true; o.R_base=true; o.R_n=String(N); if(s.s1) src.R.push(s.s1); break;
+      case 'subgrade': o.D_gen=true; o.D_t2=true; add('D_n',N); SV('s1').forEach(v=>src.D.push('ดินเดิม: '+v)); break;
+      case 'embankment': o.D_gen=true; o.D_t3=true; add('D_n',N); SV('s1').forEach(v=>src.D.push('ดินถม: '+v)); break;
+      case 'selected': o.K_gen=true; o[s.type==='ประเภท ก'?'K_a':'K_b']=true; add('K_n',N); src.K.push(...SV('s1')); break;
+      case 'subbase': o.L_gen=true; o.L_sub=true; add('L_n',N); src.L.push(...SV('s1')); break;
+      case 'base': o.R_gen=true; o.R_base=true; add('R_n',N); src.R.push(...SV('s1')); break;
       case 'recycling': o.Y_rc_sets=String(N); o.Y_rc_cmp=String(N); o.Y_rc_ucs=String(N*4); break;
       case 'cement-modified': o.Y_sc_sets=String(N); o.Y_sc_cmp=String(N); o.Y_sc_ucs=String(N*4);
-        for(let k=1;k<=Math.min(N,4);k++){ o[`Y_sc${k}_src`]=s.s1; o[`Y_sc${k}_type`]='หินคลุก'; } break;
+        { const sv=srcVals(s,'s1',N); for(let k=1;k<=Math.min(N,4);k++){ o[`Y_sc${k}_src`]=sv[k-1]||s.s1; o[`Y_sc${k}_type`]='หินคลุก'; } } break;
       case 'prime': o.X_pr=true; o.X_pr_n=String(N); o.X_pr_rock=true; o.X_pr_rock_s1=s.s1;
         if(s.type==='CSS-1'){o.X_pr_css=true;o.X_pr_css_m=s.mk;} else if(s.type==='MC-70'){o.X_pr_mc=true;o.X_pr_mc_m=s.mk;} else {o.X_pr_ash=true;o.X_pr_ash_t=[s.type==='อื่น ๆ'?'':s.type,s.mk].filter(Boolean).join(' · ');} break;
-      case 'ac': o[s.type==='Binder'?'X_ac_b':'X_ac_w']=true; o.X_ac_n=String(N);
+      case 'ac': o[s.type==='Binder'?'X_ac_b':'X_ac_w']=true; add('X_ac_n',N);
         for(const [k,sk] of [['34','s34'],['12','s12'],['38','s38'],['dust','sd']]){ o['X_ac_'+k]=true; o[`X_ac_${k}_s`]=s[sk]; } { const at=s.atype||'AC 60-70'; if(at==='AC 60-70'){o.X_ac_ac=true; o.X_ac_ac_m=s.mk;} else {o.X_ac_oth=true; o.X_ac_oth_t=[at.startsWith('อื่น')?'':at,s.mk].filter(Boolean).join(' · ');} } break;
-      case 'concrete': o.X_cm_n=String(N); o.X_cm_type=s.type; o.X_cm_cem=true; o.X_cm_cem_b=s.mk; o.X_cm_sand=true; o.X_cm_sand_s=s.s1; o.X_cm_stone=true; o.X_cm_stone_s=s.s2; break;
+      case 'concrete': conc.push(concCode(s.type)); cSrc.sand.push(s.s1); cSrc.stone.push(s.s2); cSrc.cem.push(s.mk); break;
       case 'rebar': { let sets=0,bars=0; s.rows.forEach(r=>{ if(!r.sz) return; const k=`B_${r.gr}_${r.sz}`; o[k]=true; o[k+'_m']=r.mk; sets++; bars+=barSamples(r.n); });
         o.B_sets=String(sets); o.B_bars=String(bars); break; }
       case 'pipe': { let tot=0; s.rows.forEach(r=>{ const k=pipeSamples(r.n); if(!k) return; o['P_'+r.sz]=true; o[`P_${r.sz}_n`]=String(k); o[`P_${r.sz}_m`]=r.mk; tot+=k; });
         if(tot) o.P_tot=String(tot); break; }
     }
   }
+  if(conc.length){ o._conc=[...new Set(conc)]; o.X_cm_n=String(o._conc.length); o.X_cm_cem=true; o.X_cm_cem_b=uniq(cSrc.cem); o.X_cm_sand=true; o.X_cm_sand_s=uniq(cSrc.sand); o.X_cm_stone=true; o.X_cm_stone_s=uniq(cSrc.stone); }
   for(const [p,list] of Object.entries(src)){ const n={D:4,K:2,L:4,R:4}[p]; list.slice(0,n).forEach((v,i)=>o[`${p}_s${i+1}`]= i===n-1&&list.length>n ? list.slice(i).join(' / ') : v); }
   return o;
 }
-function sheetsNeeded(){ return [...new Set(picked.map(id=>byId(id).sheet).filter(x=>x>0))].sort(); }
+function sheetsNeeded(){ return [...new Set(picked.map(k=>byId(k).sheet).filter(x=>x>0))].sort(); }
 function fill1(root){
   const o=sheetValues();
   root.querySelectorAll('[data-f]').forEach(el=>el.textContent=o[el.dataset.f]??'');
@@ -463,13 +530,13 @@ function fill1(root){
 function renderDoc2(){
   const d=info, today=new Date(), ts=`${today.getDate()} ${MONTH[today.getMonth()]} ${today.getFullYear()+543}`;
   const notes=[];
-  const rows=picked.map((id,i)=>{ const m=byId(id), s=st[id], L=lines(m), N=setsOf(m);
+  const rows=picked.map((id,i)=>{ const m=byId(id), s=st[id], L=lines(id), N=setsOf(id);
     const srcs=(m.src||[]).filter(x=>s[x.k]).map(x=>`${esc(x.s||x.l)}: ${esc(s[x.k])}`);
     if(m.opt) srcs.push(`${esc(m.opt.l)}: ${esc(s.type)}`); if(m.opt2) srcs.push(`${esc(m.opt2.s)}: ${esc(s[m.opt2.k]||m.opt2.v[0])}`);
     const many=!m.calc&&N>1, none=L.length&&L.every(l=>l.tot===0);
     const samp= none ? `<b>ไม่ต้องส่ง</b> <span class="r">${esc(L[0].note||'')}</span>`
       : L.filter(l=>l.tot!==0).map(l=>`${esc(l.n)} <b>${l.per!=null||l.todo?qtxt(l.per,l.u):qtxt(l.tot,l.u)}</b>${many&&l.tot!=null?` <span class="r">(รวม ${fmt(l.tot)} ${esc(l.u)})</span>`:''}`).join('<br>')||'<span class="miss">[ยังไม่กรอกขนาด]</span>';
-    return `<tr><td class="c">${i+1}</td><td><b>${esc(m.name)}</b><div class="r">${srcs.concat('เกณฑ์: '+esc(RS[m.id]||m.rule.t)).join(' · ')}</div></td>
+    return `<tr><td class="c">${i+1}</td><td><b>${esc(titleOf(id))}</b><div class="r">${srcs.concat('เกณฑ์: '+esc(RS[m.id]||m.rule.t)).join(' · ')}</div></td>
       <td>${samp}</td><td class="c">${none?'—':m.calc==='bars'||m.calc==='pipes'?L.filter(l=>l.tot>0).length+' ขนาด':N+' '+esc(m.unit)}</td>
       <td>${m.tests.map((t,k)=>`${k+1}) ${esc(t)}`).join(' ')}</td><td class="c"><span class="bx"></span></td></tr>`; }).join('');
   let h=`<div class="d2">
@@ -485,7 +552,7 @@ function renderDoc2(){
     <div>ลงชื่อ ......................................... ผู้เก็บตัวอย่าง<br>(.........................................)</div></div></div>`;
   if($('#wLab').checked){
     const labs=[];
-    picked.forEach(id=>{ const m=byId(id), L=lines(m).filter(l=>l.tot!==0), N=(m.calc?1:setsOf(m));
+    picked.forEach(id=>{ const m=byId(id), L=lines(id).filter(l=>l.tot!==0), N=(m.calc?1:setsOf(id));
       for(let k=1;k<=N;k++) L.forEach(l=>labs.push(`<div class="lab"><div class="t">ตัวอย่างวัสดุ · สตว. สทช.14</div><div class="big">${esc(l.n)}</div>
         <div>${esc(m.name)}${m.calc?'':` · ชุดที่ <b>${k}/${N}</b>`}</div>
         <div>โครงการ: ${esc(d.H_project)||'<span class="ln"></span>'}</div><div>วันที่เก็บ <span class="ln"></span></div><div>สถานที่ / กม. <span class="ln"></span></div>
@@ -549,7 +616,7 @@ function fitPrev(){ const b=$('#prevBox'), sc=$('#prevScaler'); if(b.hidden) ret
 window.addEventListener('resize',fitPrev);
 $('#bClear').onclick=()=>{ if(!confirm('ล้างข้อมูลที่กรอกทั้งหมด?')) return; try{ localStorage.removeItem(KEY); }catch(e){} location.href=location.pathname; };
 function upd3(){
-  const w1=$('#w1').checked, w2=$('#w2').checked, need=sheetsNeeded(), none=picked.filter(id=>byId(id).sheet===0).map(id=>byId(id).name);
+  const w1=$('#w1').checked, w2=$('#w2').checked, need=sheetsNeeded(), none=[...new Set(picked.filter(id=>byId(id).sheet===0).map(id=>byId(id).name))];
   $('#b1').hidden=!w1; $('#bPrev').hidden=!w1; $('#only1').hidden=!w1; $('#b2').hidden=!w2; $('#wLabWrap').hidden=!w2; $('#infoCard').hidden=!(w1||w2);
   $('#b1').disabled=!need.length;
   $('#sheetNote').innerHTML = w1 ? (need.length?`PDF 1 จะมี ${need.length} แผ่น (แบบฟอร์มแผ่นที่ ${need.join(', ')})`:'วัสดุที่เลือกไม่มีในแบบฟอร์มบันทึกนำส่ง')+(none.length?` · <span class="miss">${esc(none.join(', '))} ไม่มีในแบบฟอร์ม</span>`:'') : '';
@@ -569,8 +636,11 @@ $$('.steps button').forEach(b=>b.onclick=()=>go(+b.dataset.go));
 function save(){ try{ localStorage.setItem(KEY,JSON.stringify({picked,st,info,w:[$('#w1').checked,$('#w2').checked,$('#wLab').checked]})); }catch(e){} }
 function load(){ let s=null; try{ s=JSON.parse(localStorage.getItem(KEY)||'null'); }catch(e){}
   if(s){ picked=s.picked||[]; st=s.st||{}; info=s.info||{}; if(s.w){ $('#wLab').checked=s.w[2]; } $('#w1').checked=$('#w2').checked=true; }
-  const q=new URLSearchParams(location.search).get('m'); if(q) q.split(',').forEach(id=>{ if(byId(id)&&!picked.includes(id)) picked.push(id); });
-  picked=picked.filter(byId); picked.sort((a,b)=>byId(a).no-byId(b).no); picked.forEach(id=>{ if(!st[id]) st[id]=defaults(byId(id)); });
+  const q=new URLSearchParams(location.search).get('m'); if(q) q.split(',').forEach(id=>{ if(byId(id)&&!keysOf(id).length) picked.push(id); });
+  picked=picked.filter(byId); picked.sort((a,b)=>byId(a).no-byId(b).no); picked.forEach(k=>{ if(!st[k]) st[k]=defaults(byId(k)); const d=defaults(byId(k)); for(const f in d) if(st[k][f]===undefined) st[k][f]=d[f]; });
+  /* ย้ายชนิดคอนกรีตเดิม ค1…ค4 → ค18…ค42 (ค่า Cube/Cylinder เท่ากัน) */
+  picked.filter(k=>base(k)==='concrete').forEach(k=>{ const t=st[k].type||'', old=(t.match(/^ค[\d-]+/)||[''])[0];
+    if(CONC_OLD[old]) st[k].type=concLabel(CONC_OLD[old]); else if(!byId(k).opt.v.includes(t)) st[k].type=concLabel('ค18'); });
   const sel=(n,arr)=>{ $(`[name=${n}]`).innerHTML='<option value="">— เลือก —</option>'+arr.map(o=>`<option>${esc(o)}</option>`).join(''); };
   sel('H_owner',OWNER); sel('H_work',WORK);
   if(!info.H_fy){ const t=new Date(); info.H_fy=String(t.getFullYear()+543+(t.getMonth()>=9?1:0)); }
