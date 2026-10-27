@@ -735,9 +735,9 @@ const V=v=>v?esc(v):'';
 /* แหล่งของแต่ละรายการวัสดุ (ลำดับตาม items) — ไม่ระบุ = ใช้ช่องแหล่งแรก */
 const SRCMAP={ac:['s34','s12','s38','sd','mk'],concrete:['s1','s2','mk'],prime:['mk','s1'],'cement-modified':['s1',''],recycling:['s1','s1','s1','']};
 /* กลุ่มรายการของใบกำกับ B/C/D: [{t:หัวกลุ่ม, rows:[{sub}|{n,q,u,lab,src}|{spot}]}] */
-function bcGroups(g){
+function bcGroups(g,only){
   const out=[];
-  forGrp(g).forEach(k=>{ const m=byId(k), s=st[k];
+  (only||forGrp(g)).forEach(k=>{ const m=byId(k), s=st[k];
     if(m.calc==='spot'){ out.push({t:`สอบทาน (Spot Check) ${m.name.replace(/^Spot Check\s*/,'')}`,rows:[{spot:1,layer:s.layer,dist:s.dist}]}); return; }
     if(m.id==='concrete'){ const c=CONC.find(x=>x[0]===concCode(s.type))||CONC[0];
       out.push({t:`ออกแบบส่วนผสม MIX DESIGN สำหรับคอนกรีต ${c[0]} (Cube ${c[1]} / Cylinder ${c[2]} กก./ตร.ซม.)`,
@@ -774,6 +774,8 @@ function bcRowHTML(r){
   return `<div class="it"><span></span><span>-</span><span>${esc(r.n)}</span><span>จำนวน</span><span class="n">${r.q==null?'':fmt(r.q)}</span><span>${esc(r.u||'')}</span><span>${r.lab?esc(r.lab):''}</span><span>${r.lab?(V(r.src)||dots('100%')):''}</span></div>`;
 }
 function bcHeadHTML(g){ const d=info, row=(l,v)=>`<div class="h"><b>${l}</b><span>${v}</span></div>`;
+  if(g==='A') return `<h1>ใบกำกับตัวอย่างวัสดุ</h1>`+row('โครงการ',V(d.H_project)||dots('100%'))+row('ผู้รับจ้าง',V(d.F_company)||dots('100%'))
+    +row('ผู้ควบคุมงาน',(V(d.F_insp)||dots('60mm'))+(d.F_insp_tel?` &nbsp;&nbsp; โทร. ${V(d.F_insp_tel)}`:''));
   if(g==='D'){ let h=`<h1>ใบกำกับตัวอย่างวัสดุ (General Test)</h1>`+row('ผู้รับบริการ',V(d.D_client)||dots('100%'))+row('ที่อยู่',V(d.D_addr)||dots('100%'))+row('โทรศัพท์',V(d.D_tel)||dots('60mm'));
     if(d.H_project) h+=row('โครงการ (ถ้ามี)',V(d.H_project));
     if(d.F_insp) h+=row('ผู้ควบคุมงาน (ถ้ามี)',V(d.F_insp)+(d.F_insp_tel?` &nbsp;&nbsp; โทร. ${V(d.F_insp_tel)}`:''));
@@ -785,20 +787,21 @@ function bcHeadHTML(g){ const d=info, row=(l,v)=>`<div class="h"><b>${l}</b><spa
 function signHTML(role,n,p){ return `<div class="sign"><span class="lb">ลงชื่อ</span><span class="dots"></span><span class="lb">${role}</span>`+
   (n?`<span class="nm">( ${esc(n)} )</span>`:`<span class="nm bl"><span>(</span><span class="dl"></span><span>)</span></span>`)+
   (p?`<span class="nm">${esc(p)}</span>`:`<span class="nm bl"><span class="dl"></span></span>`)+`</div>`; }
-function bcSignsHTML(g){ const list=(info.signers&&info.signers.length)?info.signers:[{n:'',p:''}];
+function bcSignsHTML(g){ if(g==='A') return `<div class="signs">${signHTML('ผู้นำส่ง',info.F_sender,'')}${signHTML('ผู้ควบคุมงาน',info.F_insp,'')}</div>`;
+  const list=(info.signers&&info.signers.length)?info.signers:[{n:'',p:''}];
   let h=list.map(x=>signHTML(g==='D'?'ผู้นำส่ง':'ผู้กำกับการส่ง',x.n,x.p)).join('');
   if(g==='D') h+=signHTML('ผู้เก็บตัวอย่าง',info.F_collector,'');
   return `<div class="signs">${h}</div>`; }
 /* จัดหน้า B/C/D: ตัดหน้าตามกลุ่มวัสดุ · ลายเซ็นหน้าสุดท้าย ไม่แยกหน้า · ไม่มีเลขหน้า */
-function paginateBC(root,g){
-  root.innerHTML=''; const MM=96/25.4;
+function paginateBC(root,g,only){
+  if(!only) root.innerHTML=''; const MM=96/25.4;
   const page=()=>{ const pg=document.createElement('div'); pg.className='pg pgBC g'+g; const d=document.createElement('div'); d.className='bc'; pg.appendChild(d); root.appendChild(pg); return d; };
   let cur=page(); const lim=(297-20)*MM;
   const over=()=>cur.scrollHeight>lim+0.5;
   const put=html=>{ const w=document.createElement('div'); w.innerHTML=html; const el=w.firstElementChild; cur.appendChild(el);
     if(over()&&cur.children.length>1){ cur.removeChild(el); cur=page(); cur.appendChild(el); } };
   put(`<div class="hd">${bcHeadHTML(g)}<div class="sec">ตัวอย่างที่นำส่ง</div></div>`);
-  bcGroups(g).forEach((G,i)=>put(`<div class="gp"><div class="gt"><span>${i+1}</span><span>${esc(G.t)}</span></div>${G.rows.map(bcRowHTML).join('')}</div>`));
+  bcGroups(g,only).forEach((G,i)=>put(`<div class="gp"><div class="gt"><span>${i+1}</span><span>${esc(G.t)}</span></div>${G.rows.map(bcRowHTML).join('')}</div>`));
   put(bcSignsHTML(g));
 }
 
@@ -851,11 +854,13 @@ function buildPages(root){
   if(g==='A'){ root.innerHTML='';
     if(sheetsNeeded().length){ root.innerHTML=$('#doc1').innerHTML; fill1(root); [...root.querySelectorAll('.pg1')].forEach(p=>{ if(p.hidden) p.remove(); }); }
     if(a2Keys().length) root.insertAdjacentHTML('beforeend',a2HTML());
+    const sp=picked.filter(k=>byId(k).calc==='spec'); if(sp.length) paginateBC(root,'A',sp);   // ใบกำกับก้อนตัวอย่างคอนกรีต (แนบท้าย)
   } else { root.innerHTML=''; if(bcGroups(g).length) paginateBC(root,g); }
   return [...root.querySelectorAll('.pg')];
 }
 function docSummary(){ const g=info.grp; if(!g) return '';
   if(g==='A'){ const p=[]; if(sheetsNeeded().length) p.push(`A1 บันทึกนำส่งตัวอย่างวัสดุ แผ่นที่ ${sheetsNeeded().join(', ')}`); if(a2Keys().length) p.push('A2 บันทึกนำส่งตรวจสอบและรับรองเครื่องหมายจราจร และ Spot Check');
+    if(picked.some(k=>byId(k).calc==='spec')) p.push('ใบกำกับก้อนตัวอย่างคอนกรีต (แนบท้าย)');
     return p.length?`ไฟล์เดียว: ${p.join(' + ')}`:'ยังไม่มีรายการ'; }
   const skip=picked.length-forGrp(g).length;
   return `${DOCNAME[g]} · ${bcGroups(g).length} กลุ่มรายการ${skip?` · ไม่พิมพ์ Spot Check ${skip} รายการ (ใช้กับกลุ่ม A/B)`:''}`; }
