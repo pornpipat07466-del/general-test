@@ -171,7 +171,7 @@ table.sheet .x:has(.v){font-weight:600!important}
 .pgBC .it .n{text-align:right;padding-right:2mm}
 .pgBC .sb{display:grid;grid-template-columns:7mm 1fr;font-weight:700;padding-left:5mm}
 .pgBC .s2{display:grid;grid-template-columns:7mm 5mm 8mm 38mm 15mm 18mm 9mm;align-items:baseline}.pgBC .s2 .c{text-align:center}
-.pgBC .dl{border-bottom:1px dotted #000;height:1em;display:inline-block;width:100%}
+.pgBC .dl{border-bottom:1px dotted #000;height:.75em;display:inline-block;width:100%;vertical-align:baseline}
 .pgBC .signs{margin-top:9mm;display:grid;grid-template-columns:1fr 1fr;column-gap:6mm;row-gap:7mm}
 .pgBC .sign{display:grid;grid-template-columns:11mm 52mm auto;line-height:1.5;align-items:baseline}
 .pgBC .sign .lb{white-space:nowrap}
@@ -777,7 +777,7 @@ function buildPages(root){
   if(g==='A'){ root.innerHTML='';
     if(sheetsNeeded().length){ root.innerHTML=$('#doc1').innerHTML; fill1(root); [...root.querySelectorAll('.pg1')].forEach(p=>{ if(p.hidden) p.remove(); }); }
     if(a2Keys().length) root.insertAdjacentHTML('beforeend',a2HTML());
-  } else paginateBC(root,g);
+  } else { root.innerHTML=''; if(bcGroups(g).length) paginateBC(root,g); }
   return [...root.querySelectorAll('.pg')];
 }
 function docSummary(){ const g=info.grp; if(!g) return '';
@@ -799,7 +799,7 @@ async function makePdf(){
   try{
     await loadLibs(); await fontsReady();
     const stage=$('#stage'); const pages=buildPages(stage); zoomToTransform(stage);
-    if(!pages.length) throw new Error('ไม่มีรายการสำหรับเอกสารนี้');
+    if(!pages.length) throw new Error('ไม่มีรายการที่พิมพ์ได้สำหรับกลุ่มนี้ — ย้อนกลับไปเลือกวัสดุ');
     const { jsPDF }=window.jspdf; const pdf=new jsPDF({unit:'mm',format:'a4',compress:true});
     for(let i=0;i<pages.length;i++){ $('#busyT').textContent=`กำลังสร้าง PDF… หน้า ${i+1}/${pages.length}`;
       const c=await html2canvas(pages[i],{scale:2,backgroundColor:'#ffffff',useCORS:true,logging:false,windowWidth:820});
