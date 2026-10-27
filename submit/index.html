@@ -370,7 +370,7 @@ const M=[
  {id:'specimen',no:11,g:2,name:'ก้อนตัวอย่างคอนกรีต',en:'Concrete Specimen · Cube / Cylinder',sheet:1,unit:'ชุด',calc:'spec',k:10,
   rule:{t:'เก็บทุกวันที่เทคอนกรีต อย่างน้อยวันละ 1 ชุด (3 ก้อน) · ทุกส่วนโครงสร้าง · ทุกครั้งที่เปลี่ยนแหล่งมวลรวม · ทุก 50 ม.³ (พื้น/ผนัง ทุก 250 ตร.ม.) · Ready-mix เก็บปากโม่ กลางโม่ ก้นโม่ · หล่อต่อหน้าผู้ควบคุมงาน บ่มตาม มทช.(ท) 102 · ทดสอบอายุ 28 วัน',ref:'มทช.101-2563 ข้อ 3.11.2–3.11.3 และ 3.12.1'},
   items:[],tests:['กำลังอัดประลัย อายุ 28 วัน'],tref:'มทช.101-2563 ข้อ 3.12',
-  src:[{k:'s1',l:'ส่วนโครงสร้าง / วันที่เท',ph:'เช่น พื้นสะพาน ช่วงที่ 1 · 20 ต.ค. 69'}],
+  src:[{k:'s1',l:'ส่วนโครงสร้าง',ph:'เช่น พื้นสะพาน ช่วงที่ 1'},{k:'s2',l:'วันที่เท',ph:'เช่น 20 ต.ค. 69'}],
   opt:{k:'type',l:'ชนิดคอนกรีต (กก./ตร.ซม.)',v:CONC.map(x=>concLabel(x[0]))},opt2:{k:'shape',l:'แท่งตัวอย่าง',s:'แท่งตัวอย่าง',v:['Cube 15×15×15 ซม.','Cylinder Ø15×30 ซม.']}},
  {id:'rebar',no:12,g:2,name:'เหล็กเสริม',en:'Reinforcing Steel',sheet:1,unit:'ตัวอย่าง',calc:'bars',k:10,
   rule:{t:'ทุกขนาด/ผู้ผลิต จากกองวัสดุ 5 ตัวอย่าง (คู่มือฯ) · 1 ตัวอย่าง/100 เส้น ไม่น้อยกว่า 5 ยาว ≥ 1.00 ม. (มทช.103-2569 ข้อ 3.5)',ref:K+' · มทช.103-2569'},
@@ -517,8 +517,10 @@ function cardHTML(k,i){
       : I(k,'layer','ชั้น (ชนิดเส้น)',s.layer,'เช่น เส้นจราจร')}
       ${I(k,'dist','ระยะทาง (กม.)',s.dist,'เช่น 2.500','d')}</div>`;
   } else {
-    const srcs=(m.src||[]).flatMap(x=> x.k!=='mk'&&N>=2
-      ? srcVals(s,x.k,N).map((v,j)=>I(k,j?`${x.k}_${j+1}`:x.k,`${x.l} · ${m.calc==='spec'?'ชุด':'ตัวอย่าง'}ที่ ${j+1}`,v,x.ph))
+    const srcs = m.calc==='spec'
+      ? '</div><div class="row2 s">'+Array.from({length:N},(_,j)=>(m.src||[]).map(x=>{ const f=j?`${x.k}_${j+1}`:x.k; return I(k,f,`${x.l}${N>1?' · ชุดที่ '+(j+1):''}`,s[f]||'',x.ph); }).join('')).join('')+'</div><div class="row2 s">'
+      : (m.src||[]).flatMap(x=> x.k!=='mk'&&N>=2
+      ? srcVals(s,x.k,N).map((v,j)=>I(k,j?`${x.k}_${j+1}`:x.k,`${x.l} · ตัวอย่างที่ ${j+1}`,v,x.ph))
       : [I(k,x.k,x.l,s[x.k],x.ph)]).join('');
     inp=`<div class="row2 s">${m.one||m.calc==='area'?'':I(k,'sets',`จำนวน (${m.unit})${m.max?' สูงสุด '+m.max:''}`,s.sets,'1','n')}${srcs}
       ${m.opt?`<div><label class="f">${lk(m.opt.l)}</label><select data-m="${k}" data-k="type">${m.opt.v.map(o=>`<option ${o===s.type?'selected':''}>${esc(o)}</option>`).join('')}</select></div>`:''}
@@ -743,8 +745,8 @@ function bcGroups(g){
     if(m.calc==='bars'){ const by={}; s.rows.filter(r=>r.sz).forEach(r=>{ const h=`${r.gr==='SR24'?'มอก.20-2559':'มอก.24-2559'} ชั้นคุณภาพ ${r.gr}${r.mk?' · ยี่ห้อ '+r.mk:''}`; (by[h]=by[h]||[]).push(r); });
       const rows=[]; Object.entries(by).forEach(([h,rs])=>{ rows.push({sub:h}); rs.forEach(r=>rows.push({n:`เหล็ก ${r.sz} (ยาว 1.00 ม.)`,q:barSamples(r.n),u:'ท่อน'})); });
       if(rows.length) out.push({t:`${m.name} (${m.en})`,rows}); return; }
-    if(m.calc==='spec'){ const c=CONC.find(x=>x[0]===concCode(s.type))||CONC[0], cyl=/Cylinder/.test(s.shape), N=setsOf(k), sv=srcVals(s,'s1',N);
-      const rows=[]; for(let j=0;j<N;j++) rows.push({n:`แท่ง ${cyl?'Cylinder':'Cube'}${N>1?' ชุดที่ '+(j+1):''}`,q:3,u:'ก้อน',lab:'ตำแหน่ง',src:sv[j]});
+    if(m.calc==='spec'){ const c=CONC.find(x=>x[0]===concCode(s.type))||CONC[0], cyl=/Cylinder/.test(s.shape), N=setsOf(k), sv=srcVals(s,'s1',N), dv=srcVals(s,'s2',N);
+      const rows=[]; for(let j=0;j<N;j++) rows.push({n:`แท่ง ${cyl?'Cylinder':'Cube'}${N>1?' ชุดที่ '+(j+1):''}${dv[j]?' · เท '+dv[j]:''}`,q:3,u:'ก้อน',lab:'ตำแหน่ง',src:sv[j]});
       if(cyl&&+s.cap>0) rows.push({n:'Capping หัว',q:+s.cap,u:'ก้อน'});
       out.push({t:`ก้อนตัวอย่างคอนกรีต ${c[0]} (${cyl?'Cylinder Ø15×30 ซม. · '+c[2]:'Cube 15×15×15 ซม. · '+c[1]} กก./ตร.ซม.)`,rows}); return; }
     if(m.calc==='pc'||m.calc==='mesh'){ const rows=lines(k).filter(l=>l.tot>0||m.calc==='mesh').map((l,i)=>{ const r=s.rows.filter(x=>m.calc==='pc'?x.sz:(x.sz||x.n||x.mk))[i]||{};
