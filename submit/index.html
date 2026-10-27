@@ -257,6 +257,7 @@ table.sheet .x:has(.v){font-weight:600!important}
         <label class="f">ที่อยู่</label><input name="D_addr">
         <label class="f">โทรศัพท์</label><input name="D_tel" inputmode="tel">
       </div>
+      <div data-g="A"><div class="row2 s"><div><label class="f">ที่ (เลขที่หนังสือ)</label><input name="H_no" placeholder="เช่น สทช.ที่ 14/01/2570/…"></div><div><label class="f">วันที่</label><input name="H_date" placeholder="เช่น 28 ต.ค. 2569"></div></div></div>
       <label class="f">ชื่อโครงการ<span data-g="D"> (ถ้ามี)</span></label><input name="H_project" placeholder="เช่น ก่อสร้างถนนลาดยาง สาย กบ.xxxx">
       <div data-g="A,B,C"><div class="row2 s"><div><label class="f">ผู้รับจ้าง (บริษัทฯ / หจก.)</label><input name="F_company"></div><div data-g="A"><label class="f">โทร.</label><input name="F_company_tel" inputmode="tel"></div></div></div>
       <div data-g="B,C"><div class="row2 s"><div><label class="f">สัญญาจ้างเลขที่</label><input name="C_no"></div><div><label class="f">ลงวันที่</label><input name="C_date" placeholder="เช่น 15 ตุลาคม 2569"></div></div></div>
@@ -281,7 +282,7 @@ table.sheet .x:has(.v){font-weight:600!important}
         <div style="display:flex;gap:16px"><label style="display:flex;gap:6px;align-items:center"><input type="radio" name="ret" value="self" checked style="width:auto"> มารับผลเอง</label><label style="display:flex;gap:6px;align-items:center"><input type="radio" name="ret" value="send" style="width:auto"> ให้ส่งไปที่</label></div>
         <div id="retAddr" hidden><label class="f">ที่อยู่สำหรับส่งผล</label><input name="F_ret_addr"></div>
         <label class="f">ชื่อผู้ลงนามในวงเล็บ ( ) ใต้ "จึงเรียนมาฯ"</label><input name="F_signer">
-        <p class="ref">เลขที่และวันที่ในใบนำส่ง เว้นว่างไว้ให้เขียนเอง · สตว. ลงเลขเมื่อรับตัวอย่าง</p>
+        <p class="ref">ที่ / วันที่ เว้นว่างได้ ถ้าว่างจะพิมพ์เป็นเส้นจุดให้เขียนเอง</p>
         <h3 class="sgh">อื่น ๆ ในบันทึกนำส่งเครื่องหมายจราจร (A2) <small class="ref">ถ้ามี</small></h3>
         <label class="f">รายการ / รายละเอียด</label><input name="A2_oth" placeholder="เช่น แผ่นสะท้อนแสง · Shop Drawing">
         <div class="row2 s"><div><label class="f">จำนวน</label><input name="A2_oth_q" inputmode="numeric"></div><div><label class="f">หน่วย</label><input name="A2_oth_u" placeholder="เช่น ชุด"></div></div>
@@ -624,7 +625,7 @@ document.addEventListener('click',e=>{
 
 /* ===== PDF 1: แปลงสถานะ -> ค่าในแบบฟอร์ม ===== */
 function sheetValues(){
-  const o={...info}; o.H_no=''; o.H_date='';
+  const o={...info}; o.H_no=info.H_no||''; o.H_date=info.H_date||'';
   if(o.H_work!=='อื่นๆ') o.H_work_other='';
   o.F_ret_self=(info.ret||'self')==='self'; o.F_ret_send=info.ret==='send'; if(!o.F_ret_send) o.F_ret_addr='';
   const src={D:[],K:[],L:[],R:[]}, add=(k,v)=>o[k]=String((+o[k]||0)+v);
@@ -919,7 +920,7 @@ function a2HTML(){ const d=info, bx=on=>`<span class="bx${on?' on':''}"></span>`
     +`<div class="it dd"><span></span><span>-</span>${ln(d.A2_l1)}</div><div class="it dd"><span></span><span>-</span>${ln(d.A2_l2)}</div>`;
   return `<div class="pg pgA2"><div class="a2">
 <h1>บันทึกนำส่งตรวจสอบและรับรองเครื่องหมายจราจร<br>และทดสอบเพื่อสอบทาน (Spot Check)</h1>
-<div class="flex"><b>ที่</b>${ln('','flex:0 0 55mm')}<span style="margin-left:22mm"><b>วันที่</b></span>${ln('','flex:0 0 55mm')}</div>
+<div class="flex"><b>ที่</b>${ln(d.H_no,'flex:0 0 55mm')}<span style="margin-left:22mm"><b>วันที่</b></span>${ln(d.H_date,'flex:0 0 55mm')}</div>
 <div><b>เสนอ</b> &nbsp;ผู้อำนวยการสำนักงานทางหลวงชนบทที่ 14</div>
 <div class="row"><b>โครงการของ</b><div class="opts">${own}</div></div>
 <div class="row"><b>งานก่อสร้าง</b><div class="opts">${wk}</div></div>
