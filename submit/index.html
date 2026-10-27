@@ -279,7 +279,6 @@ table.sheet .x:has(.v){font-weight:600!important}
         <div id="signers"></div>
         <p><button class="btn ghost sm" id="sgAdd">+ เพิ่มรายชื่อ</button></p>
       </div>
-      <div data-g="D"><label class="f">ผู้เก็บตัวอย่าง (ถ้ามี)</label><input name="F_collector" placeholder="เว้นว่างได้ ลงชื่อด้วยมือ"></div>
     </div>
   </section>
 
@@ -790,7 +789,6 @@ function signHTML(role,n,p){ return `<div class="sign"><span class="lb">ลง�
 function bcSignsHTML(g){ if(g==='A') return `<div class="signs">${signHTML('ผู้นำส่ง',info.F_sender,'')}${signHTML('ผู้ควบคุมงาน',info.F_insp,'')}</div>`;
   const list=(info.signers&&info.signers.length)?info.signers:[{n:'',p:''}];
   let h=list.map(x=>signHTML(g==='D'?'ผู้นำส่ง':'ผู้กำกับการส่ง',x.n,x.p)).join('');
-  if(g==='D') h+=signHTML('ผู้เก็บตัวอย่าง',info.F_collector,'');
   return `<div class="signs">${h}</div>`; }
 /* จัดหน้า B/C/D: ตัดหน้าตามกลุ่มวัสดุ · ลายเซ็นหน้าสุดท้าย ไม่แยกหน้า · ไม่มีเลขหน้า */
 function paginateBC(root,g,only){
