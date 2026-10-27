@@ -46,6 +46,8 @@ main{max-width:760px;margin:0 auto;padding:6px 16px 120px}
 .chip input{width:20px;height:20px;margin:1px 0 0;flex:none;accent-color:var(--acc)}
 .chip small{display:block;color:var(--muted);font-size:12px}
 .chip b.cnt{color:var(--acc);font-size:13px}
+.grps{display:grid;gap:8px}.grp{display:flex;gap:10px;align-items:flex-start;padding:11px 12px;border:1.5px solid var(--line);border-radius:14px;font-size:15.5px}.grp.on{border-color:var(--acc);background:var(--warn)}.grp input{width:20px;height:20px;margin:2px 0 0;flex:none;accent-color:var(--acc)}.grp small{display:block;color:var(--muted);font-size:13px}
+.sgh{font-size:15px;margin:16px 0 0}.sg{border-top:1px dashed var(--line);margin-top:8px;padding-top:2px}
 .dupbar{display:flex;gap:8px;flex-wrap:wrap;margin-top:12px;padding-top:10px;border-top:1px dashed var(--line)}
 .chip:has(input:checked){border-color:var(--acc);background:var(--acc-bg);box-shadow:inset 0 0 0 1px var(--acc)}
 label.f{display:block;font-size:14px;color:var(--muted);margin:10px 0 3px}
@@ -161,7 +163,7 @@ table.sheet .x:has(.v){font-weight:600!important}
 <body>
 <header class="top">
   <div class="ab"><a class="home" href="../index.html"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 11l9-8 9 8"/><path d="M5 10v10h14V10"/></svg>หน้าแรก</a><div class="ttl">สร้างใบนำส่งตัวอย่าง</div></div>
-  <nav class="steps"><button data-go="1">① เลือกวัสดุ</button><button data-go="2">② สรุปรายการ</button><button data-go="3">③ ส่งออก PDF</button></nav>
+  <nav class="steps"><button data-go="1">① วัสดุ</button><button data-go="2">② สรุป</button><button data-go="3">③ ผู้ใช้</button><button data-go="4">④ ส่งออก</button></nav>
 </header>
 
 <main>
@@ -179,20 +181,39 @@ table.sheet .x:has(.v){font-weight:600!important}
   <!-- ขั้น 3 -->
   <section id="st3" hidden>
     <div class="card">
-      <h2>ตัวเลือกเอกสาร</h2>
-      <label class="pick" hidden><input type="checkbox" id="w1" checked><span><b>PDF 1</b> บันทึกนำส่งตัวอย่างวัสดุ<br><small class="ref">ตามแบบฟอร์ม สตว. — ผู้ควบคุมงานลงนาม แนบไปกับตัวอย่าง</small></span></label>
-      <label class="pick" hidden><input type="checkbox" id="w2" checked><span><b>PDF 2</b> ใบสรุปการเตรียมตัวอย่างวัสดุ (General Test)<br><small class="ref">ให้ผู้รับจ้างใช้เตรียมและนำส่งวัสดุ</small></span></label>
-      <label class="pick" id="wLabWrap"><input type="checkbox" id="wLab"><span>แนบป้ายติดถุงตัวอย่างท้าย PDF 2</span></label>
-      <div id="sheetNote" class="ref"></div>
+      <h2>ผู้ส่งตัวอย่าง</h2><p class="ref">เลือกกลุ่มผู้ใช้ — เอกสารที่ได้ต่างกันตามกลุ่ม</p>
+      <div class="grps">
+        <label class="grp"><input type="radio" name="grp" value="A"><span><b>A · สทช.14</b><small>บันทึกนำส่งตัวอย่างวัสดุ (แบบฟอร์ม สตว.)</small></span></label>
+        <label class="grp"><input type="radio" name="grp" value="B"><span><b>B · ขทช.</b><small>ใบกำกับตัวอย่างวัสดุ</small></span></label>
+        <label class="grp"><input type="radio" name="grp" value="C"><span><b>C · หน่วยงานภายนอก</b><small>อปท. ยผ. อื่น ๆ · ใบกำกับตัวอย่างวัสดุ</small></span></label>
+        <label class="grp"><input type="radio" name="grp" value="D"><span><b>D · ผู้รับจ้าง / ประชาชน</b><small>ใบกำกับตัวอย่างวัสดุ (General Test)</small></span></label>
+      </div>
+      <div id="spotWarn" class="q" hidden></div>
     </div>
-    <div class="card" id="infoCard">
-      <h2>ข้อมูลโครงการ</h2>
-      <label class="f">ชื่อโครงการ</label><input name="H_project" placeholder="เช่น ก่อสร้างถนนลาดยาง สาย กบ.xxxx">
-      <label class="f">สายทาง</label><input name="H_route">
-      <div class="row3"><div><label class="f">ตำบล</label><input name="H_tambon"></div><div><label class="f">อำเภอ</label><input name="H_amphoe"></div><div><label class="f">จังหวัด</label><input name="H_changwat" value="กระบี่"></div></div>
-      <div class="row2 s"><div><label class="f">ผู้ควบคุมงาน</label><input name="F_insp"></div><div><label class="f">โทร.</label><input name="F_insp_tel" inputmode="tel"></div></div>
-      <label class="f">บริษัทฯ / หจก. (ผู้รับจ้าง)</label><input name="F_company">
-      <div id="only1">
+    <div class="card" id="infoCard" hidden>
+      <h2>ข้อมูลสำหรับเอกสาร</h2>
+      <div data-g="B"><label class="f">แขวงทางหลวงชนบท</label><select name="B_office"></select></div>
+      <div data-g="C"><label class="f">ชื่อหน่วยงาน</label><input name="C_org" placeholder="เช่น องค์การบริหารส่วนตำบล…"></div>
+      <div data-g="D">
+        <label class="f">ผู้รับบริการ</label><input name="D_client" placeholder="ชื่อบุคคล / บริษัท / หจก.">
+        <label class="f">ที่อยู่</label><input name="D_addr">
+        <label class="f">โทรศัพท์</label><input name="D_tel" inputmode="tel">
+      </div>
+      <label class="f">ชื่อโครงการ<span data-g="D"> (ถ้ามี)</span></label><input name="H_project" placeholder="เช่น ก่อสร้างถนนลาดยาง สาย กบ.xxxx">
+      <div data-g="A,B,C"><div class="row2 s"><div><label class="f">ผู้รับจ้าง (บริษัทฯ / หจก.)</label><input name="F_company"></div><div data-g="A"><label class="f">โทร.</label><input name="F_company_tel" inputmode="tel"></div></div></div>
+      <div data-g="B,C"><div class="row2 s"><div><label class="f">สัญญาจ้างเลขที่</label><input name="C_no"></div><div><label class="f">ลงวันที่</label><input name="C_date" placeholder="เช่น 15 ตุลาคม 2569"></div></div></div>
+      <div class="row2 s"><div><label class="f">ผู้ควบคุมงาน<span data-g="D"> (ถ้ามี)</span></label><input name="F_insp"></div><div><label class="f">โทร.</label><input name="F_insp_tel" inputmode="tel"></div></div>
+      <div data-g="B,C">
+        <label class="pick"><input type="checkbox" name="ref_on"><span>แสดงข้อความอ้างถึงประกาศผู้ชนะ</span></label>
+        <div id="refBox" hidden>
+          <label class="f">ประกาศผู้ชนะการเสนอราคา (ชื่อประกาศ)</label><input name="ref_text" placeholder="เช่น ประกวดราคาจ้างก่อสร้าง… ด้วยวิธีประกวดราคาอิเล็กทรอนิกส์ (e-bidding)">
+          <label class="f">ลงวันที่</label><input name="ref_date" placeholder="เช่น 1 กันยายน 2569">
+        </div>
+      </div>
+      <div data-g="A">
+        <label class="f">สายทาง</label><input name="H_route">
+        <div class="row3"><div><label class="f">ตำบล</label><input name="H_tambon"></div><div><label class="f">อำเภอ</label><input name="H_amphoe"></div><div><label class="f">จังหวัด</label><input name="H_changwat" value="กระบี่"></div></div>
+        <div class="row2 s"><div><label class="f">ระยะทางก่อสร้าง (กม.)</label><input name="H_len" inputmode="decimal"></div><div><label class="f">ระยะทางตลอดสายทาง (กม.)</label><input name="H_len_all" inputmode="decimal"></div></div>
         <label class="f">โครงการของ</label><select name="H_owner"></select>
         <label class="f">ประเภทงาน</label><select name="H_work"></select>
         <div id="wOther" hidden><label class="f">ระบุ (กรณีอื่นๆ)</label><input name="H_work_other"></div>
@@ -204,6 +225,23 @@ table.sheet .x:has(.v){font-weight:600!important}
         <label class="f">ชื่อผู้ลงนามในวงเล็บ ( ) ใต้ "จึงเรียนมาฯ"</label><input name="F_signer">
         <p class="ref">เลขที่และวันที่ในใบนำส่ง เว้นว่างไว้ให้เขียนเอง · สตว. ลงเลขเมื่อรับตัวอย่าง</p>
       </div>
+      <div data-g="B,C,D">
+        <h3 class="sgh" id="sgTitle">ผู้กำกับการส่ง</h3>
+        <div id="signers"></div>
+        <p><button class="btn ghost sm" id="sgAdd">+ เพิ่มรายชื่อ</button></p>
+      </div>
+      <div data-g="D"><label class="f">ผู้เก็บตัวอย่าง (ถ้ามี)</label><input name="F_collector" placeholder="เว้นว่างได้ ลงชื่อด้วยมือ"></div>
+    </div>
+  </section>
+
+  <!-- ขั้น 4 -->
+  <section id="st4" hidden>
+    <div class="card">
+      <h2>ตัวเลือกเอกสาร</h2>
+      <label class="pick" hidden><input type="checkbox" id="w1" checked><span><b>PDF 1</b> บันทึกนำส่งตัวอย่างวัสดุ<br><small class="ref">ตามแบบฟอร์ม สตว. — ผู้ควบคุมงานลงนาม แนบไปกับตัวอย่าง</small></span></label>
+      <label class="pick" hidden><input type="checkbox" id="w2" checked><span><b>PDF 2</b> ใบสรุปการเตรียมตัวอย่างวัสดุ (General Test)<br><small class="ref">ให้ผู้รับจ้างใช้เตรียมและนำส่งวัสดุ</small></span></label>
+      <label class="pick" id="wLabWrap"><input type="checkbox" id="wLab"><span>แนบป้ายติดถุงตัวอย่างท้าย PDF 2</span></label>
+      <div id="sheetNote" class="ref"></div>
     </div>
     <div class="card">
       <div style="display:grid;gap:10px">
@@ -326,6 +364,7 @@ const PIPES=['600','800','1000','1200','1500'];
 const CHECK=[['ตัวอย่างเป็นตัวแทนของวัสดุ/กอง',S],['ปริมาณมากพอสำหรับการทดสอบ (ตามตาราง)',S],['ติดป้ายทุกภาชนะ ระบุ วัน เดือน ปี สถานที่ จุดเก็บ ผู้เก็บ',S],['ภาชนะที่ใช้ใส่วัสดุควรมีความเหมาะสม แข็งแรง ปิดสนิท',S],['เก็บรักษาให้คงสภาพจนถึงวันทดสอบ',S]];
 const OWNER=['สำนักก่อสร้างทาง','สำนักก่อสร้างสะพาน','สำนักสำรวจและออกแบบ','สำนักบำรุงรักษาและอำนวยความปลอดภัยงานทาง','สำนักงานทางหลวงชนบทที่ 14 (กระบี่)'];
 const WORK=['ถนนลาดยาง','ถนน คสล.','สะพาน คสล.','ท่อลอดเหลี่ยม คสล.','งานสำรวจ (เพื่อออกแบบทาง)','ผิวจราจร','อื่นๆ','ซ่อมบำรุงปกติ','ซ่อมบำรุงตามกำหนดเวลา','ซ่อมบำรุงพิเศษ'];
+const OFFICES=['แขวงทางหลวงชนบทกระบี่','แขวงทางหลวงชนบทตรัง','แขวงทางหลวงชนบทพัทลุง','แขวงทางหลวงชนบทพังงา','แขวงทางหลวงชนบทภูเก็ต'];   // HANDOFF-export-FINAL ข้อ 4
 const MONTH=['มกราคม','กุมภาพันธ์','มีนาคม','เมษายน','พฤษภาคม','มิถุนายน','กรกฎาคม','สิงหาคม','กันยายน','ตุลาคม','พฤศจิกายน','ธันวาคม'];
 
 /* ===== สถานะ ===== */
@@ -449,9 +488,10 @@ document.addEventListener('input',e=>{
     if(t.tagName==='SELECT') keysOf(base(k)).forEach(refreshCard);
     else if(['sets','n','area','nT','nN','nB','layer','dist'].includes(t.dataset.k)) refreshCard(k);
     nav(); return; }
-  if(t.name){ info[t.name]= t.type==='radio' ? (t.checked?t.value:info[t.name]) : t.value; save(); upd3(); }
+  if(t.dataset.sg!=null){ info.signers[+t.dataset.sg][t.dataset.sf]=t.value; save(); return; }
+  if(t.name){ info[t.name]= t.type==='radio' ? (t.checked?t.value:info[t.name]) : t.type==='checkbox' ? t.checked : t.value; save(); applyGrp(); upd3(); }
 });
-document.addEventListener('change',e=>{ if(e.target.tagName==='SELECT'&&e.target.dataset.m) e.target.dispatchEvent(new Event('input',{bubbles:true})); if(e.target.type==='radio'){ info.ret=e.target.value; save(); upd3(); } });
+document.addEventListener('change',e=>{ if(e.target.tagName==='SELECT'&&e.target.dataset.m) e.target.dispatchEvent(new Event('input',{bubbles:true})); if(e.target.type==='radio'&&e.target.name){ info[e.target.name]=e.target.value; save(); applyGrp(); upd3(); nav(); } });
 document.addEventListener('click',e=>{
   const a=e.target.closest('[data-add]'), d=e.target.closest('[data-del]'), u=e.target.closest('[data-dup]'), rm=e.target.closest('[data-rm]');
   if(a){ const k=a.dataset.add, m=byId(k); st[k].rows.push(m.calc==='bars'?{gr:'SD40',sz:'DB16',n:'',mk:''}:{sz:'1000',n:'',mk:''}); save(); refreshCard(k); }
@@ -617,7 +657,7 @@ window.addEventListener('resize',fitPrev);
 $('#bClear').onclick=()=>{ if(!confirm('ล้างข้อมูลที่กรอกทั้งหมด?')) return; try{ localStorage.removeItem(KEY); }catch(e){} location.href=location.pathname; };
 function upd3(){
   const w1=$('#w1').checked, w2=$('#w2').checked, need=sheetsNeeded(), none=[...new Set(picked.filter(id=>byId(id).sheet===0).map(id=>byId(id).name))];
-  $('#b1').hidden=!w1; $('#bPrev').hidden=!w1; $('#only1').hidden=!w1; $('#b2').hidden=!w2; $('#wLabWrap').hidden=!w2; $('#infoCard').hidden=!(w1||w2);
+  $('#b1').hidden=!w1; $('#bPrev').hidden=!w1; $('#b2').hidden=!w2; $('#wLabWrap').hidden=!w2;
   $('#b1').disabled=!need.length;
   $('#sheetNote').innerHTML = w1 ? (need.length?`PDF 1 จะมี ${need.length} แผ่น (แบบฟอร์มแผ่นที่ ${need.join(', ')})`:'วัสดุที่เลือกไม่มีในแบบฟอร์มบันทึกนำส่ง')+(none.length?` · <span class="miss">${esc(none.join(', '))} ไม่มีในแบบฟอร์ม</span>`:'') : '';
   $('#wOther').hidden=info.H_work!=='อื่นๆ'; $('#retAddr').hidden=info.ret!=='send';
@@ -626,10 +666,26 @@ function upd3(){
 $('#w1').onchange=$('#w2').onchange=$('#wLab').onchange=()=>{ save(); upd3(); };
 
 /* ===== นำทาง / บันทึก ===== */
-function go(n){ if(n>1&&!picked.length) return; step=n; [1,2,3].forEach(i=>$('#st'+i).hidden=i!==n);
+/* ===== ขั้น 3: กลุ่มผู้ใช้ ===== */
+function renderSigners(){ if(!Array.isArray(info.signers)||!info.signers.length) info.signers=[{n:'',p:''}];
+  const many=info.signers.length>1;
+  $('#signers').innerHTML=info.signers.map((g,i)=>`<div class="sg"><div class="row2 s"><div><label class="f">ชื่อ-สกุล ${many?'คนที่ '+(i+1):''}</label><input data-sg="${i}" data-sf="n" value="${esc(g.n)}"></div><div><label class="f">ตำแหน่ง</label><input data-sg="${i}" data-sf="p" value="${esc(g.p)}"></div></div>${many?`<button class="btn ghost sm" data-sgdel="${i}">ลบคนนี้</button>`:''}</div>`).join(''); }
+function applyGrp(){ const g=info.grp||'';
+  $('#infoCard').hidden=!g;
+  $$('#st3 [data-g]').forEach(el=>el.hidden=!el.dataset.g.split(',').includes(g));
+  $('#sgTitle').textContent=g==='D'?'ผู้นำส่ง':'ผู้กำกับการส่ง';
+  $('#refBox').hidden=!info.ref_on;
+  const sp=[...new Set(picked.filter(k=>byId(k).calc==='spot').map(k=>byId(k).name))];
+  $('#spotWarn').hidden=!(sp.length&&(g==='C'||g==='D'));
+  $('#spotWarn').textContent=`กลุ่ม ${g} ไม่พิมพ์รายการหมวด 5: ${sp.join(', ')} (ใช้กับกลุ่ม A และ B เท่านั้น)`;
+  $$('#st3 .grp').forEach(l=>l.classList.toggle('on',l.querySelector('input').value===g)); }
+$('#sgAdd').onclick=()=>{ info.signers.push({n:'',p:''}); save(); renderSigners(); };
+document.addEventListener('click',e=>{ const d=e.target.closest('[data-sgdel]'); if(!d) return; info.signers.splice(+d.dataset.sgdel,1); save(); renderSigners(); });
+
+function go(n){ if(n>1&&!picked.length) return; if(n>3&&!info.grp) n=3; step=n; [1,2,3,4].forEach(i=>$('#st'+i).hidden=i!==n);
   $$('.steps button').forEach(b=>b.toggleAttribute('aria-current',+b.dataset.go===n)); $$('.steps button').forEach(b=>{ if(b.hasAttribute('aria-current')) b.setAttribute('aria-current','step'); });
-  if(n===2) renderCards(); if(n===3) upd3(); nav(); scrollTo(0,0); }
-function nav(){ $('#bBack').hidden=step===1; $('#bNext').hidden=step===3; $('#bNext').disabled=!picked.length;
+  if(n===2) renderCards(); if(n===3){ renderSigners(); applyGrp(); } if(n===4) upd3(); nav(); scrollTo(0,0); }
+function nav(){ $('#bBack').hidden=step===1; $('#bNext').hidden=step===4; $('#bNext').disabled=!picked.length||(step===3&&!info.grp);
   $('#navS').textContent= picked.length?`เลือกแล้ว ${picked.length} รายการ`:'ยังไม่ได้เลือกวัสดุ'; }
 $('#bNext').onclick=()=>go(step+1); $('#bBack').onclick=()=>go(step-1);
 $$('.steps button').forEach(b=>b.onclick=()=>go(+b.dataset.go));
@@ -642,10 +698,12 @@ function load(){ let s=null; try{ s=JSON.parse(localStorage.getItem(KEY)||'null'
   picked.filter(k=>base(k)==='concrete').forEach(k=>{ const t=st[k].type||'', old=(t.match(/^ค[\d-]+/)||[''])[0];
     if(CONC_OLD[old]) st[k].type=concLabel(CONC_OLD[old]); else if(!byId(k).opt.v.includes(t)) st[k].type=concLabel('ค18'); });
   const sel=(n,arr)=>{ $(`[name=${n}]`).innerHTML='<option value="">— เลือก —</option>'+arr.map(o=>`<option>${esc(o)}</option>`).join(''); };
-  sel('H_owner',OWNER); sel('H_work',WORK);
+  sel('H_owner',OWNER); sel('H_work',WORK); sel('B_office',OFFICES);
   if(!info.H_fy){ const t=new Date(); info.H_fy=String(t.getFullYear()+543+(t.getMonth()>=9?1:0)); }
   if(!info.H_changwat) info.H_changwat='กระบี่';
-  $$('#st3 [name]').forEach(el=>{ if(el.type==='radio') el.checked=(info.ret||'self')===el.value; else if(info[el.name]!=null) el.value=info[el.name]; });
+  if(!info.ret) info.ret='self';
+  $$('#st3 [name]').forEach(el=>{ if(el.type==='radio') el.checked=info[el.name]===el.value; else if(el.type==='checkbox') el.checked=!!info[el.name]; else if(info[el.name]!=null) el.value=info[el.name]; });
+  renderSigners();
 }
 load(); renderPicker(); go(1);
 </script>
