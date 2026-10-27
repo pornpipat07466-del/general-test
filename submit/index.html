@@ -204,8 +204,8 @@ table.sheet .x:has(.v){font-weight:600!important}
 
 .acp{position:absolute;background:#fff;border-left:1px solid #000;border-right:1px solid #000;font-family:'Sarabun',sans-serif;color:#555;box-sizing:border-box;line-height:1.05}
 .acp>div{height:var(--h);display:flex;align-items:center;white-space:nowrap;box-sizing:border-box}
-.acp .hdr{border-top:1px solid #000;color:#000}
-.acp .hdr .box{width:44%;height:100%;display:flex;align-items:center;gap:.6em;padding-left:.8em;border-right:1px solid #000;border-bottom:1px solid #000;box-sizing:border-box;font-size:1.08em}
+.acp .hdr{color:#000}
+.acp .hdr .box{width:44%;height:100%;display:flex;align-items:center;gap:.6em;padding-left:.8em;border-top:1px solid #000;border-right:1px solid #000;border-bottom:1px solid #000;box-sizing:border-box;font-size:1.08em}
 .acp .hdr .rt{flex:1;display:flex;align-items:baseline;gap:.35em;justify-content:flex-end;padding-right:.8em;font-weight:700;font-size:1.08em}
 .acp .ln{gap:.45em;padding:0 .8em 0 2.4em}
 .acp .sm{font-size:.92em}.acp .xs{font-size:.78em;margin-right:.9em}
@@ -735,32 +735,31 @@ function acPanel(pg,o){
   const t=pg.querySelector('table'); if(!t) return; pg.querySelectorAll('.acp').forEach(x=>x.remove());
   const cell=sel=>{ const e=t.querySelector(sel); return e&&e.closest('td'); };
   const tdByText=re=>[...t.querySelectorAll('td')].find(td=>re.test(td.textContent.trim()));
-  const a=cell('[data-c="X_mar"]'), z=tdByText(/^Density\s*50$/), f=tdByText(/^Bitumen Content\s*300$/);
+  const a=cell('[data-c="X_mar"]'), z=tdByText(/^Density\s*50$/), f=tdByText(/^Bitumen Content\s*300$/), top=tdByText(/^CONCRETE MIX DESIGN$/);
   if(!a||!z||!f) return;
   const pr=pg.getBoundingClientRect(), k=pr.width/pg.offsetWidth, R=e=>e.getBoundingClientRect();
-  const x0=(R(a).left-pr.left)/k, x1=(R(z).right-pr.left)/k, y0=(R(a.closest('tr')).top-pr.top)/k, y1=(R(f.closest('tr')).top-pr.top)/k;
+  const x0=(R(a).left-pr.left)/k, x1=(R(z).right-pr.left)/k, y0=(R((top||a).closest('tr')).top-pr.top)/k, y1=(R(f.closest('tr')).top-pr.top)/k;
   const rowH=R(a.closest('tr')).height/k, lab=a.closest('tr').querySelector('.x:not(:empty)'), bigFs=parseFloat(getComputedStyle(lab||a).fontSize)*(rowH/(a.closest('tr').offsetHeight||rowH));
   const Q=o._qc||{mar:[],ext:[],core:[]}, sum=a=>a.reduce((t,r)=>t+(+r.n||0),0);
   const mar=Q.mar, ext=Q.ext, core=Q.core, nCore=core.reduce((t,c)=>t+c.n,0), pos=core.flatMap(c=>c.labels||[]);
   const side=core.map(c=>c.lanes).join(' '), J=a=>[...new Set(a.filter(Boolean))].join(' / ');
-  const C=Math.max(12,Math.round((y1-y0)/rowH)), nm=Math.max(2,mar.length), ne=Math.max(2,ext.length);
-  let cr=Math.max(2,Math.ceil(pos.length/4)); const free=C-(5+nm+ne); if(free>cr) cr=free;
-  const lines=5+nm+ne+cr, h=(y1-y0)/lines, fs=Math.min(bigFs||10,h*0.62);
+  const C=Math.max(12,Math.round((y1-y0)/rowH)), nm=Math.max(3,mar.length), ne=Math.max(3,ext.length);
+  let cr=Math.max(2,Math.ceil(pos.length/4)); const free=C-(4+nm+ne); if(free>cr) cr=free;
+  const lines=4+nm+ne+cr, h=(y1-y0)/lines, fs=Math.min(bigFs||10,h*0.62);
   const cb=on=>`<span class="cb${on?' on':''}"></span>`, v=x=>x!==''&&x!=null&&x!==0?`<b class="v">${esc(x)}</b>`:'';
   const dl=(x,w)=>`<span class="dl" style="${w?'flex:0 0 '+w:'flex:1'}">${v(x)}</span>`;
   const hd=(on,txt,right)=>`<div class="hdr"><div class="box">${cb(on)}<b>${txt}</b></div><div class="rt">${right}</div></div>`;
-  const setRow=(r,i,km)=>`<div class="ln"><span class="sm">ชุดที่ ${i+1}</span><span class="sm">วันที่</span>${dl(r.d,'26%')}<span class="sm">จำนวน</span>${dl(r.n,'10%')}<span class="sm">ก้อน</span>${km?`<span class="sm">เก็บจาก กม.</span>${dl(r.km)}`:'<span style="flex:1"></span>'}</div>`;
+  const setRow=(r,i,km)=>`<div class="ln"><span class="sm">ชุดที่ ${i+1}</span><span class="sm">วันที่</span>${dl(r.d,'26%')}<span class="sm">จำนวน</span>${dl(r.n,'10%')}<span class="sm">ก้อน</span>${km?`<span class="sm">กม.</span>${dl(r.km)}`:'<span style="flex:1"></span>'}</div>`;
   let grid=''; for(let r=0;r<cr;r++){ grid+='<div class="ln g4">'; for(let c=0;c<4;c++){ const i=c*cr+r; grid+=`<span class="no">${i+1}</span>${dl(pos[i])}`; } grid+='</div>'; }
   const d=document.createElement('div'); d.className='acp';
   Object.assign(d.style,{left:x0+'px',top:y0+'px',width:(x1-x0)+'px',height:(y1-y0)+'px',fontSize:fs+'px'}); d.style.setProperty('--h',h+'px');
   d.innerHTML=
     hd(mar.length,'ก้อนตัวอย่าง Marshall',`จำนวน${dl(mar.length||'','12%')}วัน &nbsp; จำนวน${dl(sum(mar)||'','14%')}ก้อน`)
    +Array.from({length:nm},(_,i)=>setRow(mar[i]||{},i,1)).join('')
-   +hd(nCore,'ก้อนตัวอย่าง Coring',`จำนวนรวม${dl(nCore||'','14%')}ก้อน`)
-   +`<div class="ln"><span class="sm">ช่วง กม.</span>${dl(J(core.map(c=>c.st0)),'18%')}<span class="sm">ถึง</span>${dl(J(core.map(c=>c.st1)),'18%')}<span class="sm" style="margin-left:4%">ด้าน</span>${cb(/LT/.test(side))}<span>LT</span>${cb(/RT/.test(side))}<span>RT</span></div>`
-   +grid
    +hd(ext.length,'หาปริมาณอัตราส่วนผสมแอสฟัลต์',`จำนวน${dl(ext.length||'','12%')}วัน &nbsp; จำนวน${dl(sum(ext)||'','14%')}ก้อน`)
    +Array.from({length:ne},(_,i)=>setRow(ext[i]||{},i,0)).join('')
+   +hd(nCore,'ก้อนตัวอย่าง Coring',`จำนวนรวม${dl(nCore||'','14%')}ก้อน`)
+   +grid
    +`<div class="ln acts">${cb(o.X_bit)}<span class="xs">Bitumen Content</span>${cb(o.X_grad)}<span class="xs">Gradation of Extracted Aggregate</span>${cb(o.X_sf)}<span class="xs">Stability &amp; Flow</span>${cb(o.X_den)}<span class="xs">Density</span></div>`;
   pg.appendChild(d);
 }
