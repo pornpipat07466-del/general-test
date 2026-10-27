@@ -202,7 +202,7 @@ table.sheet .x:has(.v){font-weight:600!important}
 .pgA2 .boxes .t{text-align:left}
 .prev{background:#d9dee5}.prev .pg{margin-bottom:8px;box-shadow:0 1px 4px rgba(0,0,0,.2)}
 
-.acp{position:absolute;background:#fff;border-left:1px solid #000;border-right:1px solid #000;font-family:'Sarabun',sans-serif;color:#555;box-sizing:border-box;line-height:1.05}
+.acp{position:absolute;background:#fff;border-left:1px solid #000;border-right:1px solid #000;border-bottom:1px solid #000;font-family:'Sarabun',sans-serif;color:#555;box-sizing:border-box;line-height:1.05}
 .acp>div{height:var(--h);display:flex;align-items:center;white-space:nowrap;box-sizing:border-box}
 .acp .hdr{color:#000}
 .acp .hdr .box{width:44%;height:100%;display:flex;align-items:center;gap:.6em;padding-left:.8em;border-top:1px solid #000;border-right:1px solid #000;border-bottom:1px solid #000;box-sizing:border-box;font-size:1.08em}
@@ -213,7 +213,7 @@ table.sheet .x:has(.v){font-weight:600!important}
 .acp .v{color:#000;font-weight:700}
 .acp .g4{display:grid;grid-template-columns:repeat(4,1.6em 1fr);column-gap:.4em;padding-left:2.4em}
 .acp .no{text-align:right;font-size:.92em;color:#555}
-.acp .acts{border-top:1px dashed #000;border-bottom:1px dashed #000;padding-left:.8em;gap:.4em;margin:0 0 calc(var(--h)*.35) 0}
+.acp .acts{border-top:1px dashed #000;padding-left:.8em;gap:.4em;margin:0}
 .acp .cb{flex:none}
 </style>
 <style id="pageRule">@page{size:A4;margin:0}</style>
@@ -745,7 +745,7 @@ function acPanel(pg,o){
   const side=core.map(c=>c.lanes).join(' '), J=a=>[...new Set(a.filter(Boolean))].join(' / ');
   const C=Math.max(12,Math.round((y1-y0)/rowH)), nm=Math.max(2,mar.length), ne=Math.max(2,ext.length);
   let cr=Math.max(2,Math.ceil(pos.length/4)); const free=C-(4+nm+ne); if(free>cr) cr=free;
-  const lines=4.35+nm+ne+cr, h=(y1-y0)/lines, fs=Math.min(bigFs||10,h*0.62);
+  const lines=4+nm+ne+cr, h=(y1-y0)/lines, fs=Math.min(bigFs||10,h*0.62);
   const cb=on=>`<span class="cb${on?' on':''}"></span>`, v=x=>x!==''&&x!=null&&x!==0?`<b class="v">${esc(x)}</b>`:'';
   const dl=(x,w)=>`<span class="dl" style="${w?'flex:0 0 '+w:'flex:1'}">${v(x)}</span>`;
   const hd=(on,txt,right)=>`<div class="hdr"><div class="box">${cb(on)}<b>${txt}</b></div><div class="rt">${right}</div></div>`;
