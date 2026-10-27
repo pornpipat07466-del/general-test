@@ -1,5 +1,5 @@
 /* General Test — ใช้งานแบบออฟไลน์ได้หลังเปิดครั้งแรก (หน้าเว็บ: ดึงใหม่ก่อน ถ้าไม่มีเน็ตใช้ฉบับที่เก็บไว้) */
-const V = 'gt-v1.0.54';
+const V = 'gt-v1.0.55';
 const CORE = ['./', 'index.html', 'criteria.html', 'properties.html', 'quality.html', 'standards.html', 'submit/index.html',
   'css/style.css', 'js/photos.js', 'js/standards.js', 'js/stdlink.js', 'img/sampling-stockpile.jpg', 'img/quartering-field.jpg', 'icons/icon-192.png', 'manifest.webmanifest',
   'fonts/THSarabunPSK.ttf', 'fonts/THSarabunPSK-Bold.ttf'];
