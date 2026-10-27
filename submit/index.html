@@ -201,6 +201,21 @@ table.sheet .x:has(.v){font-weight:600!important}
 .pgA2 .boxes>div{border:1px solid #333;padding:1.5mm 3mm;height:30mm;line-height:1.12;display:flex;flex-direction:column;justify-content:space-between;text-align:center}
 .pgA2 .boxes .t{text-align:left}
 .prev{background:#d9dee5}.prev .pg{margin-bottom:8px;box-shadow:0 1px 4px rgba(0,0,0,.2)}
+
+.acp{position:absolute;background:#fff;border:1px solid #000;border-bottom:none;display:flex;flex-direction:column;font-family:'Sarabun',sans-serif;color:#555;box-sizing:border-box;padding:0 6px 0 5px;line-height:1.1}
+.acp>*{height:var(--h);display:flex;align-items:center;gap:5px;white-space:nowrap;flex:none}
+.acp .sec{border-top:1px solid #000;margin:0 -6px 0 -5px;padding:0 6px 0 5px;color:#000}
+.acp .sec:first-child{border-top:none}.acp .sec b{font-weight:700}
+.acp .sec .r{margin-left:auto}
+.acp .u{display:inline-block;border-bottom:1px dotted #000;text-align:center;line-height:1}
+.acp .v{color:#000;font-weight:700}
+.acp .tr{display:grid;grid-template-columns:4em 11em 7em;gap:0;margin-left:22px}
+.acp .tr.k4{grid-template-columns:4em 11em 7em 8em}
+.acp .tr>span{border-bottom:1px dotted #777;height:100%;display:flex;align-items:center;justify-content:center}
+.acp .tr>span:nth-child(2){justify-content:flex-start;padding-left:4px}
+.acp .tr.th>span{border-bottom:1px solid #999;font-size:.88em;color:#555}
+.acp .ln{margin-left:22px}.acp .tests{margin-left:0;border-top:1px solid #000;margin:0 -6px 0 -5px;padding:0 6px 0 5px;font-size:.92em}
+.acp .cb{transform:scale(.9)}
 </style>
 <style id="pageRule">@page{size:A4;margin:0}</style>
 </head>
@@ -366,7 +381,7 @@ const M=[
  {id:'coring',no:11,g:1,name:'ก้อน Coring (เจาะผิวทาง)',en:'Core · Asphalt Concrete',sheet:2,unit:'ก้อน',calc:'qc',qc:'core',k:8,
   rule:{t:'เจาะ 1 ก้อน ทุก 250 ม./ช่องจราจร',ref:'มทช.230-2563'},
   items:[],tests:['Density (ความแน่น)','ความหนา']},
- {id:'acext',no:12,g:1,name:'ก้อนยาง หาปริมาณแอสฟัลต์',en:'Asphalt Content · AASHTO T 308',sheet:2,unit:'ชุด',calc:'qc',qc:'ext',k:8,
+ {id:'acext',no:12,g:1,name:'ก้อนยาง หาปริมาณแอสฟัลต์',en:'Asphalt Content · AASHTO T 308',sheet:2,unit:'ก้อน',calc:'qc',qc:'ext',k:8,
   rule:{t:'ตัวแทนส่วนผสมประจำวัน น้ำหนัก 1,500–2,000 กรัม',ref:'AASHTO T 308'},
   items:[],tests:['Bitumen Content','Gradation of Extracted Aggregate']},
  {id:'concrete',no:13,g:2,name:'งาน คสล.',en:'ถนน สะพาน ท่อลอดเหลี่ยม',sheet:2,unit:'ชุด',k:10,
@@ -437,7 +452,7 @@ const keysOf=id=>picked.filter(k=>base(k)===id);
 function defaults(m){ const o={sets:1}; (m.src||[]).forEach(s=>o[s.k]=''); if(m.opt) o.type=m.opt.v[0]; if(m.opt2) o[m.opt2.k]=m.opt2.v[0];
   if(m.calc==='bars') o.rows=[{gr:'SD40',sz:'DB16',n:'',mk:''}]; if(m.calc==='pipes') o.rows=[{sz:'1000',n:'',mk:''}]; if(m.calc==='pc'){ o.rows=[{sz:Object.keys(m.sizes)[1]||Object.keys(m.sizes)[0],n:'',mk:''}]; o.ts=''; } if(m.calc==='mesh') o.rows=[{sz:'',n:'',mk:''}]; if(m.calc==='area') o.area='';
   if(m.calc==='sign'){ o.nT=''; o.nN=''; o.nB=''; }
-  if(m.calc==='qc'){ o.n=m.qc==='mar'?'8':m.qc==='ext'?'1':''; o.labels=''; if(m.qc==='core'){ o.st0='0+000'; o.st1=''; o.lanes='LT+RT'; } }
+  if(m.calc==='qc'){ if(m.qc==='core'){ o.labels=''; o.st0='0+000'; o.st1=''; o.lanes='LT+RT'; } else o.rows=[m.qc==='mar'?{d:'',n:'8',km:''}:{d:'',n:'1'}]; }
   if(m.calc==='spot'){ o.layer=m.layers?m.layers[0]:(m.layerText||''); o.dist=''; }
   return o; }
 
@@ -453,8 +468,8 @@ function coreGen(s){ const a=st2m(s.st0), b=st2m(s.st1); if(!isFinite(a)||!isFin
 /* จำนวนก้อน/ชุดของรายการควบคุมคุณภาพ AC */
 function qcCount(k){ const m=byId(k), s=st[k], lab=qcLabels(s).length;
   if(m.qc==='core') return lab;
-  if(m.qc==='mar') return Math.max(+s.n||0, +s.ton>0?8*Math.ceil(+s.ton/100):0, lab);
-  return Math.max(+s.n||0, lab); }
+  return (s.rows||[]).reduce((t,r)=>t+(+r.n||0),0); }
+const qcDays=k=>(st[k].rows||[]).filter(r=>+r.n>0).length;
 const SIGNS=[['nT','ป้ายเตือน (ต)'],['nN','ป้ายแนะนำ (น)'],['nB','ป้ายบังคับ (บ)']];
 /* จำนวนชุดตัวอย่างของรายการ (ใช้แยกช่องแหล่ง 1 ช่อง/ตัวอย่าง เมื่อ ≥ 2) */
 function setsOf(k){ const m=byId(k), s=st[k];
@@ -469,9 +484,9 @@ const srcVals=(s,k,n)=>Array.from({length:n},(_,j)=>s[j?`${k}_${j+1}`:k]||'');
 function lines(k){
   const m=byId(k), s=st[k]||defaults(m), N=(m.one||m.calc)?1:Math.max(1,+s.sets||1);
   if(m.calc==='spot') return [];
-  if(m.calc==='qc'){ const n=qcCount(k), u=m.qc==='ext'?'ชุด':'ก้อน';
+  if(m.calc==='qc'){ const n=qcCount(k), u='ก้อน';
     const nm=m.qc==='mar'?'ก้อน Marshall':m.qc==='core'?'ก้อน Coring':'ก้อนยาง 1,500–2,000 กรัม';
-    return [{n:nm,per:null,tot:n||null,u,ref:m.rule.ref,note:m.qc==='mar'&&+s.ton>0?`ส่วนผสม ${fmt(s.ton)} ตัน → อย่างน้อย ${8*Math.ceil(+s.ton/100)} ก้อน`:m.qc==='core'&&!n?'กรอกสถานีเริ่ม–สิ้นสุด แล้วกด "สร้างรายการตำแหน่ง"':''}]; }
+    return [{n:nm,per:null,tot:n||null,u,ref:m.rule.ref,note:m.qc==='core'?(n?`ช่วง กม. ${s.st0||'…'} – ${s.st1||'…'} · ด้าน ${s.lanes}`:'กรอกสถานีเริ่ม–สิ้นสุด แล้วกด "สร้างรายการตำแหน่ง"'):`${qcDays(k)} วัน`+(m.qc==='mar'&&+s.ton>0?` · ส่วนผสม ${fmt(s.ton)} ตัน → อย่างน้อย ${8*Math.ceil(+s.ton/100)} ก้อน`:'')}]; }
   if(m.calc==='spec'){ const cyl=/Cylinder/.test(s.shape), c=CONC.find(x=>x[0]===concCode(s.type))||CONC[0], n=setsOf(k);
     const L=[{n:`แท่ง ${cyl?'Cylinder Ø15×30':'Cube 15×15×15'} ซม. · ${c[0]} (${cyl?'Cylinder '+c[2]:'Cube '+c[1]} กก./ตร.ซม.)`,per:3,tot:n*3,u:'ก้อน',ref:'มทช.101-2563 ข้อ 3.11.3',note:+s.vol>0?`ปริมาตร ${fmt(s.vol)} ม.³ → อย่างน้อย ${Math.ceil(+s.vol/50)} ชุด (ทุก 50 ม.³)`:''}];
     if(cyl&&+s.cap>0) L.push({n:'Capping หัว',per:null,tot:+s.cap,u:'ก้อน',ref:F});
@@ -538,8 +553,13 @@ function cardHTML(k,i){
       ? `<div class="row3">${I(k,'st0','สถานีเริ่ม',s.st0,'0+000')}${I(k,'st1','สถานีสิ้นสุด',s.st1,'เช่น 1+000')}<div><label class="f">ช่องจราจร</label><select data-m="${k}" data-k="lanes">${['LT+RT','LT','RT'].map(o=>`<option ${o===s.lanes?'selected':''}>${o}</option>`).join('')}</select></div></div>
          <p><button class="btn ghost sm" data-gen="${k}">สร้างรายการตำแหน่ง ทุก 250 ม.</button></p>
          <div class="row2 s">${T('labels','รายการตำแหน่ง (1 บรรทัด ต่อ 1 ก้อน · แก้ไขได้)',s.labels,'0+000 LT\n0+000 RT\n0+250 LT\n0+250 RT')}</div>`
-      : `<div class="row2 s">${I(k,'n',m.qc==='mar'?'จำนวนก้อน':'จำนวนชุด',s.n,'','n')}${m.qc==='mar'?I(k,'ton','ปริมาณส่วนผสมที่ใช้ (ตัน) ถ้ามี',s.ton,'','d'):'<div></div>'}
-         ${T('labels','หัวข้อรายการ (ถ้ามี · 1 บรรทัด ต่อ 1 '+(m.qc==='ext'?'ชุด':'ก้อน')+')',s.labels,m.qc==='ext'?'เช่น 20 ต.ค. 69 · 0+500':'เช่น 20 ต.ค. 69 ชุดที่ 1')}</div>`;
+      : s.rows.map((r,ri)=>`<div class="sub"><div class="${m.qc==='mar'?'row3':'row2 s'}">
+          <div><label class="f">ชุดที่ ${ri+1} · วันที่</label><input data-m="${k}" data-r="${ri}" data-k="d" value="${esc(r.d)}" placeholder="เช่น 20 ต.ค. 69"></div>
+          <div><label class="f">จำนวน (ก้อน)</label><input data-m="${k}" data-r="${ri}" data-k="n" value="${esc(r.n)}" inputmode="numeric"></div>
+          ${m.qc==='mar'?`<div><label class="f">เก็บจาก กม.</label><input data-m="${k}" data-r="${ri}" data-k="km" value="${esc(r.km)}" placeholder="0+500"></div>`:''}</div>
+          ${s.rows.length>1?`<div style="text-align:right"><button class="btn ghost sm" data-del="${k}:${ri}">ลบวันนี้</button></div>`:''}</div>`).join('')
+        + `<p><button class="btn ghost sm" data-add="${k}">+ เพิ่มวัน</button></p>`
+        + (m.qc==='mar'?`<div class="row2 s">${I(k,'ton','ปริมาณส่วนผสมที่ใช้ (ตัน) ถ้ามี',s.ton,'','d')}<div></div></div>`:'');
   } else if(m.calc==='sign'){
     inp=`<div class="row3">${SIGNS.map(([f,n])=>I(k,f,n,s[f],'0','n')).join('')}</div>
       <div class="row2 s">${(m.src||[]).map(x=>I(k,x.k,x.l,s[x.k],x.ph)).join('')}</div>`;
@@ -597,7 +617,7 @@ document.addEventListener('change',e=>{ if(e.target.tagName==='TEXTAREA'&&e.targ
 document.addEventListener('click',e=>{
   const gn=e.target.closest('[data-gen]'); if(gn){ const k=gn.dataset.gen, L=coreGen(st[k]); if(!L.length){ alert('กรอกสถานีเริ่มและสถานีสิ้นสุด เช่น 0+000 ถึง 1+000'); return; } st[k].labels=L.join('\n'); save(); refreshCard(k); return; }
   const a=e.target.closest('[data-add]'), d=e.target.closest('[data-del]'), u=e.target.closest('[data-dup]'), rm=e.target.closest('[data-rm]');
-  if(a){ const k=a.dataset.add, m=byId(k); st[k].rows.push(m.calc==='bars'?{gr:'SD40',sz:'DB16',n:'',mk:''}:m.calc==='pc'?{sz:Object.keys(m.sizes)[0],n:'',mk:''}:m.calc==='mesh'?{sz:'',n:'',mk:''}:{sz:'1000',n:'',mk:''}); save(); refreshCard(k); }
+  if(a){ const k=a.dataset.add, m=byId(k); st[k].rows.push(m.calc==='qc'?(m.qc==='mar'?{d:'',n:'8',km:''}:{d:'',n:'1'}):m.calc==='bars'?{gr:'SD40',sz:'DB16',n:'',mk:''}:m.calc==='pc'?{sz:Object.keys(m.sizes)[0],n:'',mk:''}:m.calc==='mesh'?{sz:'',n:'',mk:''}:{sz:'1000',n:'',mk:''}); save(); refreshCard(k); }
   if(d){ const [k,ri]=d.dataset.del.split(':'); st[k].rows.splice(+ri,1); save(); refreshCard(k); }
   if(u){ const nk=dupItem(u.dataset.dup); save(); renderCards(); nav(); const el=document.getElementById('c-'+nk); if(el) el.scrollIntoView({behavior:'smooth',block:'start'}); }
   if(rm){ const k=rm.dataset.rm; picked.splice(picked.indexOf(k),1); delete st[k]; save(); renderCards(); nav(); }
@@ -624,11 +644,11 @@ function sheetValues(){
         if(s.type==='CSS-1'){o.X_pr_css=true;o.X_pr_css_m=s.mk;} else if(s.type==='MC-70'){o.X_pr_mc=true;o.X_pr_mc_m=s.mk;} else {o.X_pr_ash=true;o.X_pr_ash_t=[s.type==='อื่น ๆ'?'':s.type,s.mk].filter(Boolean).join(' · ');} break;
       case 'ac': o[s.type==='Binder'?'X_ac_b':'X_ac_w']=true; add('X_ac_n',N);
         for(const [k,sk] of [['34','s34'],['12','s12'],['38','s38'],['dust','sd']]){ o['X_ac_'+k]=true; o[`X_ac_${k}_s`]=s[sk]; } { const at=s.atype||'AC 60-70'; if(at==='AC 60-70'){o.X_ac_ac=true; o.X_ac_ac_m=s.mk;} else {o.X_ac_oth=true; o.X_ac_oth_t=[at.startsWith('อื่น')?'':at,s.mk].filter(Boolean).join(' · ');} } break;
-      case 'marshall': case 'coring': case 'acext': { const n=qcCount(key); if(!n) break;
-        if(id==='marshall'){ o.X_mar=true; add('X_mar_n',n); o.X_sf=true; o.X_den=true; }
-        if(id==='coring'){ o.X_acs=true; add('X_acs_n',n); o.X_den=true; }
-        if(id==='acext'){ o.X_bc=true; add('X_bc_n',n); o.X_bit=true; o.X_grad=true; }
-        (o._no=o._no||[]).push(...qcLabels(s)); break; }
+      case 'marshall': case 'coring': case 'acext': { const Q=o._qc=o._qc||{mar:[],ext:[],core:[]}; if(!qcCount(key)) break;
+        if(id==='marshall'){ Q.mar.push(...s.rows.filter(r=>+r.n>0)); o.X_sf=true; o.X_den=true; }
+        if(id==='coring'){ Q.core.push({n:qcCount(key),st0:s.st0,st1:s.st1,lanes:s.lanes}); o.X_den=true; }
+        if(id==='acext'){ Q.ext.push(...s.rows.filter(r=>+r.n>0)); o.X_bit=true; o.X_grad=true; }
+        break; }
       case 'specimen': { const L=lines(key), cyl=/Cylinder/.test(s.shape), c=CONC.find(x=>x[0]===concCode(s.type))||CONC[0], fc=String(cyl?c[2]:c[1]);
         const P=cyl?'C_cyl':'C_cube'; o[P]=true; add(P+'_n',L[0].tot); if(L[1]){ o.C_cap=true; add('C_cap_n',L[1].tot); }
         o.C_fc=o.C_fc&&!String(o.C_fc).split(' / ').includes(fc)?o.C_fc+' / '+fc:fc; break; }
@@ -645,7 +665,6 @@ function sheetValues(){
         if(rs[0]){ o[P+'_sz1']=m.sizes[rs[0].sz]; o[P+'_mf1']=rs[0].mk; } if(rs.length>1){ o[P+'_sz2']=J(rs.slice(1).map(r=>m.sizes[r.sz])); o[P+'_mf2']=J(rs.slice(1).map(r=>r.mk)); } break; }
     }
   }
-  (o._no||[]).slice(0,50).forEach((v,i)=>o['X_no'+(i+1)]=v);
   if(conc.length){ o._conc=[...new Set(conc)]; o.X_cm_n=String(o._conc.length); o.X_cm_cem=true; o.X_cm_cem_b=uniq(cSrc.cem); o.X_cm_sand=true; o.X_cm_sand_s=uniq(cSrc.sand); o.X_cm_stone=true; o.X_cm_stone_s=uniq(cSrc.stone); }
   for(const [p,list] of Object.entries(src)){ const n={D:4,K:2,L:4,R:4}[p]; list.slice(0,n).forEach((v,i)=>o[`${p}_s${i+1}`]= i===n-1&&list.length>n ? list.slice(i).join(' / ') : v); }
   return o;
@@ -684,6 +703,7 @@ function fill1(root){
     for(let i=0;i<4;i++){ const h=t.getBoundingClientRect().height; if(h<=avail) break; const f=avail/h*0.996;
       t.style.zoom=(parseFloat(t.style.zoom)*f).toFixed(4); t.style.width=(parseFloat(t.style.width)/f)+'px'; cols.forEach(c=>c.style.width=(parseFloat(c.style.width)/f)+'px'); }
   });
+  const p2=root.querySelector('#sh2'); if(p2&&!p2.hidden) acPanel(p2,o);
   if(hid) root.removeAttribute('style');
 }
 
@@ -710,6 +730,34 @@ function tidyBorders(table){
     if(has(c,'Top')) dedupe(c,'Top','Bottom','left','right',byBottom[key(c.r.top)]);
     if(has(c,'Left')) dedupe(c,'Left','Right','top','bottom',byRight[key(c.r.left)]);
   });
+}
+/* ===== A1 แผ่น 2: กรอบควบคุมคุณภาพแอสฟัลต์คอนกรีต (แทนช่อง Marshall/AC/เลขลำดับ 1–50 เดิม ในกรอบเดิม) ===== */
+function acPanel(pg,o){
+  const t=pg.querySelector('table'); if(!t) return; pg.querySelectorAll('.acp').forEach(x=>x.remove());
+  const cell=sel=>{ const e=t.querySelector(sel); return e&&e.closest('td'); };
+  const tdByText=re=>[...t.querySelectorAll('td')].find(td=>re.test(td.textContent.trim()));
+  const a=cell('[data-c="X_mar"]'), z=tdByText(/^Density\s*50$/), f=tdByText(/^Bitumen Content\s*300$/);
+  if(!a||!z||!f) return;
+  const pr=pg.getBoundingClientRect(), k=pr.width/pg.offsetWidth, R=e=>e.getBoundingClientRect();
+  const x0=(R(a).left-pr.left)/k, x1=(R(z).right-pr.left)/k, y0=(R(a.closest('tr')).top-pr.top)/k, y1=(R(f.closest('tr')).top-pr.top)/k;
+  const Q=o._qc||{mar:[],ext:[],core:[]}, sum=a=>a.reduce((t,r)=>t+(+r.n||0),0);
+  const mar=Q.mar, ext=Q.ext, core=Q.core, nCore=core.reduce((t,c)=>t+c.n,0);
+  const side=core.map(c=>c.lanes).join(' '), J=a=>[...new Set(a.filter(Boolean))].join(' / ');
+  const nm=Math.max(3,mar.length), ne=Math.max(2,ext.length), lines=7+nm+ne, h=(y1-y0)/lines, fs=Math.min(11,h*0.55);
+  const cb=on=>`<span class="cb${on?' on':''}"></span>`, v=x=>x!==''&&x!=null?`<span class="v">${esc(x)}</span>`:'';
+  const ul=(x,w)=>`<span class="u" style="min-width:${w}em">${v(x)}</span>`;
+  const trs=(rows,n,km)=>Array.from({length:n},(_,i)=>{ const r=rows[i]||{}; return `<div class="tr${km?' k4':''}"><span>${i+1}</span><span>${v(r.d)}</span><span>${v(r.n)}</span>${km?`<span>${v(r.km)}</span>`:''}</div>`; }).join('');
+  const d=document.createElement('div'); d.className='acp';
+  Object.assign(d.style,{left:x0+'px',top:y0+'px',width:(x1-x0)+'px',height:(y1-y0)+'px',fontSize:fs+'px'}); d.style.setProperty('--h',h+'px');
+  d.innerHTML=`
+   <div class="sec">${cb(mar.length)}<b>ก้อนตัวอย่าง Marshall</b><span class="r">จำนวน ${ul(mar.length||'',2)} วัน &nbsp; จำนวน ${ul(sum(mar)||'',2.5)} ก้อน</span></div>
+   <div class="tr th k4"><span>ชุดที่</span><span>วันที่</span><span>จำนวน (ก้อน)</span><span>เก็บจาก กม.</span></div>${trs(mar,nm,1)}
+   <div class="sec">${cb(nCore)}<b>ก้อนตัวอย่าง Coring</b><span class="r">จำนวนรวม ${ul(nCore||'',2.5)} ก้อน</span></div>
+   <div class="ln">ช่วง กม. ${ul(J(core.map(c=>c.st0)),5)} ถึง ${ul(J(core.map(c=>c.st1)),5)} &nbsp;&nbsp; ด้าน &nbsp;${cb(/LT/.test(side))} LT &nbsp; ${cb(/RT/.test(side))} RT</div>
+   <div class="sec">${cb(ext.length)}<b>ตัวอย่างหาปริมาณอัตราส่วนผสมแอสฟัลต์</b><span class="r">จำนวน ${ul(ext.length||'',2)} วัน &nbsp; จำนวน ${ul(sum(ext)||'',2.5)} ก้อน</span></div>
+   <div class="tr th"><span>ชุดที่</span><span>วันที่</span><span>จำนวน (ก้อน)</span></div>${trs(ext,ne,0)}
+   <div class="ln tests">ทดสอบ &nbsp;${cb(o.X_bit)} Bitumen Content &nbsp;${cb(o.X_grad)} Gradation &nbsp;${cb(o.X_sf)} Stability &amp; Flow &nbsp;${cb(o.X_den)} Density</div>`;
+  pg.appendChild(d);
 }
 /* ===== A1 แผ่น 2: ตาราง CONCRETE MIX DESIGN (ต้นแบบอนุมัติ 27 ต.ค. 2569 · HANDOFF-export-FINAL ข้อ 5.5) ===== */
 const PAD=CONC.map(x=>x[0]), MINROWS=CONC.length;
@@ -784,9 +832,9 @@ function bcGroups(g,only){
     if(m.calc==='bars'){ const by={}; s.rows.filter(r=>r.sz).forEach(r=>{ const h=`${r.gr==='SR24'?'มอก.20-2559':'มอก.24-2559'} ชั้นคุณภาพ ${r.gr}${r.mk?' · ยี่ห้อ '+r.mk:''}`; (by[h]=by[h]||[]).push(r); });
       const rows=[]; Object.entries(by).forEach(([h,rs])=>{ rows.push({sub:h}); rs.forEach(r=>rows.push({n:`เหล็ก ${r.sz} (ยาว 1.00 ม.)`,q:barSamples(r.n),u:'ท่อน'})); });
       if(rows.length) out.push({t:`${m.name} (${m.en})`,rows}); return; }
-    if(m.calc==='qc'){ const L=qcLabels(s), n=qcCount(k), u=m.qc==='ext'?'ชุด':'ก้อน', nm=m.qc==='mar'?'ก้อน Marshall':m.qc==='core'?'ก้อน Coring':'ก้อนยาง (1,500–2,000 กรัม)';
-      if(!n) return; const rows=L.length?L.map(v=>({n:`${nm} ${v}`,q:1,u})):[{n:nm,q:n,u}];
-      if(L.length&&n>L.length) rows.push({n:`${nm} (ไม่ระบุหัวข้อ)`,q:n-L.length,u});
+    if(m.calc==='qc'){ const n=qcCount(k); if(!n) return; let rows;
+      if(m.qc==='core'){ const L=qcLabels(s); rows=L.map(v=>({n:`ก้อน Coring ${v}`,q:1,u:'ก้อน'})); }
+      else rows=s.rows.filter(r=>+r.n>0).map((r,i)=>({n:`ชุดที่ ${i+1}${r.d?' · '+r.d:''}`,q:+r.n,u:'ก้อน',lab:m.qc==='mar'&&r.km?'เก็บจาก กม.':'',src:m.qc==='mar'?r.km:''}));
       out.push({t:`${m.name} (${m.en})`,rows}); return; }
     if(m.calc==='spec'){ const c=CONC.find(x=>x[0]===concCode(s.type))||CONC[0], cyl=/Cylinder/.test(s.shape), N=setsOf(k), sv=srcVals(s,'s1',N), dv=srcVals(s,'s2',N);
       const rows=[]; for(let j=0;j<N;j++) rows.push({n:`แท่ง ${cyl?'Cylinder':'Cube'}${N>1?' ชุดที่ '+(j+1):''}${dv[j]?' · เท '+dv[j]:''}`,q:3,u:'ก้อน',lab:'ตำแหน่ง',src:sv[j]});
@@ -984,6 +1032,7 @@ function load(){ let s=null; try{ s=JSON.parse(localStorage.getItem(KEY)||'null'
   if(s){ picked=s.picked||[]; st=s.st||{}; info=s.info||{}; }
   const q=new URLSearchParams(location.search).get('m'); if(q) q.split(',').forEach(id=>{ if(byId(id)&&!keysOf(id).length) picked.push(id); });
   picked=picked.filter(byId); picked.sort((a,b)=>byId(a).no-byId(b).no); picked.forEach(k=>{ if(!st[k]) st[k]=defaults(byId(k)); const d=defaults(byId(k)); for(const f in d) if(st[k][f]===undefined) st[k][f]=d[f]; });
+  picked.filter(k=>['marshall','acext'].includes(base(k))).forEach(k=>{ const x=st[k]; if(x.n!=null){ x.rows=[{d:'',n:String(x.n),km:''}]; delete x.n; delete x.labels; } });
   /* ย้ายชนิดคอนกรีตเดิม ค1…ค4 → ค18…ค42 (ค่า Cube/Cylinder เท่ากัน) */
   picked.filter(k=>base(k)==='concrete').forEach(k=>{ const t=st[k].type||'', old=(t.match(/^ค[\d-]+/)||[''])[0];
     if(CONC_OLD[old]) st[k].type=concLabel(CONC_OLD[old]); else if(!byId(k).opt.v.includes(t)) st[k].type=concLabel('ค18'); });
