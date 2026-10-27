@@ -202,20 +202,19 @@ table.sheet .x:has(.v){font-weight:600!important}
 .pgA2 .boxes .t{text-align:left}
 .prev{background:#d9dee5}.prev .pg{margin-bottom:8px;box-shadow:0 1px 4px rgba(0,0,0,.2)}
 
-.acp{position:absolute;background:#fff;border:1px solid #000;border-bottom:none;display:flex;flex-direction:column;font-family:'Sarabun',sans-serif;color:#555;box-sizing:border-box;padding:0 6px 0 5px;line-height:1.1}
-.acp>*{height:var(--h);display:flex;align-items:center;gap:5px;white-space:nowrap;flex:none}
-.acp .sec{border-top:1px solid #000;margin:0 -6px 0 -5px;padding:0 6px 0 5px;color:#000}
-.acp .sec:first-child{border-top:none}.acp .sec b{font-weight:700}
-.acp .sec .r{margin-left:auto}
-.acp .u{display:inline-block;border-bottom:1px dotted #000;text-align:center;line-height:1}
+.acp{position:absolute;background:#fff;border-left:1px solid #000;border-right:1px solid #000;font-family:'Sarabun',sans-serif;color:#555;box-sizing:border-box;line-height:1.05}
+.acp>div{height:var(--h);display:flex;align-items:center;white-space:nowrap;box-sizing:border-box}
+.acp .hdr{border-top:1px solid #000;color:#000}
+.acp .hdr .box{width:44%;height:100%;display:flex;align-items:center;gap:.6em;padding-left:.8em;border-right:1px solid #000;border-bottom:1px solid #000;box-sizing:border-box;font-size:1.08em}
+.acp .hdr .rt{flex:1;display:flex;align-items:baseline;gap:.35em;justify-content:flex-end;padding-right:.8em;font-weight:700;font-size:1.08em}
+.acp .ln{gap:.45em;padding:0 .8em 0 2.4em}
+.acp .sm{font-size:.92em}.acp .xs{font-size:.78em;margin-right:.9em}
+.acp .dl{display:inline-flex;align-items:flex-end;justify-content:center;border-bottom:1px dotted #000;height:72%;min-width:2em;box-sizing:border-box}
 .acp .v{color:#000;font-weight:700}
-.acp .tr{display:grid;grid-template-columns:4em 11em 7em;gap:0;margin-left:22px}
-.acp .tr.k4{grid-template-columns:4em 11em 7em 8em}
-.acp .tr>span{border-bottom:1px dotted #777;height:100%;display:flex;align-items:center;justify-content:center}
-.acp .tr>span:nth-child(2){justify-content:flex-start;padding-left:4px}
-.acp .tr.th>span{border-bottom:1px solid #999;font-size:.88em;color:#555}
-.acp .ln{margin-left:22px}.acp .tests{margin-left:0;border-top:1px solid #000;margin:0 -6px 0 -5px;padding:0 6px 0 5px;font-size:.92em}
-.acp .cb{transform:scale(.9)}
+.acp .g4{display:grid;grid-template-columns:repeat(4,1.6em 1fr);column-gap:.4em;padding-left:2.4em}
+.acp .no{text-align:right;font-size:.92em;color:#555}
+.acp .acts{border-top:1px solid #000;padding-left:.8em;gap:.4em;margin:0}
+.acp .cb{flex:none}
 </style>
 <style id="pageRule">@page{size:A4;margin:0}</style>
 </head>
@@ -646,7 +645,7 @@ function sheetValues(){
         for(const [k,sk] of [['34','s34'],['12','s12'],['38','s38'],['dust','sd']]){ o['X_ac_'+k]=true; o[`X_ac_${k}_s`]=s[sk]; } { const at=s.atype||'AC 60-70'; if(at==='AC 60-70'){o.X_ac_ac=true; o.X_ac_ac_m=s.mk;} else {o.X_ac_oth=true; o.X_ac_oth_t=[at.startsWith('อื่น')?'':at,s.mk].filter(Boolean).join(' · ');} } break;
       case 'marshall': case 'coring': case 'acext': { const Q=o._qc=o._qc||{mar:[],ext:[],core:[]}; if(!qcCount(key)) break;
         if(id==='marshall'){ Q.mar.push(...s.rows.filter(r=>+r.n>0)); o.X_sf=true; o.X_den=true; }
-        if(id==='coring'){ Q.core.push({n:qcCount(key),st0:s.st0,st1:s.st1,lanes:s.lanes}); o.X_den=true; }
+        if(id==='coring'){ Q.core.push({n:qcCount(key),st0:s.st0,st1:s.st1,lanes:s.lanes,labels:qcLabels(s)}); o.X_den=true; }
         if(id==='acext'){ Q.ext.push(...s.rows.filter(r=>+r.n>0)); o.X_bit=true; o.X_grad=true; }
         break; }
       case 'specimen': { const L=lines(key), cyl=/Cylinder/.test(s.shape), c=CONC.find(x=>x[0]===concCode(s.type))||CONC[0], fc=String(cyl?c[2]:c[1]);
@@ -731,7 +730,7 @@ function tidyBorders(table){
     if(has(c,'Left')) dedupe(c,'Left','Right','top','bottom',byRight[key(c.r.left)]);
   });
 }
-/* ===== A1 แผ่น 2: กรอบควบคุมคุณภาพแอสฟัลต์คอนกรีต (แทนช่อง Marshall/AC/เลขลำดับ 1–50 เดิม ในกรอบเดิม) ===== */
+/* ===== A1 แผ่น 2: กรอบควบคุมคุณภาพแอสฟัลต์คอนกรีต (แทนช่อง Marshall/AC/เลขลำดับเดิม ในกรอบเดิม · หน้าตาแบบฟอร์มเดิม) ===== */
 function acPanel(pg,o){
   const t=pg.querySelector('table'); if(!t) return; pg.querySelectorAll('.acp').forEach(x=>x.remove());
   const cell=sel=>{ const e=t.querySelector(sel); return e&&e.closest('td'); };
@@ -740,23 +739,29 @@ function acPanel(pg,o){
   if(!a||!z||!f) return;
   const pr=pg.getBoundingClientRect(), k=pr.width/pg.offsetWidth, R=e=>e.getBoundingClientRect();
   const x0=(R(a).left-pr.left)/k, x1=(R(z).right-pr.left)/k, y0=(R(a.closest('tr')).top-pr.top)/k, y1=(R(f.closest('tr')).top-pr.top)/k;
+  const rowH=R(a.closest('tr')).height/k, lab=a.closest('tr').querySelector('.x:not(:empty)'), bigFs=parseFloat(getComputedStyle(lab||a).fontSize)*(rowH/(a.closest('tr').offsetHeight||rowH));
   const Q=o._qc||{mar:[],ext:[],core:[]}, sum=a=>a.reduce((t,r)=>t+(+r.n||0),0);
-  const mar=Q.mar, ext=Q.ext, core=Q.core, nCore=core.reduce((t,c)=>t+c.n,0);
+  const mar=Q.mar, ext=Q.ext, core=Q.core, nCore=core.reduce((t,c)=>t+c.n,0), pos=core.flatMap(c=>c.labels||[]);
   const side=core.map(c=>c.lanes).join(' '), J=a=>[...new Set(a.filter(Boolean))].join(' / ');
-  const nm=Math.max(3,mar.length), ne=Math.max(2,ext.length), lines=7+nm+ne, h=(y1-y0)/lines, fs=Math.min(11,h*0.55);
-  const cb=on=>`<span class="cb${on?' on':''}"></span>`, v=x=>x!==''&&x!=null?`<span class="v">${esc(x)}</span>`:'';
-  const ul=(x,w)=>`<span class="u" style="min-width:${w}em">${v(x)}</span>`;
-  const trs=(rows,n,km)=>Array.from({length:n},(_,i)=>{ const r=rows[i]||{}; return `<div class="tr${km?' k4':''}"><span>${i+1}</span><span>${v(r.d)}</span><span>${v(r.n)}</span>${km?`<span>${v(r.km)}</span>`:''}</div>`; }).join('');
+  const C=Math.max(12,Math.round((y1-y0)/rowH)), nm=Math.max(2,mar.length), ne=Math.max(2,ext.length);
+  let cr=Math.max(2,Math.ceil(pos.length/4)); const free=C-(5+nm+ne); if(free>cr) cr=free;
+  const lines=5+nm+ne+cr, h=(y1-y0)/lines, fs=Math.min(bigFs||10,h*0.62);
+  const cb=on=>`<span class="cb${on?' on':''}"></span>`, v=x=>x!==''&&x!=null&&x!==0?`<b class="v">${esc(x)}</b>`:'';
+  const dl=(x,w)=>`<span class="dl" style="${w?'flex:0 0 '+w:'flex:1'}">${v(x)}</span>`;
+  const hd=(on,txt,right)=>`<div class="hdr"><div class="box">${cb(on)}<b>${txt}</b></div><div class="rt">${right}</div></div>`;
+  const setRow=(r,i,km)=>`<div class="ln"><span class="sm">ชุดที่ ${i+1}</span><span class="sm">วันที่</span>${dl(r.d,'26%')}<span class="sm">จำนวน</span>${dl(r.n,'10%')}<span class="sm">ก้อน</span>${km?`<span class="sm">เก็บจาก กม.</span>${dl(r.km)}`:'<span style="flex:1"></span>'}</div>`;
+  let grid=''; for(let r=0;r<cr;r++){ grid+='<div class="ln g4">'; for(let c=0;c<4;c++){ const i=c*cr+r; grid+=`<span class="no">${i+1}</span>${dl(pos[i])}`; } grid+='</div>'; }
   const d=document.createElement('div'); d.className='acp';
   Object.assign(d.style,{left:x0+'px',top:y0+'px',width:(x1-x0)+'px',height:(y1-y0)+'px',fontSize:fs+'px'}); d.style.setProperty('--h',h+'px');
-  d.innerHTML=`
-   <div class="sec">${cb(mar.length)}<b>ก้อนตัวอย่าง Marshall</b><span class="r">จำนวน ${ul(mar.length||'',2)} วัน &nbsp; จำนวน ${ul(sum(mar)||'',2.5)} ก้อน</span></div>
-   <div class="tr th k4"><span>ชุดที่</span><span>วันที่</span><span>จำนวน (ก้อน)</span><span>เก็บจาก กม.</span></div>${trs(mar,nm,1)}
-   <div class="sec">${cb(nCore)}<b>ก้อนตัวอย่าง Coring</b><span class="r">จำนวนรวม ${ul(nCore||'',2.5)} ก้อน</span></div>
-   <div class="ln">ช่วง กม. ${ul(J(core.map(c=>c.st0)),5)} ถึง ${ul(J(core.map(c=>c.st1)),5)} &nbsp;&nbsp; ด้าน &nbsp;${cb(/LT/.test(side))} LT &nbsp; ${cb(/RT/.test(side))} RT</div>
-   <div class="sec">${cb(ext.length)}<b>ตัวอย่างหาปริมาณอัตราส่วนผสมแอสฟัลต์</b><span class="r">จำนวน ${ul(ext.length||'',2)} วัน &nbsp; จำนวน ${ul(sum(ext)||'',2.5)} ก้อน</span></div>
-   <div class="tr th"><span>ชุดที่</span><span>วันที่</span><span>จำนวน (ก้อน)</span></div>${trs(ext,ne,0)}
-   <div class="ln tests">ทดสอบ &nbsp;${cb(o.X_bit)} Bitumen Content &nbsp;${cb(o.X_grad)} Gradation &nbsp;${cb(o.X_sf)} Stability &amp; Flow &nbsp;${cb(o.X_den)} Density</div>`;
+  d.innerHTML=
+    hd(mar.length,'ก้อนตัวอย่าง Marshall',`จำนวน${dl(mar.length||'','12%')}วัน &nbsp; จำนวน${dl(sum(mar)||'','14%')}ก้อน`)
+   +Array.from({length:nm},(_,i)=>setRow(mar[i]||{},i,1)).join('')
+   +hd(nCore,'ก้อนตัวอย่าง Coring',`จำนวนรวม${dl(nCore||'','14%')}ก้อน`)
+   +`<div class="ln"><span class="sm">ช่วง กม.</span>${dl(J(core.map(c=>c.st0)),'18%')}<span class="sm">ถึง</span>${dl(J(core.map(c=>c.st1)),'18%')}<span class="sm" style="margin-left:4%">ด้าน</span>${cb(/LT/.test(side))}<span>LT</span>${cb(/RT/.test(side))}<span>RT</span></div>`
+   +grid
+   +hd(ext.length,'หาปริมาณอัตราส่วนผสมแอสฟัลต์',`จำนวน${dl(ext.length||'','12%')}วัน &nbsp; จำนวน${dl(sum(ext)||'','14%')}ก้อน`)
+   +Array.from({length:ne},(_,i)=>setRow(ext[i]||{},i,0)).join('')
+   +`<div class="ln acts">${cb(o.X_bit)}<span class="xs">Bitumen Content</span>${cb(o.X_grad)}<span class="xs">Gradation of Extracted Aggregate</span>${cb(o.X_sf)}<span class="xs">Stability &amp; Flow</span>${cb(o.X_den)}<span class="xs">Density</span></div>`;
   pg.appendChild(d);
 }
 /* ===== A1 แผ่น 2: ตาราง CONCRETE MIX DESIGN (ต้นแบบอนุมัติ 27 ต.ค. 2569 · HANDOFF-export-FINAL ข้อ 5.5) ===== */
