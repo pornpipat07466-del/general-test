@@ -159,6 +159,8 @@ a.mlink{color:inherit;text-decoration:underline;text-decoration-color:var(--acc)
 .qh .chips2{display:flex;flex-direction:column;align-items:flex-end;gap:4px;flex:none}
 .qd{font-size:14.5px;line-height:1.45;display:flex;gap:8px}
 .qd span{flex:none;width:44px;color:var(--muted);font-size:13px;padding-top:1px}
+.ctacc{border:0;margin:0;background:none}.ctacc .qd span{width:52px}.ctacc .qi:first-child{border-top:0}
+.ctq .qd span{width:44%;font-size:13.5px;line-height:1.4}
 .mchip{display:inline-block;padding:2px 10px;border-radius:99px;border:1.5px solid var(--acc);background:var(--acc-bg);color:var(--acc-ink);font-size:12.5px;font-weight:700;text-decoration:none;white-space:nowrap}
 .mchip.off{border-color:var(--line);background:var(--tile);color:var(--muted)}
 .mchip.none{border:1px dashed #C9A400;background:var(--todo);color:var(--todo-ink);font-weight:600}
