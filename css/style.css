@@ -51,7 +51,7 @@ img{max-width:100%}
 .cta .go{margin-left:auto;color:var(--acc);flex:none}
 .wrap{max-width:780px;margin:0 auto}
 .lbl{font-size:17px;font-weight:700;margin:24px 18px 10px}
-.lbl small{display:block;font-size:13px;font-weight:500;color:var(--muted);margin-top:2px}
+.lbl .lsub{font-size:13px;font-weight:500;color:var(--muted);margin-top:2px}
 .flow{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin:0 16px}
 .flow .st{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:12px 6px 10px;text-align:center}
 .flow .n{width:36px;height:36px;margin:0 auto 6px;border-radius:50%;background:var(--acc-bg);color:var(--acc);display:grid;place-items:center}
