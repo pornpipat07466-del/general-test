@@ -152,6 +152,7 @@ a.mlink{color:inherit;text-decoration:underline;text-decoration-color:var(--acc)
 .qty details{border-radius:18px;margin:0 0 10px}
 .qty summary{font-size:16px}
 .qi{padding:10px 14px;border-top:1px solid var(--line)}
+.qi.sub{padding-left:30px;border-top-style:dashed}.qi.sub .qh b{font-size:15px}
 .qh{display:flex;flex-wrap:wrap;gap:6px 8px;align-items:center;margin-bottom:2px}
 .qh b{font-size:16px;margin-right:auto}
 .qd{font-size:14.5px;line-height:1.45;display:flex;gap:8px}

@@ -45,6 +45,7 @@ main{max-width:760px;margin:0 auto;padding:6px 16px 120px}
 .chip{display:flex;gap:8px;align-items:flex-start;padding:11px 10px;border:1.5px solid var(--line);border-radius:14px;color:var(--ink);background:var(--card);cursor:pointer;font-size:15px;line-height:1.35}
 .chip input{width:20px;height:20px;margin:1px 0 0;flex:none;accent-color:var(--acc)}
 .chip small{display:block;color:var(--muted);font-size:12px}
+.chip.subc{margin-left:18px}
 .chip b.cnt{color:var(--acc);font-size:13px}
 .grps{display:grid;gap:8px}.grp{display:flex;gap:10px;align-items:flex-start;padding:11px 12px;border:1.5px solid var(--line);border-radius:14px;font-size:15.5px}.grp.on{border-color:var(--acc);background:var(--warn)}.grp input{width:20px;height:20px;margin:2px 0 0;flex:none;accent-color:var(--acc)}.grp small{display:block;color:var(--muted);font-size:13px}
 .sgh{font-size:15px;margin:16px 0 0}.sg{border-top:1px dashed var(--line);margin-top:8px;padding-top:2px}
@@ -378,14 +379,14 @@ const M=[
  {id:'marshall',no:10,g:1,name:'ก้อน Marshall',en:'ควบคุมคุณภาพแอสฟัลต์คอนกรีต',sheet:2,unit:'ก้อน',calc:'qc',qc:'mar',k:8,
   rule:{t:'8 ก้อน/วัน หรือทุก ๆ ส่วนผสมแอสฟัลต์คอนกรีตที่นำมาใช้งานประมาณ 100 ตัน',ref:'มทช.230-2563 · มทช.(ท) 607'},
   items:[],tests:['Stability & Flow','Density']},
- {id:'coring',no:11,g:1,name:'ก้อน Coring (เจาะผิวทาง)',en:'Core · Asphalt Concrete',sheet:2,unit:'ก้อน',calc:'qc',qc:'core',k:8,
+ {id:'coring',no:11,g:1,name:'ก้อน Coring AC',en:'Core · Asphalt Concrete',sheet:2,unit:'ก้อน',calc:'qc',qc:'core',k:8,
   rule:{t:'เจาะ 1 ก้อน ทุก 250 ม./ช่องจราจร',ref:'มทช.230-2563'},
   items:[],tests:['Density (ความแน่น)','ความหนา']},
  {id:'acext',no:12,g:1,name:'ก้อนยาง หาปริมาณแอสฟัลต์',en:'Asphalt Content · AASHTO T 308',sheet:2,unit:'ก้อน',calc:'qc',qc:'ext',k:8,
   rule:{t:'ตัวแทนส่วนผสมประจำวัน น้ำหนัก 1,500–2,000 กรัม',ref:'AASHTO T 308'},
   items:[],tests:['Bitumen Content','Gradation of Extracted Aggregate']},
  {id:'concrete',no:13,g:2,name:'งาน คสล.',en:'ถนน สะพาน ท่อลอดเหลี่ยม',sheet:2,unit:'ชุด',k:10,
-  rule:{t:'ออกแบบส่วนผสม 1 ชุด ต่อ 1 ชนิดคอนกรีต · ชนิดอื่นกด "+ เพิ่มรายการซ้ำ"',ref:'มทช.101-2563 · แบบมาตรฐานงานสะพาน 2568 (สพ 0102/68)'},one:true,
+  rule:{t:'ออกแบบส่วนผสม 1 ชุด ต่อ 1 ชนิดคอนกรีต · ชนิดอื่นกด "+ เพิ่มรายการซ้ำ" · ยกเว้น ทั้งโครงการใช้คอนกรีต ≤ 50 ม.³ ไม่ต้องส่ง ให้กำหนดปูนซีเมนต์ ค18 ≥ 290 · ค21 ≥ 300 · ค24 ≥ 320 กก./ม.³ (มทช.101-2563 ข้อ 3.4.2)',ref:'มทช.101-2563 · แบบมาตรฐานงานสะพาน 2568 (สพ 0102/68)'},one:true,
   items:[{n:'ทราย',q:50,u:'กก.',ref:S},{n:'หิน',q:50,u:'กก.',ref:S},{n:'ปูนซีเมนต์ประเภท 1',q:1,u:'กระสอบ',ref:S}],
   tests:['เม็ดหยาบ: % Abrasion, Flakiness Index, Elongation Index, Gradation, Specific Gravity','เม็ดละเอียด: Organic Impurity, Fineness Modulus, Gradation','ออกแบบส่วนผสม'],
   src:[{k:'s1',l:'แหล่งทราย',ph:''},{k:'s2',l:'แหล่งหิน',ph:''},{k:'mk',l:'ปูนซีเมนต์ ตรา',ph:''}],
@@ -399,7 +400,7 @@ const M=[
   rule:{t:'ทุกขนาด/ผู้ผลิต จากกองวัสดุ 5 ตัวอย่าง (คู่มือฯ) · 1 ตัวอย่าง/100 เส้น ไม่น้อยกว่า 5 ยาว ≥ 1.00 ม. (มทช.103-2569 ข้อ 3.5)',ref:K+' · มทช.103-2569'},
   items:[],tests:['แรงดึงจุดคลาก','แรงดึงสูงสุด','% การยืด']},
  {id:'wiremesh',no:16,g:2,name:'ตะแกรงลวดเหล็ก (Wire Mesh)',en:'Welded Wire Mesh',sheet:1,unit:'ตัวอย่าง',calc:'mesh',k:10,
-  rule:{t:'ตะแกรงลวดเหล็กกล้า ตาม มอก.737 หรือตะแกรงลวดเหล็กกล้าข้ออ้อย ตาม มอก.926 (ข้อ 2.3) · เก็บตัวอย่างต่อหน้าผู้ควบคุมงาน ยาวไม่น้อยกว่า 1.00 ม. (ข้อ 3.5) · จำนวนตัวอย่างกรอกเอง [ข้อ 3.5.2 กำหนดไว้สำหรับเหล็กเส้น]',ref:'มทช.103-2569 ข้อ 2.3 และ 3.5'},
+  rule:{t:'ตะแกรงลวดเหล็กกล้า ตาม มอก.737 หรือตะแกรงลวดเหล็กกล้าข้ออ้อย ตาม มอก.926 (ข้อ 2.3) · เก็บตัวอย่างต่อหน้าผู้ควบคุมงาน ยาวไม่น้อยกว่า 1.00 ม. (ข้อ 3.5) · ไม่น้อยกว่า 5 ตัวอย่าง/ขนาด',ref:'มทช.103-2569 ข้อ 2.3 และ 3.5'},
   items:[],tests:['สมบัติตาม มอก.737 / มอก.926'],tref:'มทช.103-2569 ข้อ 2.3'},
  {id:'pcwire',no:17,g:2,name:'ลวดเหล็กกล้า PC Wire',en:'Prestressing Wire · มอก.95',sheet:1,unit:'ตัวอย่าง',calc:'pc',k:10,
   sizes:{'PC 4':'4.00','PC 4A':'4.00','PC 5':'5.00','PC 5A':'5.00','PC 7':'7.00','PC 7A':'7.00','PC 9A':'9.00'},
@@ -430,7 +431,7 @@ const M=[
   items:[],tests:[],layerText:'เส้นจราจร'}
 ];
 M.forEach(m=>m.testRef=m.tref||K+' ลำดับ '+m.k);
-const RS={"recycling": "1 ชุด ต่อ 1,000 ม.", "rebar": "5 ตัวอย่าง/ขนาด/ผู้ผลิต", "pipe": "1 ท่อน ต่อ 200 ท่อน (QCS 2569)", "thermo": "> 2,000 ตร.ม. ต้องส่ง (QCS 2569)", "sign": "ทุกแผ่น + แผ่นสะท้อนแสง (QCS 2569)", "concrete": "1 ชุด ต่อ 1 ชนิดคอนกรีต", "ac": "ส่งผลออกแบบ ≥ 30 วันก่อนเริ่มงาน", "prime": "จากแหล่งผลิต/ที่นำมาใช้งาน", "cement-modified": "ออกแบบก่อนเริ่มงาน"};
+const RS={"recycling": "1 ชุด ต่อ 1,000 ม.", "rebar": "5 ตัวอย่าง/ขนาด/ผู้ผลิต", "pipe": "1 ท่อน ต่อ 200 ท่อน (QCS 2569)", "thermo": "> 2,000 ตร.ม. ต้องส่ง (QCS 2569)", "sign": "ทุกแผ่น + แผ่นสะท้อนแสง (QCS 2569)", "concrete": "1 ชุด ต่อ 1 ชนิดคอนกรีต · ≤ 50 ม.³ ใช้ปูนขั้นต่ำแทนได้", "ac": "ส่งผลออกแบบ ≥ 30 วันก่อนเริ่มงาน", "prime": "จากแหล่งผลิต/ที่นำมาใช้งาน", "cement-modified": "ออกแบบก่อนเริ่มงาน"};
 const BARS={SR24:['RB6','RB9','RB12','RB15','RB19','RB25'],SD30:['DB10','DB12','DB16','DB20','DB25','DB28'],SD40:['DB10','DB12','DB16','DB20','DB25','DB28']};
 const PIPES=['600','800','1000','1200','1500'];
 const CHECK=[['ตัวอย่างเป็นตัวแทนของวัสดุ/กอง',S],['ปริมาณมากพอสำหรับการทดสอบ (ตามตาราง)',S],['ติดป้ายทุกภาชนะ ระบุ วัน เดือน ปี สถานที่ จุดเก็บ ผู้เก็บ',S],['ภาชนะที่ใช้ใส่วัสดุควรมีความเหมาะสม แข็งแรง ปิดสนิท',S],['เก็บรักษาให้คงสภาพจนถึงวันทดสอบ',S]];
@@ -492,7 +493,7 @@ function lines(k){
     if(cyl&&+s.cap>0) L.push({n:'Capping หัว',per:null,tot:+s.cap,u:'ก้อน',ref:F});
     return L; }
   if(m.calc==='pc') return s.rows.filter(r=>r.sz).map(r=>{ const c=Math.max(1,+r.n||0); return {n:`${r.sz} Ø ${m.sizes[r.sz]} มม.${r.mk?' ('+r.mk+')':''}`,per:null,tot:c*4,u:'ตัวอย่าง (ยาว 1.00 ม.)',ref:'มทช.102-2545 ข้อ 2.2.4.2',note:r.n?`${fmt(r.n)} ม้วน × (ต้นม้วน 2 + ปลายม้วน 2)`:'ยังไม่กรอกจำนวนม้วน → คิด 1 ม้วน'}; });
-  if(m.calc==='mesh') return s.rows.filter(r=>r.sz||r.n||r.mk).map(r=>({n:`Wire Mesh ${r.sz||'[ขนาด]'}${r.mk?' ('+r.mk+')':''}`,per:null,tot:r.n?+r.n:null,u:'ตัวอย่าง (ยาว ≥ 1.00 ม.)',ref:'มทช.103-2569 ข้อ 3.5'}));
+  if(m.calc==='mesh') return s.rows.filter(r=>r.sz||r.n||r.mk).map(r=>({n:`Wire Mesh ${r.sz||'[ขนาด]'}${r.mk?' ('+r.mk+')':''}`,per:null,tot:Math.max(5,+r.n||0),u:'ตัวอย่าง (ยาว ≥ 1.00 ม.)',ref:'ไม่น้อยกว่า 5 ตัวอย่าง/ขนาด',note:'ขั้นต่ำ 5 ตัวอย่าง/ขนาด'}));
   if(m.calc==='sign') return SIGNS.filter(([f])=>+s[f]>0).map(([f,n])=>({n,per:null,tot:+s[f],u:'ป้าย',ref:'มาตรการ QCS ปีงบ 2569 ข้อ 8'}));
   if(m.calc==='bars') return s.rows.filter(r=>r.sz).map(r=>({n:`เหล็ก ${r.gr} ${r.sz}${r.mk?' ('+r.mk+')':''}`,per:null,tot:barSamples(r.n),u:'ท่อน (ยาว 1.00 ม.)',ref:'มทช.103-2569 ข้อ 3.5',note:r.n?`ใช้ ${fmt(r.n)} เส้น`:'ยังไม่กรอกจำนวนเส้น → ขั้นต่ำ 5'}));
   if(m.calc==='pipes') return s.rows.filter(r=>r.sz).map(r=>{const q=pipeSamples(r.n);return {n:`ท่อ Ø ${fmt(r.sz)} มม.${r.mk?' ('+r.mk+')':''}`,per:null,tot:q,u:'ท่อน',ref:S,note:r.n?`ใช้ ${fmt(r.n)} ท่อน${q===0?' — ไม่ต้องทดสอบ แนบ มอก.':''}`:'ยังไม่กรอกจำนวนท่อน'};});
@@ -508,7 +509,7 @@ const dupType=k=>{ const m=byId(k); return m.opt&&keysOf(m.id).some(o=>o!==k&&st
 /* ===== ขั้น 1: เลือกวัสดุ ===== */
 function renderPicker(){
   $('#picker').innerHTML=GROUPS.map((g,gi)=>`<div class="g">${g}</div><div class="chips">${
-    M.filter(m=>m.g===gi).map(m=>{ const n=keysOf(m.id).length; return `<label class="chip"><input type="checkbox" value="${m.id}" ${n?'checked':''}><span>${m.no}. ${esc(m.name)}${n>1?` <b class="cnt">×${n}</b>`:''}<small>${esc(m.en)}</small></span></label>`; }).join('')}</div>`).join('')
+    M.filter(m=>m.g===gi).map(m=>{ const n=keysOf(m.id).length; return `<label class="chip${m.calc==='qc'?' subc':''}"><input type="checkbox" value="${m.id}" ${n?'checked':''}><span>${m.calc==='qc'?'└ ':''}${m.no}. ${esc(m.name)}${n>1?` <b class="cnt">×${n}</b>`:''}<small>${esc(m.en)}</small></span></label>`; }).join('')}</div>`).join('')
     + `<p class="ref" style="margin-top:10px">หมวด 5 ใช้กับผู้ใช้กลุ่ม A (สทช.14) และ B (ขทช.) เท่านั้น</p>`;
   $$('#picker input').forEach(i=>i.onchange=()=>{
     picked=M.flatMap(m=>{ if(!$(`#picker input[value="${m.id}"]`).checked) return []; const ks=keysOf(m.id); return ks.length?ks:[m.id]; });
@@ -530,7 +531,7 @@ function cardHTML(k,i){
       ? `<div><label class="f">ชื่อขนาด</label><select data-m="${k}" data-r="${ri}" data-k="sz">${Object.keys(m.sizes).map(z=>`<option value="${z}" ${z===r.sz?'selected':''}>${z}</option>`).join('')}</select></div>
          <div><label class="f">จำนวนม้วน</label><input data-m="${k}" data-r="${ri}" data-k="n" value="${esc(r.n)}" inputmode="numeric"></div><div></div>`
       : `<div><label class="f">ขนาด</label><input data-m="${k}" data-r="${ri}" data-k="sz" value="${esc(r.sz)}" placeholder="เช่น Ø4 @0.20"></div>
-         <div><label class="f">จำนวนตัวอย่าง</label><input data-m="${k}" data-r="${ri}" data-k="n" value="${esc(r.n)}" inputmode="numeric"></div><div></div>`
+         <div><label class="f">จำนวนตัวอย่าง (ขั้นต่ำ 5)</label><input data-m="${k}" data-r="${ri}" data-k="n" value="${esc(r.n)}" inputmode="numeric"></div><div></div>`
     }</div><div class="row2"><div><label class="f">บริษัทผู้ผลิต</label><input data-m="${k}" data-r="${ri}" data-k="mk" value="${esc(r.mk)}"></div>
       <div style="align-self:end;text-align:right"><button class="btn ghost sm" data-del="${k}:${ri}">ลบขนาดนี้</button></div></div></div>`).join('')
       + `<p><button class="btn ghost sm" data-add="${k}">+ เพิ่มขนาด</button></p>`
@@ -658,7 +659,7 @@ function sheetValues(){
       case 'pipe': { let tot=0; s.rows.forEach(r=>{ const k=pipeSamples(r.n); if(!k) return; o['P_'+r.sz]=true; o[`P_${r.sz}_n`]=String(k); o[`P_${r.sz}_m`]=r.mk; tot+=k; });
         if(tot) o.P_tot=String(tot); break; }
       case 'wiremesh': { const rs=s.rows.filter(r=>r.sz||r.n||r.mk), J=a=>a.filter(Boolean).join(' / ');
-        const tot=rs.reduce((t,r)=>t+(+r.n||0),0)+(+o.W_n||0); if(tot) o.W_n=String(tot);
+        const tot=rs.reduce((t,r)=>t+Math.max(5,+r.n||0),0)+(+o.W_n||0); if(tot) o.W_n=String(tot);
         if(rs[0]){ o.W_sz1=rs[0].sz; o.W_mf1=rs[0].mk; } if(rs.length>1){ o.W_sz2=J(rs.slice(1).map(r=>r.sz)); o.W_mf2=J(rs.slice(1).map(r=>r.mk)); } break; }
       case 'pcwire': case 'pcstrand': { const P=id==='pcwire'?'Q_wire':'Q_strd', N=id==='pcwire'?'Q_pcw_n':'Q_pcs_n', J=a=>[...new Set(a.filter(Boolean))].join(' / ');
         const rs=s.rows.filter(r=>r.sz); o[P]=true; o[N]=String((+o[N]||0)+lines(key).reduce((t,l)=>t+l.tot,0)); if(s.ts) o[P+'_ts']=s.ts;
