@@ -16,7 +16,24 @@
   const STATUS = ['รับแล้ว', 'กำลังทดสอบ', 'ผลออก', 'ส่งผลแล้ว'];
   const GRP = { A: ['สทช.14', 'สทช.14'], B: ['ขทช.', 'แขวงทางหลวงชนบท'], C: ['หน่วยงานนอก', 'หน่วยงานภายนอก'], D: ['ผู้รับจ้าง', 'ผู้รับจ้าง/ประชาชน'] };
   const KHT = ['แขวงทางหลวงชนบทกระบี่', 'แขวงทางหลวงชนบทตรัง', 'แขวงทางหลวงชนบทพัทลุง', 'แขวงทางหลวงชนบทพังงา', 'แขวงทางหลวงชนบทภูเก็ต'];
-  const MATS = ['ดินถม', 'วัสดุคัดเลือก', 'ลูกรังรองพื้นทาง', 'หินคลุก', 'หินคลุกผสมซีเมนต์', 'ทราย', 'หิน 3/4″', 'หิน 3/8″', 'หินฝุ่น', 'ยางแอสฟัลต์ AC 60-70', 'ยาง CSS-1', 'ยาง MC-70', 'ปูนซีเมนต์', 'คอนกรีต (ก้อนตัวอย่าง)', 'เหล็กเส้นกลม SR24', 'เหล็กข้ออ้อย SD40', 'Wire Mesh', 'ท่อระบายน้ำ คสล.', 'สีเทอร์โมพลาสติก', 'ลูกแก้ว', 'ป้ายจราจร'];
+  /* รายการวัสดุ: ดึงจากหน้าแรก หัวข้อ General Test (#qty) — แก้ข้อมูลที่หน้าแรกที่เดียว ระบบนี้ตามอัตโนมัติ */
+  let CAT = null;
+  async function catalog() {
+    if (CAT) return CAT;
+    try {
+      const r = await fetch('../index.html', { cache: 'no-cache' }); const d = new DOMParser().parseFromString(await r.text(), 'text/html');
+      CAT = $$('.qty details', d).filter(x => x.closest('.qty') === d.querySelector('#qty + .qty')).map(det => ({
+        g: $('summary', det).textContent.replace(/\s*\(\d+\).*$/, '').trim(),
+        items: $$('.qi', det).map(qi => {
+          const qd = {}; $$('.qd', qi).forEach(x => { const k = $('span', x); if (k) qd[k.textContent.trim()] = x.textContent.slice(k.textContent.length).trim(); });
+          return { name: $('.qh b', qi).textContent.replace(/^└\s*/, '').trim(), sub: qi.classList.contains('sub'), std: $$('.qh .mchip', qi).map(x => x.textContent.trim()).join(' · '), send: qd['ส่ง'] || '', freq: qd['ความถี่'] || '' };
+        })
+      })).filter(g => g.items.length);
+    } catch (e) { CAT = []; }
+    return CAT;
+  }
+  const catFind = n => { for (const g of CAT || []) for (const it of g.items) if (it.name === n) return it; return null; };
+  const OTHER = '__other';
   const MAX_PHOTO = 10, IMG_MAX = 1600, THUMB = 360;            // [รอยืนยัน] สูงสุด 10 รูป · ด้านยาว 1,600 px
   const TM = ['ม.ค.', 'ก.พ.', 'มี.ค.', 'เม.ย.', 'พ.ค.', 'มิ.ย.', 'ก.ค.', 'ส.ค.', 'ก.ย.', 'ต.ค.', 'พ.ย.', 'ธ.ค.'];
   const TMF = ['มกราคม', 'กุมภาพันธ์', 'มีนาคม', 'เมษายน', 'พฤษภาคม', 'มิถุนายน', 'กรกฎาคม', 'สิงหาคม', 'กันยายน', 'ตุลาคม', 'พฤศจิกายน', 'ธันวาคม'];
@@ -113,34 +130,45 @@
     let users = [];
     try { users = (await call('users')).users || []; } catch (e) { return fail(e); }
     const last = LS.get('gt_staff_name');
+    if (last && users.indexOf(last) >= 0) pinStep(last, users); else nameStep(users);
+  }
+  const loginNote = `<p class="ref">• ใส่ PIN ผิด 5 ครั้ง ระงับเฉพาะชื่อนั้น 15 นาที (ผิดซ้ำ ระงับนานขึ้น และแจ้งผู้ดูแล)<br>• ลืม PIN หรือยังไม่มีชื่อ ติดต่อผู้ดูแลระบบ สตว.<br>• ไม่ใช่เจ้าหน้าที่ สตว.? <a href="../submit/index.html">สร้างใบนำส่งตัวอย่าง →</a></p>`;
+  /* ขั้น 1: เลือกชื่อผู้บันทึกข้อมูล (แยกจากหน้า PIN · เครื่องจำชื่อไว้ครั้งต่อไปข้ามขั้นนี้) */
+  function nameStep(users) {
+    app.innerHTML = `<div class="box st-login">
+      <h2>ทะเบียนรับตัวอย่าง</h2>
+      <p class="ref" style="margin:0">เลือกชื่อผู้บันทึกข้อมูล</p>
+      <div class="nmlist" role="list">${users.map(u => `<button type="button" role="listitem" data-n="${esc(u)}"><span class="av">${esc(u.slice(0, 1))}</span>${esc(u)}</button>`).join('') || '<p class="st-err">ยังไม่มีรายชื่อผู้ใช้ในระบบ</p>'}</div>
+      <p class="ref" style="margin:10px 0 0">เครื่องนี้จะจำชื่อไว้ · เปลี่ยนได้ที่หน้าใส่ PIN</p>
+    </div>${loginNote}`;
+    $$('.nmlist button', app).forEach(bt => bt.onclick = () => pinStep(bt.dataset.n, users));
+  }
+  /* ขั้น 2: ใส่ PIN 4 หลัก */
+  function pinStep(name, users) {
     app.innerHTML = `<form class="box st-login" autocomplete="off" novalidate>
       <div class="lock">${IC.lock}</div>
       <h2>ทะเบียนรับตัวอย่าง</h2>
-      <p class="ref" style="margin:0">เลือกชื่อผู้บันทึก แล้วใส่ PIN ส่วนตัว 4 หลัก</p>
-      <label class="fld"><span>ผู้บันทึกข้อมูล <em>เครื่องนี้จำไว้ · เปลี่ยนได้</em></span>
-        <select class="in sel" name="name" required><option value="">— เลือกชื่อ —</option>${users.map(u => `<option${u === last ? ' selected' : ''}>${esc(u)}</option>`).join('')}</select></label>
-      <label class="fld"><span>PIN 4 หลัก</span>
-        <span class="pinw"><input class="pinin" name="pin" type="password" inputmode="numeric" pattern="\\d{4}" maxlength="4" autocomplete="one-time-code" aria-label="PIN 4 หลัก" required>
-        <span class="pin" aria-hidden="true"><span></span><span></span><span></span><span></span></span></span></label>
+      <div class="nmchip"><span class="av">${esc(name.slice(0, 1))}</span><b>${esc(name)}</b><button type="button" class="lnk" data-chg>เปลี่ยนชื่อ</button></div>
+      <p class="ref" style="margin:0">ใส่ PIN ส่วนตัว 4 หลัก</p>
+      <span class="pinw"><input class="pinin" name="pin" type="password" inputmode="numeric" pattern="\\d{4}" maxlength="4" autocomplete="one-time-code" aria-label="PIN 4 หลัก" required>
+        <span class="pin" aria-hidden="true"><span></span><span></span><span></span><span></span></span></span>
       <p class="st-err" id="lerr" role="alert"></p>
       <button class="btn" type="submit">เข้าสู่ระบบ</button>
       <label class="chk"><input type="checkbox" name="rem" checked> จำการเข้าสู่ระบบในเครื่องนี้ 8 ชั่วโมง</label>
-    </form>
-    <p class="ref">• ใส่ PIN ผิด 5 ครั้ง ระงับเฉพาะชื่อนั้น 15 นาที (ผิดซ้ำ ระงับนานขึ้น และแจ้งผู้ดูแล)<br>• ลืม PIN หรือยังไม่มีชื่อ ติดต่อผู้ดูแลระบบ สตว.<br>• ไม่ใช่เจ้าหน้าที่ สตว.? <a href="../submit/index.html">สร้างใบนำส่งตัวอย่าง →</a></p>`;
+    </form>${loginNote}`;
     const f = $('form', app), pin = f.pin, dots = $$('.pin span', f);
+    $('[data-chg]', f).onclick = () => nameStep(users);
     const paint = () => { pin.value = pin.value.replace(/\D/g, '').slice(0, 4); dots.forEach((d, i) => { d.textContent = i < pin.value.length ? '•' : ''; d.classList.toggle('f', i < pin.value.length); d.classList.toggle('cur', i === pin.value.length && document.activeElement === pin); }); };
-    pin.addEventListener('input', () => { paint(); if (pin.value.length === 4 && f.name.value) f.requestSubmit(); });
+    pin.addEventListener('input', () => { paint(); if (pin.value.length === 4) f.requestSubmit(); });
     pin.addEventListener('focus', paint); pin.addEventListener('blur', paint);
-    if (!users.length) $('#lerr').textContent = 'ยังไม่มีรายชื่อผู้ใช้ในระบบ';
-    (f.name.value ? pin : f.name).focus();
+    pin.focus();
     f.addEventListener('submit', async e => {
       e.preventDefault();
       const er = $('#lerr'); er.textContent = '';
-      if (!f.name.value) { er.textContent = 'กรุณาเลือกชื่อ'; return; }
       if (!/^\d{4}$/.test(pin.value)) { er.textContent = 'PIN ต้องเป็นตัวเลข 4 หลัก'; return; }
       const b = $('button[type=submit]', f); b.disabled = true; b.textContent = 'กำลังตรวจสอบ…';
       try {
-        const j = await call('login', { name: f.name.value, pin: pin.value, remember: f.rem.checked });
+        const j = await call('login', { name, pin: pin.value, remember: f.rem.checked });
         sess = { t: j.token, me: j.me, exp: j.exp };
         if (f.rem.checked) LS.set('gt_staff_tok', sess); else try { sessionStorage.setItem('gt_staff_tok', JSON.stringify(sess)); } catch (x) {}
         LS.set('gt_staff_name', j.me);
@@ -160,10 +188,10 @@
     const it = listCache || [];
     const cnt = s => it.filter(r => r.status === s).length;
     const q = filt.q.trim().toLowerCase();
-    const show = it.filter(r => (!filt.st || r.status === filt.st) &&
+    const show = it.filter(r => (!filt.st || r.status === filt.st || (filt.st === '__miss' && r.nMiss)) &&
       (!q || [r.no, r.prj, r.road, r.con, r.agency, r.sender].some(v => raw(v).toLowerCase().includes(q))));
     let h = `<label class="stsearch">${IC.srch}<input type="search" id="q" placeholder="ค้นหา เลขรับ · โครงการ · สายทาง · ผู้รับจ้าง" value="${esc(filt.q)}" aria-label="ค้นหา"></label>
-      <div class="chips" role="tablist">${[['', 'ทั้งหมด', it.length]].concat(STATUS.map(s => [s, s, cnt(s)])).map(([v, t, n]) =>
+      <div class="chips" role="tablist">${[['', 'ทั้งหมด', it.length]].concat(STATUS.map(s => [s, s, cnt(s)]), [['__miss', 'ตัวอย่างไม่ครบ', it.filter(r => r.nMiss).length]]).map(([v, t, n]) =>
         `<button type="button" class="chip${filt.st === v ? ' on' : ''}" data-st="${esc(v)}">${t}<i>${n}</i></button>`).join('')}</div>`;
     let lastM = '';
     show.forEach(r => {
@@ -171,7 +199,7 @@
       if (m !== lastM) { lastM = m; const [y, mo] = m.split('-').map(Number); h += `<div class="mhd">${TMF[mo - 1] || ''} ${y + 543} <span>· ปีงบ ${fyOf(r.date)}</span></div>`; }
       h += `<a class="rec" href="#r/${slug(r.no)}"><div class="t"><span class="no">${esc(r.no)}</span>${badge(r)}</div>
         <p>${esc(r.prj)}${r.road ? ' · ' + esc(r.road) : ''}</p>
-        <div class="m"><span>${esc(grpLabel(r))}</span><span>${thShort(r.date)}</span><span>📷 ${r.nPhoto}</span><span>วัสดุ ${r.nMat}</span></div></a>`;
+        <div class="m">${r.nMiss ? `<span class="missb">ไม่ครบ ${r.nMiss}</span>` : ''}<span>${esc(grpLabel(r))}</span><span>${thShort(r.date)}</span><span>📷 ${r.nPhoto}</span><span>วัสดุ ${r.nMat}</span></div></a>`;
     });
     if (!show.length) h += `<div class="box st-empty"><p class="ref" style="margin:0">${it.length ? 'ไม่พบรายการที่ตรงกับการค้นหา' : 'ยังไม่มีรายการ · กด "+ ลงรับ" เพื่อเริ่ม'}</p></div>`;
     h += `<a class="fab" href="#new">${IC.plus}ลงรับ</a>`;
@@ -185,7 +213,7 @@
   async function viewForm(no) {
     ttl.textContent = no ? 'แก้ไข ' + no : 'ลงรับตัวอย่าง';
     busy();
-    let rec = { no: '', date: isoToday(), grp: 'B', agency: KHT[0], prj: '', road: '', con: '', sender: '', tel: '', note: '', mats: [{ name: '', qty: '', src: '', std: '' }] };
+    let rec = { no: '', date: isoToday(), grp: 'B', agency: KHT[0], prj: '', road: '', con: '', sender: '', tel: '', note: '', mats: [{ name: '', qty: '', src: '', std: '', done: 'ครบ', miss: '', due: '' }] };
     let autoNo = true;
     if (no) { rec = (await call('get', { no })).rec; autoNo = false; }
     else { try { rec.no = (await call('next', { date: rec.date })).no; } catch (e) { rec.no = ''; } }
@@ -193,9 +221,21 @@
     const agencyField = g => g === 'A' ? `<input class="in" name="agency" value="สทช.14" readonly>`
       : g === 'B' ? `<select class="in" name="agency">${KHT.map(k => `<option${k === raw(rec.agency) ? ' selected' : ''}>${k}</option>`).join('')}</select>`
       : `<input class="in" name="agency" maxlength="150" value="${esc(GRP[g] && rec.grp === g ? rec.agency : '')}" placeholder="${g === 'C' ? 'เช่น อบต. … / ยผ. …' : 'ชื่อผู้รับบริการ / บริษัท'}">`;
-    const matRow = (m, i) => `<div class="mrow" data-i="${i}">
-        <div class="mtop"><b>${i + 1}</b><input class="in" name="mname" list="matlist" maxlength="200" value="${esc(m.name)}" placeholder="วัสดุ เช่น หินคลุก" aria-label="วัสดุ"><button class="mdel" type="button" aria-label="ลบรายการ">${IC.x}</button></div>
-        <div class="row3"><input class="in" name="mqty" maxlength="60" value="${esc(m.qty)}" placeholder="จำนวน" aria-label="จำนวน"><input class="in" name="msrc" maxlength="200" value="${esc(m.src)}" placeholder="แหล่ง / กม." aria-label="แหล่ง"><input class="in" name="mstd" maxlength="60" value="${esc(m.std)}" placeholder="มทช." aria-label="มาตรฐาน"></div></div>`;
+    await catalog();
+    const blank = () => ({ name: '', qty: '', src: '', std: '', done: 'ครบ', miss: '', due: '' });
+    const hint = it => it ? `ตามเกณฑ์ (หน้าแรก): ส่ง ${esc(it.send)}${it.freq ? ' · ความถี่ ' + esc(it.freq) : ''}` : '';
+    const matRow = (m, i) => {
+      const it = catFind(raw(m.name)), other = !!m.name && !it;
+      return `<div class="mrow" data-i="${i}">
+        <div class="mtop"><b>${i + 1}</b><select class="in" name="mpick" aria-label="วัสดุ"><option value="">— เลือกวัสดุ —</option>${(CAT || []).map(g => `<optgroup label="${esc(g.g)}">${g.items.map(x => `<option value="${esc(x.name)}"${it && it.name === x.name ? ' selected' : ''}>${x.sub ? '└ ' : ''}${esc(x.name)}</option>`).join('')}</optgroup>`).join('')}<option value="${OTHER}"${other ? ' selected' : ''}>อื่น ๆ (พิมพ์เอง)</option></select><button class="mdel" type="button" aria-label="ลบรายการ">${IC.x}</button></div>
+        <input class="in mother" name="mname" maxlength="200" value="${esc(other ? m.name : '')}" placeholder="ชื่อวัสดุ" aria-label="ชื่อวัสดุ (อื่น ๆ)"${other ? '' : ' hidden'}>
+        <small class="mhint">${hint(it)}</small>
+        <div class="row3"><input class="in" name="mqty" maxlength="60" value="${esc(m.qty)}" placeholder="จำนวน" aria-label="จำนวน"><input class="in" name="msrc" maxlength="200" value="${esc(m.src)}" placeholder="แหล่ง / กม." aria-label="แหล่ง"><input class="in" name="mstd" maxlength="60" value="${esc(m.std)}" placeholder="มทช." aria-label="มาตรฐาน"></div>
+        <div class="mdone"><span>ตัวอย่าง</span><div class="seg2" role="radiogroup" aria-label="ความครบของตัวอย่าง"><button type="button" role="radio" data-d="ครบ" class="${m.done !== 'ไม่ครบ' ? 'on ok' : ''}" aria-checked="${m.done !== 'ไม่ครบ'}">✓ ครบ</button><button type="button" role="radio" data-d="ไม่ครบ" class="${m.done === 'ไม่ครบ' ? 'on bad' : ''}" aria-checked="${m.done === 'ไม่ครบ'}">ไม่ครบ</button></div></div>
+        <div class="mmiss"${m.done === 'ไม่ครบ' ? '' : ' hidden'}><textarea class="in" name="mmiss" rows="2" maxlength="300" placeholder="หมายเหตุ: ส่วนที่ยังไม่ครบ เช่น ขาดหินคลุก 25 กก. ผู้รับจ้างจะนำมาส่ง…" aria-label="หมายเหตุวัสดุไม่ครบ">${esc(m.miss)}</textarea>
+          <label class="fld"><span>วันที่จะนำส่งเพิ่ม <em>ถ้าทราบ</em></span><input class="in" type="date" name="mdue" value="${esc(m.due)}"></label></div>
+      </div>`;
+    };
     app.innerHTML = `<form class="st-form" novalidate>
       <div class="box">
         <div class="row2">
@@ -213,7 +253,7 @@
       </div>
       <div class="box"><h2>รายการวัสดุ *</h2><div id="mats">${rec.mats.map(matRow).join('')}</div>
         <button class="btn ghost sm" type="button" id="addMat" style="margin:10px 0 0;width:100%">+ เพิ่มวัสดุ</button>
-        <datalist id="matlist">${MATS.map(m => `<option value="${esc(m)}">`).join('')}</datalist></div>
+        ${CAT && CAT.length ? '<p class="ref" style="margin:8px 0 0">รายการวัสดุ ปริมาณ และความถี่ ดึงจากหน้าแรก (General Test)</p>' : '<p class="ref" style="margin:8px 0 0">โหลดรายการจากหน้าแรกไม่ได้ · เลือก "อื่น ๆ" แล้วพิมพ์ชื่อวัสดุ</p>'}</div>
       ${no ? '' : `<div class="box"><h2>รูปภาพ <span class="ref" style="font-weight:500">ใส่ลายน้ำอัตโนมัติ · อัปโหลดหลังบันทึก</span></h2>
         <div class="pb"><label class="btn">${IC.cam}ถ่ายรูป<input type="file" accept="image/*" capture="environment" hidden data-pick></label>
         <label class="btn ghost">${IC.img}เลือกรูป<input type="file" accept="image/*" multiple hidden data-pick></label></div>
@@ -235,10 +275,24 @@
       if (autoNo && f.date.value) { try { f.no.value = (await call('next', { date: f.date.value })).no; } catch (e) {} }
     });
     const matsEl = $('#mats', f);
-    const readMats = () => $$('.mrow', matsEl).map(r => ({ name: $('[name=mname]', r).value.trim(), qty: $('[name=mqty]', r).value.trim(), src: $('[name=msrc]', r).value.trim(), std: $('[name=mstd]', r).value.trim() }));
+    const readMats = () => $$('.mrow', matsEl).map(r => { const pk = $('[name=mpick]', r).value, d = $('.seg2 .on', r);
+      return { name: pk === OTHER ? $('[name=mname]', r).value.trim() : pk, qty: $('[name=mqty]', r).value.trim(), src: $('[name=msrc]', r).value.trim(), std: $('[name=mstd]', r).value.trim(),
+        done: d ? d.dataset.d : 'ครบ', miss: $('[name=mmiss]', r).value.trim(), due: $('[name=mdue]', r).value }; });
+    matsEl.addEventListener('change', e => {
+      const sel = e.target.closest('[name=mpick]'); if (!sel) return;
+      const r = sel.closest('.mrow'), it = catFind(sel.value), o = $('[name=mname]', r);
+      o.hidden = sel.value !== OTHER; if (!o.hidden) o.focus();
+      $('.mhint', r).innerHTML = hint(it);
+      if (it) { $('[name=mstd]', r).value = it.std; }
+    });
+    matsEl.addEventListener('click', e => {
+      const b = e.target.closest('.seg2 button'); if (!b) return;
+      const r = b.closest('.mrow'); $$('.seg2 button', r).forEach(x => { const on = x === b; x.classList.toggle('on', on); x.classList.toggle('ok', on && x.dataset.d === 'ครบ'); x.classList.toggle('bad', on && x.dataset.d === 'ไม่ครบ'); x.setAttribute('aria-checked', on); });
+      const mm = $('.mmiss', r); mm.hidden = b.dataset.d !== 'ไม่ครบ'; if (!mm.hidden) $('[name=mmiss]', r).focus();
+    });
     const redrawMats = ms => { matsEl.innerHTML = ms.map(matRow).join(''); };
-    $('#addMat').onclick = () => { const ms = readMats(); ms.push({ name: '', qty: '', src: '', std: '' }); redrawMats(ms); $$('[name=mname]', matsEl).pop().focus(); };
-    matsEl.addEventListener('click', e => { const d = e.target.closest('.mdel'); if (!d) return; const ms = readMats(); ms.splice(Number(d.closest('.mrow').dataset.i), 1); redrawMats(ms.length ? ms : [{ name: '', qty: '', src: '', std: '' }]); });
+    $('#addMat').onclick = () => { const ms = readMats(); ms.push(blank()); redrawMats(ms); $$('[name=mpick]', matsEl).pop().focus(); };
+    matsEl.addEventListener('click', e => { const d = e.target.closest('.mdel'); if (!d) return; const ms = readMats(); ms.splice(Number(d.closest('.mrow').dataset.i), 1); redrawMats(ms.length ? ms : [blank()]); });
     const formData = () => ({ no: f.no.value.trim(), date: f.date.value, grp, agency: f.agency.value.trim(), prj: f.prj.value.trim(), road: f.road.value.trim(), con: f.con.value.trim(), sender: f.sender.value.trim(), tel: f.tel.value.trim(), note: f.note.value.trim(), mats: readMats().filter(m => m.name) });
     if (!no) {
       const drawQ = () => { $('#qph').innerHTML = queue.map((q, i) => `<figure><img src="data:image/jpeg;base64,${q.thumb}" alt="รูปที่ ${i + 1}"><button type="button" class="phx" data-qi="${i}" aria-label="เอารูปออก">${IC.x}</button></figure>`).join('') + (queue.length ? '' : '<p class="ref" style="grid-column:1/-1;margin:0">ยังไม่มีรูป · ถ่ายกองวัสดุ ป้ายกอง หรือสัญลักษณ์</p>'); };
@@ -256,7 +310,7 @@
     f.addEventListener('submit', async e => {
       e.preventDefault();
       const d = formData(), er = $('#ferr'); er.textContent = '';
-      const bad = !/^\d{4}\/\d{4}$/.test(d.no) ? 'เลขรับต้องเป็นรูปแบบ ปปปป/นนนน เช่น 2570/0012' : !d.date ? 'กรุณาระบุวันที่รับ' : !d.prj ? 'กรุณากรอกโครงการ' : !d.mats.length ? 'กรุณาเพิ่มรายการวัสดุอย่างน้อย 1 รายการ' : '';
+      const bad = !/^\d{4}\/\d{4}$/.test(d.no) ? 'เลขรับต้องเป็นรูปแบบ ปปปป/นนนน เช่น 2570/0012' : !d.date ? 'กรุณาระบุวันที่รับ' : !d.prj ? 'กรุณากรอกโครงการ' : !d.mats.length ? 'กรุณาเลือกวัสดุอย่างน้อย 1 รายการ' : d.mats.some(m => m.done === 'ไม่ครบ' && !m.miss) ? 'วัสดุที่ "ไม่ครบ" ต้องใส่หมายเหตุว่าขาดอะไร / จะนำมาส่งเมื่อใด' : '';
       if (bad) { er.textContent = bad; return; }
       if (no && rec.mats) d.mats.forEach(m => { const o = rec.mats.find(x => raw(x.name) === m.name && raw(x.src) === m.src); if (o) { m.result = o.result; m.note = o.note; } });
       const b = $('button[type=submit]', f); b.disabled = true; b.textContent = 'กำลังบันทึก…';
@@ -285,7 +339,7 @@
           return `<div class="${i < si ? 'd' : i === si ? 'c' : ''}">${s}${i <= si && lg ? '<br>' + thShort(lg.at) : ''}</div>`; }).join('')}</div>
         <div class="pb">${si > 0 ? `<button class="btn ghost sm" type="button" data-to="${STATUS[si - 1]}">← ${STATUS[si - 1]}</button>` : '<span></span>'}${si < 3 ? `<button class="btn sm" type="button" data-to="${STATUS[si + 1]}">${STATUS[si + 1]} →</button>` : '<span class="ref" style="align-self:center;text-align:right">เสร็จสิ้น</span>'}</div>
       </div>
-      <div class="box"><h2>ผลทดสอบรายวัสดุ</h2>${rec.mats.map(m => `<div class="mat"><div>${esc(m.name)}${m.qty ? ' <span class="ref">' + esc(m.qty) + '</span>' : ''}<small>${[m.src && 'แหล่ง ' + esc(m.src), m.std && esc(m.std)].filter(Boolean).join(' · ')}</small></div>
+      <div class="box"><h2>ผลทดสอบรายวัสดุ</h2>${rec.mats.map(m => `<div class="mat"><div>${esc(m.name)}${m.qty ? ' <span class="ref">' + esc(m.qty) + '</span>' : ''}<small>${[m.src && 'แหล่ง ' + esc(m.src), m.std && esc(m.std)].filter(Boolean).join(' · ')}</small>${m.done === 'ไม่ครบ' ? `<span class="miss">ไม่ครบ · ${esc(m.miss)}${m.due ? ' · นำส่งเพิ่ม ' + thDate(m.due) : ''} <button type="button" class="lnk" data-full="${m.i}">รับครบแล้ว</button></span>` : `<span class="full">✓ ตัวอย่างครบ${m.miss ? ' · ' + esc(m.miss) : ''}</span>`}</div>
           <div class="pf" role="group" aria-label="ผลทดสอบ ${esc(m.name)}"><button type="button" class="${m.result === 'ผ่าน' ? 'ok' : ''}" data-i="${m.i}" data-r="ผ่าน" aria-pressed="${m.result === 'ผ่าน'}">ผ่าน</button><button type="button" class="${m.result === 'ไม่ผ่าน' ? 'bad' : ''}" data-i="${m.i}" data-r="ไม่ผ่าน" aria-pressed="${m.result === 'ไม่ผ่าน'}">ไม่ผ่าน</button></div></div>`).join('')}
         <form class="fld rep"><span>เลขที่รายงานผล</span><div class="row2b"><input class="in" name="rep" maxlength="150" value="${esc(rec.report)}" placeholder="เช่น รายงานผลทดสอบเลขที่ …"><button class="btn sm" type="submit">บันทึก</button></div></form>
       </div>
@@ -298,6 +352,7 @@
     const act = async (fn, msg) => { try { const j = await fn(); listCache = null; drawDetail(j.rec); if (msg) toast(msg); } catch (e) { toast(e.message, true); } };
     $$('[data-to]', app).forEach(b => b.onclick = () => { b.disabled = true; act(() => call('status', { no: rec.no, to: b.dataset.to }), 'เปลี่ยนเป็น ' + b.dataset.to); });
     $$('.pf button', app).forEach(b => b.onclick = () => { const cur = rec.mats.find(m => String(m.i) === b.dataset.i).result; act(() => call('result', { no: rec.no, i: Number(b.dataset.i), result: cur === b.dataset.r ? '' : b.dataset.r })); });
+    $$('[data-full]', app).forEach(b => b.onclick = () => { b.disabled = true; act(() => call('complete', { no: rec.no, i: Number(b.dataset.full) }), 'บันทึกรับครบแล้ว'); });
     $('.rep', app).onsubmit = e => { e.preventDefault(); act(() => call('report', { no: rec.no, report: e.target.rep.value.trim() }), 'บันทึกเลขที่รายงานแล้ว'); };
     $$('.phv', app).forEach(b => b.onclick = () => openPhoto(rec, b.dataset.id));
     $$('[data-pick]', app).forEach(inp => inp.addEventListener('change', async () => {
