@@ -124,40 +124,21 @@
   const busy = t => { app.innerHTML = `<p class="ref st-load">${t || 'กำลังโหลด…'}</p>`; };
 
   /* ---------- เข้าสู่ระบบ ---------- */
-  async function viewLogin() {
+  /* เข้าระบบด้วย PIN ส่วนตัว 4 หลักอย่างเดียว · ระบบรู้ว่าเป็นใครจาก PIN (PIN ห้ามซ้ำกันในแท็บ ผู้ใช้) */
+  function viewLogin() {
     ttl.textContent = 'เข้าสู่ระบบภายใน'; setWho();
-    busy();
-    let users = [];
-    try { users = (await call('users')).users || []; } catch (e) { return fail(e); }
-    const last = LS.get('gt_staff_name');
-    if (last && users.indexOf(last) >= 0) pinStep(last, users); else nameStep(users);
-  }
-  const loginNote = `<p class="ref">• ใส่ PIN ผิด 5 ครั้ง ระงับเฉพาะชื่อนั้น 15 นาที (ผิดซ้ำ ระงับนานขึ้น และแจ้งผู้ดูแล)<br>• ลืม PIN หรือยังไม่มีชื่อ ติดต่อผู้ดูแลระบบ สตว.<br>• ไม่ใช่เจ้าหน้าที่ สตว.? <a href="../submit/index.html">สร้างใบนำส่งตัวอย่าง →</a></p>`;
-  /* ขั้น 1: เลือกชื่อผู้บันทึกข้อมูล (แยกจากหน้า PIN · เครื่องจำชื่อไว้ครั้งต่อไปข้ามขั้นนี้) */
-  function nameStep(users) {
-    app.innerHTML = `<div class="box st-login">
-      <h2>ทะเบียนรับตัวอย่าง</h2>
-      <p class="ref" style="margin:0">เลือกชื่อผู้บันทึกข้อมูล</p>
-      <div class="nmlist" role="list">${users.map(u => `<button type="button" role="listitem" data-n="${esc(u)}"><span class="av">${esc(u.slice(0, 1))}</span>${esc(u)}</button>`).join('') || '<p class="st-err">ยังไม่มีรายชื่อผู้ใช้ในระบบ</p>'}</div>
-      <p class="ref" style="margin:10px 0 0">เครื่องนี้จะจำชื่อไว้ · เปลี่ยนได้ที่หน้าใส่ PIN</p>
-    </div>${loginNote}`;
-    $$('.nmlist button', app).forEach(bt => bt.onclick = () => pinStep(bt.dataset.n, users));
-  }
-  /* ขั้น 2: ใส่ PIN 4 หลัก */
-  function pinStep(name, users) {
     app.innerHTML = `<form class="box st-login" autocomplete="off" novalidate>
       <div class="lock">${IC.lock}</div>
       <h2>ทะเบียนรับตัวอย่าง</h2>
-      <div class="nmchip"><span class="av">${esc(name.slice(0, 1))}</span><b>${esc(name)}</b><button type="button" class="lnk" data-chg>เปลี่ยนชื่อ</button></div>
-      <p class="ref" style="margin:0">ใส่ PIN ส่วนตัว 4 หลัก</p>
+      <p class="ref" style="margin:0 0 10px">ใส่ PIN ส่วนตัว 4 หลัก</p>
       <span class="pinw"><input class="pinin" name="pin" type="password" inputmode="numeric" pattern="\\d{4}" maxlength="4" autocomplete="one-time-code" aria-label="PIN 4 หลัก" required>
         <span class="pin" aria-hidden="true"><span></span><span></span><span></span><span></span></span></span>
       <p class="st-err" id="lerr" role="alert"></p>
       <button class="btn" type="submit">เข้าสู่ระบบ</button>
       <label class="chk"><input type="checkbox" name="rem" checked> จำการเข้าสู่ระบบในเครื่องนี้ 8 ชั่วโมง</label>
-    </form>${loginNote}`;
+    </form>
+    <p class="ref">• ใส่ PIN ผิดหลายครั้ง ระบบจะพักการเข้าระบบชั่วคราวและแจ้งผู้ดูแล<br>• ลืม PIN ติดต่อผู้ดูแลระบบ สตว.<br>• ไม่ใช่เจ้าหน้าที่ สตว.? <a href="../submit/index.html">สร้างใบนำส่งตัวอย่าง →</a></p>`;
     const f = $('form', app), pin = f.pin, dots = $$('.pin span', f);
-    $('[data-chg]', f).onclick = () => nameStep(users);
     const paint = () => { pin.value = pin.value.replace(/\D/g, '').slice(0, 4); dots.forEach((d, i) => { d.textContent = i < pin.value.length ? '•' : ''; d.classList.toggle('f', i < pin.value.length); d.classList.toggle('cur', i === pin.value.length && document.activeElement === pin); }); };
     pin.addEventListener('input', () => { paint(); if (pin.value.length === 4) f.requestSubmit(); });
     pin.addEventListener('focus', paint); pin.addEventListener('blur', paint);
@@ -168,10 +149,9 @@
       if (!/^\d{4}$/.test(pin.value)) { er.textContent = 'PIN ต้องเป็นตัวเลข 4 หลัก'; return; }
       const b = $('button[type=submit]', f); b.disabled = true; b.textContent = 'กำลังตรวจสอบ…';
       try {
-        const j = await call('login', { name, pin: pin.value, remember: f.rem.checked });
+        const j = await call('login', { pin: pin.value, remember: f.rem.checked });
         sess = { t: j.token, me: j.me, exp: j.exp };
         if (f.rem.checked) LS.set('gt_staff_tok', sess); else try { sessionStorage.setItem('gt_staff_tok', JSON.stringify(sess)); } catch (x) {}
-        LS.set('gt_staff_name', j.me);
         location.hash = location.hash === '#login' || !location.hash ? '#list' : location.hash; route();
       } catch (x) { er.textContent = x.message; pin.value = ''; paint(); pin.focus(); b.disabled = false; b.textContent = 'เข้าสู่ระบบ'; }
     });
@@ -222,6 +202,8 @@
       : g === 'B' ? `<select class="in" name="agency">${KHT.map(k => `<option${k === raw(rec.agency) ? ' selected' : ''}>${k}</option>`).join('')}</select>`
       : `<input class="in" name="agency" maxlength="150" value="${esc(GRP[g] && rec.grp === g ? rec.agency : '')}" placeholder="${g === 'C' ? 'เช่น อบต. … / ยผ. …' : 'ชื่อผู้รับบริการ / บริษัท'}">`;
     await catalog();
+    let users = []; try { users = (await call('users')).users || []; } catch (e) {}
+    if (rec.by && users.indexOf(raw(rec.by)) < 0) users.push(raw(rec.by));
     const blank = () => ({ name: '', qty: '', src: '', std: '', done: 'ครบ', miss: '', due: '' });
     const hint = it => it ? `ตามเกณฑ์ (หน้าแรก): ส่ง ${esc(it.send)}${it.freq ? ' · ความถี่ ' + esc(it.freq) : ''}` : '';
     const matRow = (m, i) => {
@@ -258,6 +240,9 @@
         <div class="pb"><label class="btn">${IC.cam}ถ่ายรูป<input type="file" accept="image/*" capture="environment" hidden data-pick></label>
         <label class="btn ghost">${IC.img}เลือกรูป<input type="file" accept="image/*" multiple hidden data-pick></label></div>
         <div class="stph" id="qph"></div></div>`}
+      <div class="box"><h2>ผู้บันทึกข้อมูล *</h2>
+        <select class="in sel" name="by" required aria-label="ผู้บันทึกข้อมูล"><option value="">— เลือกผู้บันทึกข้อมูล —</option>${users.map(u => `<option${no && u === raw(rec.by) ? ' selected' : ''}>${esc(u)}</option>`).join('')}</select>
+        <p class="ref" style="margin:6px 0 0">ชื่อนี้ลงในทะเบียนและลายน้ำรูป · รายชื่อแก้ได้ที่ Sheet แท็บ ผู้ใช้</p></div>
       <p class="st-err" id="ferr" role="alert"></p>
       <div class="bar"><a class="btn ghost" href="${no ? '#r/' + slug(no) : '#list'}">ยกเลิก</a><button class="btn" type="submit">${no ? 'บันทึกการแก้ไข' : 'บันทึกลงรับ'}</button></div>
     </form>`;
@@ -293,7 +278,7 @@
     const redrawMats = ms => { matsEl.innerHTML = ms.map(matRow).join(''); };
     $('#addMat').onclick = () => { const ms = readMats(); ms.push(blank()); redrawMats(ms); $$('[name=mpick]', matsEl).pop().focus(); };
     matsEl.addEventListener('click', e => { const d = e.target.closest('.mdel'); if (!d) return; const ms = readMats(); ms.splice(Number(d.closest('.mrow').dataset.i), 1); redrawMats(ms.length ? ms : [blank()]); });
-    const formData = () => ({ no: f.no.value.trim(), date: f.date.value, grp, agency: f.agency.value.trim(), prj: f.prj.value.trim(), road: f.road.value.trim(), con: f.con.value.trim(), sender: f.sender.value.trim(), tel: f.tel.value.trim(), note: f.note.value.trim(), mats: readMats().filter(m => m.name) });
+    const formData = () => ({ no: f.no.value.trim(), date: f.date.value, grp, agency: f.agency.value.trim(), prj: f.prj.value.trim(), road: f.road.value.trim(), con: f.con.value.trim(), sender: f.sender.value.trim(), tel: f.tel.value.trim(), note: f.note.value.trim(), by: f.by.value, mats: readMats().filter(m => m.name) });
     if (!no) {
       const drawQ = () => { $('#qph').innerHTML = queue.map((q, i) => `<figure><img src="data:image/jpeg;base64,${q.thumb}" alt="รูปที่ ${i + 1}"><button type="button" class="phx" data-qi="${i}" aria-label="เอารูปออก">${IC.x}</button></figure>`).join('') + (queue.length ? '' : '<p class="ref" style="grid-column:1/-1;margin:0">ยังไม่มีรูป · ถ่ายกองวัสดุ ป้ายกอง หรือสัญลักษณ์</p>'); };
       drawQ();
@@ -310,14 +295,15 @@
     f.addEventListener('submit', async e => {
       e.preventDefault();
       const d = formData(), er = $('#ferr'); er.textContent = '';
-      const bad = !/^\d{4}\/\d{4}$/.test(d.no) ? 'เลขรับต้องเป็นรูปแบบ ปปปป/นนนน เช่น 2570/0012' : !d.date ? 'กรุณาระบุวันที่รับ' : !d.prj ? 'กรุณากรอกโครงการ' : !d.mats.length ? 'กรุณาเลือกวัสดุอย่างน้อย 1 รายการ' : d.mats.some(m => m.done === 'ไม่ครบ' && !m.miss) ? 'วัสดุที่ "ไม่ครบ" ต้องใส่หมายเหตุว่าขาดอะไร / จะนำมาส่งเมื่อใด' : '';
+      const bad = !/^\d{4}\/\d{4}$/.test(d.no) ? 'เลขรับต้องเป็นรูปแบบ ปปปป/นนนน เช่น 2570/0012' : !d.date ? 'กรุณาระบุวันที่รับ' : !d.prj ? 'กรุณากรอกโครงการ' : !d.mats.length ? 'กรุณาเลือกวัสดุอย่างน้อย 1 รายการ' : d.mats.some(m => m.done === 'ไม่ครบ' && !m.miss) ? 'วัสดุที่ "ไม่ครบ" ต้องใส่หมายเหตุว่าขาดอะไร / จะนำมาส่งเมื่อใด' : !d.by ? 'กรุณาเลือกผู้บันทึกข้อมูล' : '';
+      if (bad === 'กรุณาเลือกผู้บันทึกข้อมูล') f.by.focus();
       if (bad) { er.textContent = bad; return; }
       if (no && rec.mats) d.mats.forEach(m => { const o = rec.mats.find(x => raw(x.name) === m.name && raw(x.src) === m.src); if (o) { m.result = o.result; m.note = o.note; } });
       const b = $('button[type=submit]', f); b.disabled = true; b.textContent = 'กำลังบันทึก…';
       try {
         const j = await call('save', { rec: d, orig: no || '' });
         const saved = j.rec.no;
-        for (let i = 0; i < queue.length; i++) { b.textContent = `อัปโหลดรูป ${i + 1}/${queue.length}…`; try { await call('photo', { no: saved, data: queue[i].data, thumb: queue[i].thumb }); } catch (x) { toast('อัปโหลดรูปที่ ' + (i + 1) + ' ไม่สำเร็จ: ' + x.message, true); } }
+        for (let i = 0; i < queue.length; i++) { b.textContent = `อัปโหลดรูป ${i + 1}/${queue.length}…`; try { const q = await restamp(queue[i], j.rec); await call('photo', { no: saved, data: q.data, thumb: q.thumb }); } catch (x) { toast('อัปโหลดรูปที่ ' + (i + 1) + ' ไม่สำเร็จ: ' + x.message, true); } }
         listCache = null; toast(no ? 'บันทึกการแก้ไขแล้ว' : 'ลงรับ ' + saved + ' แล้ว');
         location.hash = '#r/' + slug(saved);
       } catch (x) { er.textContent = x.message; b.disabled = false; b.textContent = no ? 'บันทึกการแก้ไข' : 'บันทึกลงรับ'; }
@@ -386,7 +372,7 @@
       ['grp', 'ผู้ส่ง ' + grpLabel(r), true],
       ['prj', raw(r.prj) + (r.road ? ' · สาย ' + raw(r.road) : ''), true],
       ['con', r.con ? 'ผู้รับจ้าง ' + raw(r.con) : '', !!r.con],
-      ['by', 'ผู้บันทึก ' + (sess ? sess.me : ''), true]                     // [รอยืนยัน] ค่าเริ่มต้นเปิด
+      ['by', 'ผู้บันทึก ' + (raw(r.by) || '(ตามที่เลือกก่อนบันทึก)'), true]   // [รอยืนยัน] ค่าเริ่มต้นเปิด
     ];
   }
   async function loadBitmap(file) {
@@ -398,7 +384,7 @@
     for (const ch of Array.from(text)) { const t = line + ch; if (x.measureText(t).width > maxW && line) { out.push(line); line = ch; } else line = t; }
     if (line) out.push(line); return out;
   }
-  function stamp(src, lines) {
+  function stamp(src, lines, bare) {
     const sw = src.width, sh = src.height, k = Math.min(1, IMG_MAX / Math.max(sw, sh));
     const c = document.createElement('canvas'); c.width = Math.round(sw * k); c.height = Math.round(sh * k);
     const x = c.getContext('2d'); x.drawImage(src, 0, 0, c.width, c.height);
@@ -411,6 +397,7 @@
       x.fillStyle = '#fff'; x.textBaseline = 'top'; let y = h - bh + fs * 0.45;
       L.forEach(l => { x.font = l[1]; x.fillText(l[0], padX, y); y += l[2] * 1.32; });
     }
+    if (bare) return c;
     x.font = '700 ' + Math.round(fs * 0.8) + 'px Sarabun, sans-serif'; x.textAlign = 'right'; x.textBaseline = 'top';
     x.fillStyle = 'rgba(0,0,0,.35)'; const tw = x.measureText('สตว. สทช.14').width; x.fillRect(w - tw - fs * 1.1, fs * 0.35, tw + fs * 0.8, fs * 1.25);
     x.fillStyle = '#fff'; x.fillText('สตว. สทช.14', w - fs * 0.7, fs * 0.5); x.textAlign = 'left';
@@ -418,9 +405,18 @@
     return c;
   }
   const b64 = (canvas, q) => canvas.toDataURL('image/jpeg', q).split(',')[1];
+  /* รูปที่ถ่ายก่อนเลือกผู้บันทึก: ตอนบันทึกจะวาดลายน้ำใหม่จากรูปต้นฉบับ (ย่อแล้ว ไม่มีลายน้ำ) ให้ตรงข้อมูลที่บันทึกจริง
+     เว้นบรรทัดที่ผู้ใช้แก้ข้อความเองในหน้าตรวจรูป */
+  async function restamp(q, rec) {
+    if (!q.base) return q;
+    const fresh = wmFrom(rec), lines = q.lines.map((l, i) => { const f = fresh.find(x => x[0] === l[0]); const keep = l[1] !== q.defs[i] || !f || l[0] === 'date' && raw(rec.date) === '' ; return [l[0], keep ? l[1] : (l[0] === 'date' ? l[1].replace(/^วันที่รับ .*? ·/, f[1].split(' ·')[0] + ' ·') : f[1]), l[2]]; });
+    const im = await new Promise((ok, no) => { const i = new Image(); i.onload = () => ok(i); i.onerror = no; i.src = 'data:image/jpeg;base64,' + q.base; });
+    const c = stamp(im, lines); return { data: b64(c, 0.82), thumb: thumbOf(c) };
+  }
   function thumbOf(c) { const k = THUMB / Math.max(c.width, c.height), t = document.createElement('canvas'); t.width = Math.round(c.width * k); t.height = Math.round(c.height * k); t.getContext('2d').drawImage(c, 0, 0, t.width, t.height); return b64(t, 0.72); }
   async function photoFlow(file, lines) {
     let bmp; try { if (document.fonts) await document.fonts.load('700 20px Sarabun'); bmp = await loadBitmap(file); } catch (e) { toast(e.message, true); return null; }
+    const defs = lines.map(l => l[1]);            // ข้อความตั้งต้น ใช้แยกว่าบรรทัดไหนผู้ใช้แก้เอง
     return new Promise(done => {
       let cv = stamp(bmp, lines);
       const m = sheet(`<h2>ตรวจรูปก่อนบันทึก</h2><div class="pv" id="pvc"></div>
@@ -434,7 +430,7 @@
       const end = v => { closeSheet(); done(v); };
       $('[data-cancel]', m).onclick = () => end(null);
       m.addEventListener('click', e => { if (e.target === m) done(null); });
-      $('[data-ok]', m).onclick = () => { redraw(); end({ data: b64(cv, 0.82), thumb: thumbOf(cv) }); };
+      $('[data-ok]', m).onclick = () => { redraw(); end({ data: b64(cv, 0.82), thumb: thumbOf(cv), base: b64(stamp(bmp, [], true), 0.9), lines: lines.map(l => l.slice()), defs: defs }); };
     });
   }
 
