@@ -157,6 +157,7 @@ a.mlink{color:inherit;text-decoration:underline;text-decoration-color:var(--acc)
 .qh{display:flex;gap:6px;align-items:flex-start;margin-bottom:4px}
 .qh b{font-size:16px;flex:1 1 auto;min-width:0;line-height:1.35;padding-top:2px}
 .qh .mchip{flex:none}
+.qlink{color:var(--acc-ink);font-weight:600;text-decoration:underline;text-underline-offset:2px}
 .qh .chips2{display:flex;flex-direction:column;align-items:flex-end;gap:4px;flex:none}
 .qd{font-size:14.5px;line-height:1.45;display:flex;gap:8px}
 .qd span{flex:none;width:44px;color:var(--muted);font-size:13px;padding-top:1px}
