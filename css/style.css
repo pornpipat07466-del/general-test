@@ -332,3 +332,19 @@ table.mx td.nb{font-weight:400}
 .stf .mat .full{display:block;font-size:12.5px;color:var(--ok);margin-top:2px}
 .stf .mat .lnk{margin-left:4px}
 .stf .missb{background:var(--bad-bg);color:var(--bad);font-weight:700;padding:0 8px;border-radius:999px}
+/* ทะเบียนรับตัวอย่าง v2 */
+.stf input[type=date].in{-webkit-appearance:none;appearance:none;display:block;min-width:0;max-width:100%;text-align:left;line-height:24px}
+.stf input[type=date].in::-webkit-date-and-time-value{text-align:left}
+.stf .row2>*{min-width:0}
+.stf .mq{display:grid;grid-template-columns:96px 1fr 1fr;gap:6px;margin:6px 0 0 30px}.stf .mq[hidden]{display:none}
+.stf .mq .qty{position:relative;display:block}.stf .mq .qty .in{padding-right:34px}
+.stf .mq .qty span{position:absolute;right:10px;top:50%;transform:translateY(-50%);font-size:13.5px;color:var(--muted);pointer-events:none}
+.stf .subs{margin:6px 0 0 30px}
+.stf .sub{display:flex;align-items:center;justify-content:space-between;gap:8px;padding:6px 0;border-top:1px dashed var(--line);font-size:14px;line-height:1.35}
+.stf .sub:first-child{border-top:0}.stf .sub>span{min-width:0}
+.stf .sub .seg2{flex:none}.stf .sub .seg2 button{min-height:36px;padding:5px 10px;font-size:13.5px}
+.stf .more{margin-top:10px}.stf .more summary{font-size:13.5px;font-weight:600;color:var(--pri-ink);cursor:pointer;padding:6px 0}
+.stf .sync{text-align:right;margin:6px 2px 0;font-size:12.5px}
+.stf .subl{list-style:none;margin:4px 0 0;padding:0;font-size:12.5px;color:var(--muted);line-height:1.5}.stf .subl .no{color:var(--bad);font-weight:600}
+.stf .delrec{width:100%;margin-top:12px;color:var(--bad);border-color:var(--bad-line,var(--line))}
+.stf .ph0{display:grid;place-items:center;aspect-ratio:1;border-radius:12px;background:var(--tile);color:var(--muted);font-size:13px}
