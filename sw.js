@@ -1,7 +1,7 @@
 /* General Test — ใช้งานแบบออฟไลน์ได้หลังเปิดครั้งแรก (หน้าเว็บ: ดึงใหม่ก่อน ถ้าไม่มีเน็ตใช้ฉบับที่เก็บไว้) */
-const V = 'gt-v1.0.76';
+const V = 'gt-v1.0.77';
 const CORE = ['./', 'index.html', 'criteria.html', 'properties.html', 'quality.html', 'standards.html', 'submit/index.html',
-  'css/style.css?v=76', 'js/photos.js', 'js/standards.js', 'js/stdlink.js', 'img/sampling-stockpile.jpg', 'img/quartering-field.jpg', 'icons/icon-192.png', 'manifest.webmanifest',
+  'css/style.css?v=77', 'js/photos.js', 'js/standards.js', 'js/stdlink.js', 'img/sampling-stockpile.jpg', 'img/quartering-field.jpg', 'icons/icon-192.png', 'manifest.webmanifest',
   'fonts/THSarabunPSK.ttf', 'fonts/THSarabunPSK-Bold.ttf'];
 self.addEventListener('install', e => { e.waitUntil(caches.open(V).then(c => c.addAll(CORE)).then(() => self.skipWaiting())); });
 self.addEventListener('activate', e => { e.waitUntil(caches.keys().then(ks => Promise.all(ks.filter(k => k !== V).map(k => caches.delete(k)))).then(() => self.clients.claim())); });

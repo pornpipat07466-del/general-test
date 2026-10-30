@@ -230,7 +230,9 @@
     const us = users.slice(); if (rec.by && us.indexOf(raw(rec.by)) < 0) us.push(raw(rec.by));
     const queue = [];                    // รูปที่ถ่ายก่อนบันทึก (ส่งพร้อมบันทึกลงรับ)
     const agencyField = g => g === 'A' ? `<input class="in" name="agency" value="สทช.14" readonly>`
-      : g === 'B' ? `<select class="in" name="agency">${KHT.map(k => `<option${k === raw(rec.agency) ? ' selected' : ''}>${k}</option>`).join('')}</select>`
+      : g === 'B' ? (() => { const own = rec.grp === 'B' && rec.agency && KHT.indexOf(raw(rec.agency)) < 0;
+          return `<select class="in" name="agsel">${KHT.map(k => `<option${k === raw(rec.agency) ? ' selected' : ''}>${k}</option>`).join('')}<option value="${OTHER}"${own ? ' selected' : ''}>อื่น ๆ (พิมพ์เอง)</option></select>
+          <input class="in mother0" name="agency" maxlength="150" value="${esc(own ? rec.agency : '')}" placeholder="พิมพ์ชื่อหน่วยงาน"${own ? '' : ' hidden'}>`; })()
       : `<input class="in" name="agency" maxlength="150" value="${esc(GRP[g] && rec.grp === g ? rec.agency : '')}" placeholder="${g === 'C' ? 'เช่น อบต. … / ยผ. …' : 'ชื่อผู้รับบริการ / บริษัท'}">`;
     const subsFor = (name, old) => {
       const it = catFind(name), parts = it ? splitSubs(it.send) : [];
@@ -261,7 +263,7 @@
         </div>
         <div class="fld"><span>กลุ่มผู้ส่ง</span><div class="seg" role="radiogroup">${Object.keys(GRP).map(g => `<button type="button" role="radio" aria-checked="${rec.grp === g}" class="${rec.grp === g ? 'on' : ''}" data-g="${g}">${g}<small>${GRP[g][0]}</small></button>`).join('')}</div></div>
         <label class="fld"><span id="agl">${rec.grp === 'A' ? 'หน่วยงาน' : rec.grp === 'B' ? 'แขวง' : rec.grp === 'C' ? 'ชื่อหน่วยงาน' : 'ผู้รับบริการ'}</span><span id="agw">${agencyField(rec.grp)}</span></label>
-        <label class="fld"><span>โครงการ <em>ไม่บังคับ</em></span><input class="in" name="prj" maxlength="300" value="${esc(rec.prj)}"></label>
+        <label class="fld"><span>โครงการ</span><input class="in" name="prj" maxlength="300" value="${esc(rec.prj)}"></label>
         <div class="row2"><label class="fld"><span>สายทาง</span><input class="in" name="road" maxlength="150" value="${esc(rec.road)}" placeholder="กบ.ถ.1-0001"></label>
         <label class="fld"><span>ผู้รับจ้าง</span><input class="in" name="con" maxlength="200" value="${esc(rec.con)}"></label></div>
         <details class="more"${rec.sender || rec.tel || rec.note ? ' open' : ''}><summary>ผู้นำส่ง · โทร · หมายเหตุ</summary>
@@ -290,6 +292,7 @@
       $('#agl').textContent = grp === 'A' ? 'หน่วยงาน' : grp === 'B' ? 'แขวง' : grp === 'C' ? 'ชื่อหน่วยงาน' : 'ผู้รับบริการ';
       $('#agw').innerHTML = agencyField(grp);
     });
+    $('#agw').addEventListener('change', e => { if (e.target.name !== 'agsel') return; const o = f.agency; o.hidden = e.target.value !== OTHER; if (!o.hidden) { o.value = ''; o.focus(); } });
     f.no.addEventListener('input', () => { autoNo = false; $('#noHint').textContent = 'กำหนดเอง'; });
     f.date.addEventListener('change', () => { if (autoNo && f.date.value) f.no.value = nextNoLocal(f.date.value); });
     const matsEl = $('#mats', f);
@@ -318,7 +321,7 @@
     const redrawMats = ms => { matsEl.innerHTML = ms.map(matRow).join(''); };
     $('#addMat').onclick = () => { const ms = readMats(); ms.push(blank()); redrawMats(ms); $$('[name=mpick]', matsEl).pop().focus(); };
     matsEl.addEventListener('click', e => { const d = e.target.closest('.mdel'); if (!d) return; const ms = readMats(); ms.splice(Number(d.closest('.mrow').dataset.i), 1); redrawMats(ms.length ? ms : [blank()]); });
-    const formData = () => ({ no: f.no.value.trim(), date: f.date.value, grp, agency: f.agency.value.trim(), prj: f.prj.value.trim(), road: f.road.value.trim(), con: f.con.value.trim(), sender: f.sender.value.trim(), tel: f.tel.value.trim(), note: f.note.value.trim(), by: f.by.value, mats: readMats().filter(m => m.name) });
+    const formData = () => ({ no: f.no.value.trim(), date: f.date.value, grp, agency: (f.agsel && f.agsel.value !== OTHER ? f.agsel.value : f.agency.value).trim(), prj: f.prj.value.trim(), road: f.road.value.trim(), con: f.con.value.trim(), sender: f.sender.value.trim(), tel: f.tel.value.trim(), note: f.note.value.trim(), by: f.by.value, mats: readMats().filter(m => m.name) });
     if (!no) {
       const drawQ = () => { $('#qph').innerHTML = queue.map((q, i) => `<figure><img src="data:image/jpeg;base64,${q.thumb}" alt="รูปที่ ${i + 1}"><button type="button" class="phx" data-qi="${i}" aria-label="เอารูปออก">${IC.x}</button></figure>`).join('') + (queue.length ? '' : '<p class="ref" style="grid-column:1/-1;margin:0">ยังไม่มีรูป · ถ่ายกองวัสดุ ป้ายกอง หรือสัญลักษณ์</p>'); };
       drawQ();

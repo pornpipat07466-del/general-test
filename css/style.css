@@ -348,3 +348,5 @@ table.mx td.nb{font-weight:400}
 .stf .subl{list-style:none;margin:4px 0 0;padding:0;font-size:12.5px;color:var(--muted);line-height:1.5}.stf .subl .no{color:var(--bad);font-weight:600}
 .stf .delrec{width:100%;margin-top:12px;color:var(--bad);border-color:var(--bad-line,var(--line))}
 .stf .ph0{display:grid;place-items:center;aspect-ratio:1;border-radius:12px;background:var(--tile);color:var(--muted);font-size:13px}
+.stf .mother0{margin-top:6px}
+.stf .mother0[hidden]{display:none}
